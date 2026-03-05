@@ -1,0 +1,67 @@
+import NextAuth from 'next-auth'
+import { PrismaAdapter } from '@auth/prisma-adapter'
+import GitHub from 'next-auth/providers/github'
+import Google from 'next-auth/providers/google'
+import Credentials from 'next-auth/providers/credentials'
+import bcrypt from 'bcryptjs'
+import { db } from '@/lib/db'
+import { loginSchema } from '@/lib/validations'
+
+export const { handlers, signIn, signOut, auth } = NextAuth({
+  adapter: PrismaAdapter(db),
+  session: { strategy: 'jwt' },
+  pages: {
+    signIn: '/auth/login',
+    error:  '/auth/login',
+  },
+  providers: [
+    GitHub({
+      clientId: process.env.GITHUB_CLIENT_ID!,
+      clientSecret: process.env.GITHUB_CLIENT_SECRET!,
+    }),
+    Google({
+      clientId: process.env.GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+    }),
+    Credentials({
+      async authorize(credentials) {
+        const parsed = loginSchema.safeParse(credentials)
+        if (!parsed.success) return null
+
+        const user = await db.user.findUnique({
+          where: { email: parsed.data.email },
+        })
+        if (!user) return null
+
+        // For OAuth users without password
+        const account = await db.account.findFirst({
+          where: { userId: user.id, type: 'credentials' },
+        })
+        if (!account?.access_token) return null
+
+        const valid = await bcrypt.compare(parsed.data.password, account.access_token)
+        if (!valid) return null
+
+        return user
+      },
+    }),
+  ],
+  callbacks: {
+    async jwt({ token, user }) {
+      if (user) {
+        token.id       = user.id
+        token.username = (user as any).username
+        token.role     = (user as any).role
+      }
+      return token
+    },
+    async session({ session, token }) {
+      if (token) {
+        session.user.id       = token.id as string
+        session.user.username = token.username as string
+        session.user.role     = token.role as string
+      }
+      return session
+    },
+  },
+})

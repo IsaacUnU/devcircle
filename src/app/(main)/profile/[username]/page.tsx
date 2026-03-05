@@ -1,0 +1,132 @@
+import type { Metadata } from 'next'
+import { notFound } from 'next/navigation'
+import { auth } from '@/lib/auth'
+import { getUserProfile, getUserPosts } from '@/lib/queries'
+import { PostCard } from '@/components/post/PostCard'
+import { Sidebar } from '@/components/layout/Sidebar'
+import { ComposeModal } from '@/components/post/ComposeModal'
+import { FollowButton } from '@/components/profile/FollowButton'
+import { MapPin, LinkIcon, Calendar } from 'lucide-react'
+import { format } from 'date-fns'
+import { es } from 'date-fns/locale'
+import { getAvatarUrl, formatCount } from '@/lib/utils'
+
+interface Props {
+  params: { username: string }
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const user = await getUserProfile(params.username)
+  if (!user) return { title: 'Usuario no encontrado' }
+  return {
+    title: `${user.name ?? user.username} (@${user.username})`,
+    description: user.bio ?? `Perfil de ${user.username} en DevCircle`,
+  }
+}
+
+export default async function ProfilePage({ params }: Props) {
+  const [session, user, posts] = await Promise.all([
+    auth(),
+    getUserProfile(params.username),
+    getUserPosts(params.username),
+  ])
+
+  if (!user) notFound()
+
+  const isOwn      = session?.user?.id === user.id
+  const isFollowing = (user.followers?.length ?? 0) > 0
+  const avatar     = user.image ?? getAvatarUrl(user.username)
+
+  return (
+    <div className="flex min-h-screen">
+      <Sidebar />
+      <ComposeModal />
+
+      <main className="ml-64 flex-1 max-w-2xl px-6 py-6">
+        {/* Profile header */}
+        <div className="card p-6 mb-6">
+          <div className="flex items-start justify-between mb-4">
+            <img src={avatar} alt="" className="w-16 h-16 avatar" />
+            {!isOwn && session && (
+              <FollowButton
+                targetUserId={user.id}
+                initialFollowing={isFollowing}
+                username={user.username}
+              />
+            )}
+            {isOwn && (
+              <a href="/settings" className="btn-secondary text-sm">
+                Editar perfil
+              </a>
+            )}
+          </div>
+
+          <h1 className="text-xl font-bold text-text-primary">
+            {user.name ?? user.username}
+          </h1>
+          <p className="text-text-muted text-sm mb-3">@{user.username}</p>
+
+          {user.bio && (
+            <p className="text-text-secondary text-sm mb-3 leading-relaxed">{user.bio}</p>
+          )}
+
+          {/* Meta */}
+          <div className="flex flex-wrap gap-3 text-xs text-text-muted mb-4">
+            {user.location && (
+              <span className="flex items-center gap-1">
+                <MapPin className="w-3.5 h-3.5" /> {user.location}
+              </span>
+            )}
+            {user.website && (
+              <a
+                href={user.website}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1 text-brand-400 hover:text-brand-300"
+              >
+                <LinkIcon className="w-3.5 h-3.5" /> {user.website.replace(/^https?:\/\//, '')}
+              </a>
+            )}
+            <span className="flex items-center gap-1">
+              <Calendar className="w-3.5 h-3.5" />
+              Se unió en {format(new Date(user.createdAt), 'MMMM yyyy', { locale: es })}
+            </span>
+          </div>
+
+          {/* Stats */}
+          <div className="flex gap-5 text-sm">
+            <div>
+              <span className="font-semibold text-text-primary">{formatCount(user._count.posts)}</span>
+              <span className="text-text-muted ml-1">posts</span>
+            </div>
+            <div>
+              <span className="font-semibold text-text-primary">{formatCount(user._count.followers)}</span>
+              <span className="text-text-muted ml-1">seguidores</span>
+            </div>
+            <div>
+              <span className="font-semibold text-text-primary">{formatCount(user._count.following)}</span>
+              <span className="text-text-muted ml-1">siguiendo</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Posts */}
+        {posts && posts.length > 0 ? (
+          <div className="space-y-4">
+            {posts.map(post => (
+              <PostCard
+                key={post.id}
+                post={post as any}
+                currentUserId={session?.user?.id}
+              />
+            ))}
+          </div>
+        ) : (
+          <div className="card p-12 text-center">
+            <p className="text-text-muted">Todavía no hay posts</p>
+          </div>
+        )}
+      </main>
+    </div>
+  )
+}

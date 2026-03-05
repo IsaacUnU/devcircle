@@ -1,0 +1,43 @@
+import { z } from 'zod'
+
+export const loginSchema = z.object({
+  email:    z.string().email('Email inválido'),
+  password: z.string().min(6, 'Mínimo 6 caracteres'),
+})
+
+export const registerSchema = z.object({
+  email:    z.string().email('Email inválido'),
+  username: z
+    .string()
+    .min(3, 'Mínimo 3 caracteres')
+    .max(20, 'Máximo 20 caracteres')
+    .regex(/^[a-zA-Z0-9_]+$/, 'Solo letras, números y guiones bajos'),
+  name:     z.string().min(2, 'Mínimo 2 caracteres').max(50),
+  password: z.string().min(6, 'Mínimo 6 caracteres'),
+})
+
+export const createPostSchema = z.object({
+  content:  z.string().min(1, 'El post no puede estar vacío').max(500, 'Máximo 500 caracteres'),
+  codeSnip: z.string().max(2000).optional(),
+  language: z.string().optional(),
+  tags:     z.array(z.string()).max(5, 'Máximo 5 tags').optional(),
+})
+
+export const updateProfileSchema = z.object({
+  name:     z.string().min(2).max(50).optional(),
+  bio:      z.string().max(200).optional(),
+  website:  z.string().url().optional().or(z.literal('')),
+  location: z.string().max(50).optional(),
+})
+
+export const createCommentSchema = z.object({
+  content:  z.string().min(1).max(300),
+  postId:   z.string(),
+  parentId: z.string().optional(),
+})
+
+export type LoginInput    = z.infer<typeof loginSchema>
+export type RegisterInput = z.infer<typeof registerSchema>
+export type CreatePost    = z.infer<typeof createPostSchema>
+export type UpdateProfile = z.infer<typeof updateProfileSchema>
+export type CreateComment = z.infer<typeof createCommentSchema>
