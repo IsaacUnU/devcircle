@@ -34,9 +34,10 @@ export function GroupModal() {
     }
 
     return (
-        <>
-            <div className="fixed inset-0 bg-black/80 backdrop-blur-md z-50 animate-fade-in" onClick={closeGroupModal} />
-            <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-md z-50 animate-slide-up px-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-y-auto custom-scrollbar">
+            <div className="fixed inset-0 bg-black/80 backdrop-blur-md animate-fade-in" onClick={closeGroupModal} />
+
+            <div className="relative w-full max-w-md animate-slide-up my-auto">
                 <div className="card p-6 shadow-2xl glass border-brand-500/20">
                     <div className="flex items-center justify-between mb-8">
                         <div className="flex items-center gap-3">
@@ -93,6 +94,6 @@ export function GroupModal() {
                     </form>
                 </div>
             </div>
-        </>
+        </div>
     )
 }
