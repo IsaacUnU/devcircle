@@ -1,4 +1,4 @@
-// DevCircle - Prisma Schema
+// DevCircle - Prisma Schema v2
 // Stack: PostgreSQL + Next.js + NextAuth
 
 generator client {
@@ -63,25 +63,35 @@ model User {
   image         String?
   website       String?
   location      String?
+  reputation    Int       @default(0)
   role          Role      @default(USER)
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 
-  // Auth relations
   accounts Account[]
   sessions Session[]
 
-  // Social relations
   posts         Post[]
   comments      Comment[]
   likes         Like[]
   bookmarks     Bookmark[]
   notifications Notification[] @relation("NotificationReceiver")
   triggered     Notification[] @relation("NotificationTrigger")
+  videos        Video[]
+  videoLikes    VideoLike[]
+  videoComments VideoComment[]
 
-  // Follow system (self-referential many-to-many)
+  sentMessages     DirectMessage[] @relation("MessageSender")
+  receivedMessages DirectMessage[] @relation("MessageReceiver")
+  conversationsA   Conversation[]  @relation("ConversationUserA")
+  conversationsB   Conversation[]  @relation("ConversationUserB")
+
   followers Follow[] @relation("Following")
   following Follow[] @relation("Follower")
+
+  projects Project[]
+  groups   GroupMember[]
+  jobs     Job[]
 
   @@index([username])
   @@index([email])
@@ -113,15 +123,15 @@ model Follow {
 // ─── POSTS ──────────────────────────────────────────────────────────────────
 
 model Post {
-  id        String     @id @default(cuid())
-  content   String     @db.Text
-  codeSnip  String?    @db.Text
-  language  String?    // programming language for code snippet
+  id        String    @id @default(cuid())
+  content   String    @db.Text
+  codeSnip  String?   @db.Text
+  language  String?
   image     String?
-  published Boolean    @default(true)
+  published Boolean   @default(true)
   authorId  String
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 
   author    User       @relation(fields: [authorId], references: [id], onDelete: Cascade)
   comments  Comment[]
@@ -134,23 +144,18 @@ model Post {
   @@map("posts")
 }
 
-// ─── TAGS ───────────────────────────────────────────────────────────────────
-
 model Tag {
   id    String    @id @default(cuid())
   name  String    @unique
   posts PostTag[]
-
   @@map("tags")
 }
 
 model PostTag {
   postId String
   tagId  String
-
   post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
   tag  Tag  @relation(fields: [tagId], references: [id], onDelete: Cascade)
-
   @@id([postId, tagId])
   @@map("post_tags")
 }
@@ -162,7 +167,7 @@ model Comment {
   content   String   @db.Text
   authorId  String
   postId    String
-  parentId  String?  // for nested comments
+  parentId  String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -238,4 +243,158 @@ enum NotificationType {
   FOLLOW
   MENTION
   REPLY
+  REPUTATION
+}
+
+// ─── VIDEOS (Reels / DevClips) ───────────────────────────────────────────────
+
+model Video {
+  id          String   @id @default(cuid())
+  title       String
+  description String?  @db.Text
+  url         String
+  thumbnail   String?
+  duration    Int?     // seconds
+  authorId    String
+  tags        String[]
+  views       Int      @default(0)
+  published   Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  author   User           @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  likes    VideoLike[]
+  comments VideoComment[]
+
+  @@index([authorId])
+  @@index([createdAt])
+  @@map("videos")
+}
+
+model VideoLike {
+  id        String   @id @default(cuid())
+  userId    String
+  videoId   String
+  createdAt DateTime @default(now())
+
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  video Video @relation(fields: [videoId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, videoId])
+  @@map("video_likes")
+}
+
+model VideoComment {
+  id        String   @id @default(cuid())
+  content   String   @db.Text
+  userId    String
+  videoId   String
+  createdAt DateTime @default(now())
+
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  video Video @relation(fields: [videoId], references: [id], onDelete: Cascade)
+
+  @@index([videoId])
+  @@map("video_comments")
+}
+
+// ─── DIRECT MESSAGES ────────────────────────────────────────────────────────
+
+model Conversation {
+  id        String   @id @default(cuid())
+  userAId   String
+  userBId   String
+  lastMsgAt DateTime @default(now())
+  createdAt DateTime @default(now())
+
+  userA    User            @relation("ConversationUserA", fields: [userAId], references: [id], onDelete: Cascade)
+  userB    User            @relation("ConversationUserB", fields: [userBId], references: [id], onDelete: Cascade)
+  messages DirectMessage[]
+
+  @@unique([userAId, userBId])
+  @@index([userAId])
+  @@index([userBId])
+  @@map("conversations")
+}
+
+model DirectMessage {
+  id             String   @id @default(cuid())
+  content        String   @db.Text
+  senderId       String
+  receiverId     String
+  conversationId String
+  read           Boolean  @default(false)
+  createdAt      DateTime @default(now())
+
+  sender       User         @relation("MessageSender", fields: [senderId], references: [id], onDelete: Cascade)
+  receiver     User         @relation("MessageReceiver", fields: [receiverId], references: [id], onDelete: Cascade)
+  conversation Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+
+  @@index([conversationId])
+  @@index([senderId])
+  @@map("direct_messages")
+}
+
+model Project {
+  id          String   @id @default(cuid())
+  title       String
+  description String?  @db.Text
+  url         String?
+  repoUrl     String?
+  image       String?
+  techStack   String[]
+  ownerId     String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  owner User @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+
+  @@index([ownerId])
+  @@map("projects")
+}
+
+model Job {
+  id          String   @id @default(cuid())
+  title       String
+  company     String
+  location    String
+  type        String   @default("FULL_TIME") // FULL_TIME, PART_TIME, CONTRACT, FREELANCE, INTERNSHIP
+  salary      String?
+  description String   @db.Text
+  url         String?
+  authorId    String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  author User @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  @@index([authorId])
+  @@map("jobs")
+}
+
+model Group {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  description String?  @db.Text
+  image       String?
+  creatorId   String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  members GroupMember[]
+
+  @@map("groups")
+}
+
+model GroupMember {
+  id      String @id @default(cuid())
+  groupId String
+  userId  String
+  role    String @default("MEMBER") // ADMIN, MEMBER
+
+  group Group @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([groupId, userId])
+  @@map("group_members")
 }

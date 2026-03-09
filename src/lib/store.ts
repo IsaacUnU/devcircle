@@ -1,28 +1,56 @@
 import { create } from 'zustand'
 
-interface UIStore {
-  // Compose post modal
+interface UIState {
+  // Modals
   isComposeOpen: boolean
-  openCompose:   () => void
-  closeCompose:  () => void
+  openCompose: () => void
+  closeCompose: () => void
 
-  // Notification count
-  unreadCount:    number
-  setUnreadCount: (n: number) => void
+  isProjectModalOpen: boolean
+  openProjectModal: () => void
+  closeProjectModal: () => void
 
-  // Active tab in profile
-  profileTab: 'posts' | 'bookmarks'
-  setProfileTab: (tab: 'posts' | 'bookmarks') => void
+  isJobModalOpen: boolean
+  openJobModal: () => void
+  closeJobModal: () => void
+
+  isGroupModalOpen: boolean
+  openGroupModal: () => void
+  closeGroupModal: () => void
+
+  // Notifications
+  unreadCount: number
+  setUnreadCount: (count: number) => void
+  incrementUnread: () => void
+
+  // Messages unread
+  unreadMessages: number
+  setUnreadMessages: (count: number) => void
+  incrementUnreadMessages: () => void
 }
 
-export const useUIStore = create<UIStore>((set) => ({
-  isComposeOpen:  false,
-  openCompose:    () => set({ isComposeOpen: true }),
-  closeCompose:   () => set({ isComposeOpen: false }),
+export const useUIStore = create<UIState>((set) => ({
+  isComposeOpen: false,
+  openCompose: () => set({ isComposeOpen: true }),
+  closeCompose: () => set({ isComposeOpen: false }),
 
-  unreadCount:    0,
-  setUnreadCount: (n) => set({ unreadCount: n }),
+  isProjectModalOpen: false,
+  openProjectModal: () => set({ isProjectModalOpen: true }),
+  closeProjectModal: () => set({ isProjectModalOpen: false }),
 
-  profileTab:    'posts',
-  setProfileTab: (tab) => set({ profileTab: tab }),
+  isJobModalOpen: false,
+  openJobModal: () => set({ isJobModalOpen: true }),
+  closeJobModal: () => set({ isJobModalOpen: false }),
+
+  isGroupModalOpen: false,
+  openGroupModal: () => set({ isGroupModalOpen: true }),
+  closeGroupModal: () => set({ isGroupModalOpen: false }),
+
+  unreadCount: 0,
+  setUnreadCount: (count: number) => set({ unreadCount: count }),
+  incrementUnread: () => set((state) => ({ unreadCount: state.unreadCount + 1 })),
+
+  unreadMessages: 0,
+  setUnreadMessages: (count: number) => set({ unreadMessages: count }),
+  incrementUnreadMessages: () => set((state) => ({ unreadMessages: state.unreadMessages + 1 })),
 }))

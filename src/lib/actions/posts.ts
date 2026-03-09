@@ -4,6 +4,7 @@ import { revalidatePath } from 'next/cache'
 import { auth } from '@/lib/auth'
 import { db } from '@/lib/db'
 import { createPostSchema, createCommentSchema } from '@/lib/validations'
+import { updateReputation } from './reputation'
 
 // ── Create Post ─────────────────────────────────────────────────────────────
 export async function createPost(data: {
@@ -28,19 +29,22 @@ export async function createPost(data: {
       authorId: session.user.id,
       tags: tags?.length
         ? {
-            create: tags.map(name => ({
-              tag: {
-                connectOrCreate: {
-                  where: { name },
-                  create: { name },
-                },
+          create: tags.map(name => ({
+            tag: {
+              connectOrCreate: {
+                where: { name },
+                create: { name },
               },
-            })),
-          }
+            },
+          })),
+        }
         : undefined,
     },
     include: { author: true, tags: { include: { tag: true } } },
   })
+
+  // Reputation: +5 for creating a post
+  await updateReputation(session.user.id, 5)
 
   revalidatePath('/feed')
   return post
@@ -58,6 +62,10 @@ export async function deletePost(postId: string) {
   }
 
   await db.post.delete({ where: { id: postId } })
+
+  // Reputation: -5 for deleting a post
+  await updateReputation(session.user.id, -5)
+
   revalidatePath('/feed')
 }
 
@@ -72,16 +80,24 @@ export async function toggleLike(postId: string) {
 
   if (existing) {
     await db.like.delete({ where: { id: existing.id } })
+
+    // Reputation: -2 for the post author when unliked
+    const post = await db.post.findUnique({ where: { id: postId } })
+    if (post) await updateReputation(post.authorId, -2)
+
   } else {
     await db.like.create({ data: { userId: session.user.id, postId } })
 
     // Create notification for post author
     const post = await db.post.findUnique({ where: { id: postId } })
     if (post && post.authorId !== session.user.id) {
+      // Reputation: +2 for the post author when liked
+      await updateReputation(post.authorId, 2)
+
       await db.notification.create({
         data: {
-          type:        'LIKE',
-          receiverId:  post.authorId,
+          type: 'LIKE',
+          receiverId: post.authorId,
           triggeredBy: session.user.id,
           postId,
         },
@@ -126,8 +142,8 @@ export async function addComment(data: {
 
   const comment = await db.comment.create({
     data: {
-      content:  parsed.data.content,
-      postId:   parsed.data.postId,
+      content: parsed.data.content,
+      postId: parsed.data.postId,
       parentId: parsed.data.parentId,
       authorId: session.user.id,
     },
@@ -139,11 +155,11 @@ export async function addComment(data: {
   if (post && post.authorId !== session.user.id) {
     await db.notification.create({
       data: {
-        type:        data.parentId ? 'REPLY' : 'COMMENT',
-        receiverId:  post.authorId,
+        type: data.parentId ? 'REPLY' : 'COMMENT',
+        receiverId: post.authorId,
         triggeredBy: session.user.id,
-        postId:      data.postId,
-        commentId:   comment.id,
+        postId: data.postId,
+        commentId: comment.id,
       },
     })
   }

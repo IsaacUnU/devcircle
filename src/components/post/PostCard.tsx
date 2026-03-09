@@ -9,13 +9,13 @@ import type { PostWithMeta } from '@/types'
 import toast from 'react-hot-toast'
 
 interface PostCardProps {
-  post:            PostWithMeta
-  currentUserId?:  string
+  post: PostWithMeta
+  currentUserId?: string
 }
 
 export function PostCard({ post, currentUserId }: PostCardProps) {
   const [isPending, startTransition] = useTransition()
-  const [liked,     setLiked]     = useState(() => (post.likes?.length ?? 0) > 0)
+  const [liked, setLiked] = useState(() => (post.likes?.length ?? 0) > 0)
   const [likeCount, setLikeCount] = useState(post._count.likes)
   const [bookmarked, setBookmarked] = useState(() => (post.bookmarks?.length ?? 0) > 0)
   const [showCode, setShowCode] = useState(false)
@@ -57,32 +57,32 @@ export function PostCard({ post, currentUserId }: PostCardProps) {
   return (
     <article className="card p-5 hover:border-surface-hover transition-colors animate-fade-in">
       {/* Author */}
-      <div className="flex items-start gap-3 mb-3">
-        <Link href={`/profile/${post.author.username}`}>
+      <div className="flex items-start gap-3 mb-4">
+        <Link href={`/profile/${post.author.username}`} className="shrink-0">
           <img
             src={authorImage}
             alt={post.author.name ?? post.author.username}
-            className="w-10 h-10 avatar hover:ring-brand-500 transition-all"
+            className="w-11 h-11 avatar hover:ring-2 hover:ring-brand-500/50 transition-all duration-300 shadow-sm"
           />
         </Link>
         <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2 flex-wrap">
+          <div className="flex items-center gap-1.5 flex-wrap">
             <Link
               href={`/profile/${post.author.username}`}
-              className="font-semibold text-text-primary hover:text-brand-400 transition-colors text-sm"
+              className="font-bold text-text-primary hover:text-brand-400 transition-colors text-sm"
             >
               {post.author.name ?? post.author.username}
             </Link>
-            <span className="text-text-muted text-sm">@{post.author.username}</span>
-            <span className="text-text-muted text-xs">·</span>
-            <time className="text-text-muted text-xs">{timeAgo(post.createdAt)}</time>
+            <span className="text-text-muted text-[13px]">@{post.author.username}</span>
+            <span className="text-text-muted text-xs opacity-50">·</span>
+            <time className="text-text-muted text-xs opacity-80">{timeAgo(post.createdAt)}</time>
           </div>
         </div>
       </div>
 
       {/* Content */}
-      <Link href={`/post/${post.id}`}>
-        <p className="text-text-primary text-sm leading-relaxed mb-3 whitespace-pre-line">
+      <Link href={`/post/${post.id}`} className="block group/content">
+        <p className="text-text-primary text-[15px] leading-relaxed mb-4 whitespace-pre-line group-hover/content:text-text-primary/90 transition-colors">
           {post.content}
         </p>
       </Link>

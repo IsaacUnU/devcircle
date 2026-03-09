@@ -4,6 +4,7 @@ import { revalidatePath } from 'next/cache'
 import { auth } from '@/lib/auth'
 import { db } from '@/lib/db'
 import { updateProfileSchema } from '@/lib/validations'
+import { updateReputation } from './reputation'
 
 // ── Toggle Follow ────────────────────────────────────────────────────────────
 export async function toggleFollow(targetUserId: string) {
@@ -14,7 +15,7 @@ export async function toggleFollow(targetUserId: string) {
   const existing = await db.follow.findUnique({
     where: {
       followerId_followingId: {
-        followerId:  session.user.id,
+        followerId: session.user.id,
         followingId: targetUserId,
       },
     },
@@ -22,15 +23,20 @@ export async function toggleFollow(targetUserId: string) {
 
   if (existing) {
     await db.follow.delete({ where: { id: existing.id } })
+    // Reputation: -5 for the unfollowed user
+    await updateReputation(targetUserId, -5)
   } else {
     await db.follow.create({
       data: { followerId: session.user.id, followingId: targetUserId },
     })
 
+    // Reputation: +5 for the followed user
+    await updateReputation(targetUserId, 5)
+
     await db.notification.create({
       data: {
-        type:        'FOLLOW',
-        receiverId:  targetUserId,
+        type: 'FOLLOW',
+        receiverId: targetUserId,
         triggeredBy: session.user.id,
       },
     })
@@ -55,7 +61,7 @@ export async function updateProfile(data: {
 
   const user = await db.user.update({
     where: { id: session.user.id },
-    data:  parsed.data,
+    data: parsed.data,
   })
 
   revalidatePath(`/profile/${user.username}`)
@@ -69,7 +75,7 @@ export async function markNotificationsRead() {
 
   await db.notification.updateMany({
     where: { receiverId: session.user.id, read: false },
-    data:  { read: true },
+    data: { read: true },
   })
 
   revalidatePath('/')

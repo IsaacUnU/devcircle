@@ -11,12 +11,12 @@ const MAX_CHARS = 500
 
 export function ComposeModal() {
   const { isComposeOpen, closeCompose } = useUIStore()
-  const [content,   setContent]   = useState('')
-  const [codeSnip,  setCodeSnip]  = useState('')
-  const [language,  setLanguage]  = useState('')
-  const [tagInput,  setTagInput]  = useState('')
-  const [tags,      setTags]      = useState<string[]>([])
-  const [showCode,  setShowCode]  = useState(false)
+  const [content, setContent] = useState('')
+  const [codeSnip, setCodeSnip] = useState('')
+  const [language, setLanguage] = useState('')
+  const [tagInput, setTagInput] = useState('')
+  const [tags, setTags] = useState<string[]>([])
+  const [showCode, setShowCode] = useState(false)
   const [isPending, startTransition] = useTransition()
   const textareaRef = useRef<HTMLTextAreaElement>(null)
 
@@ -59,21 +59,21 @@ export function ComposeModal() {
   }
 
   return (
-    <>
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 animate-fade-in"
+        className="fixed inset-0 bg-black/80 backdrop-blur-md animate-fade-in"
         onClick={closeCompose}
       />
 
       {/* Modal */}
-      <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-lg z-50 animate-slide-up">
-        <div className="card p-5 shadow-2xl">
+      <div className="relative w-full max-w-lg animate-slide-up">
+        <div className="card p-6 shadow-2xl overflow-hidden glass">
           {/* Header */}
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="font-semibold text-text-primary">Nuevo post</h2>
-            <button onClick={closeCompose} className="btn-ghost p-1.5">
-              <X className="w-4 h-4" />
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-lg font-bold text-text-primary">Nuevo post</h2>
+            <button onClick={closeCompose} className="btn-ghost p-2 -mr-2">
+              <X className="w-5 h-5" />
             </button>
           </div>
 
@@ -165,6 +165,6 @@ export function ComposeModal() {
           </div>
         </div>
       </div>
-    </>
+    </div>
   )
 }

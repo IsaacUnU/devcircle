@@ -6,142 +6,134 @@ const prisma = new PrismaClient()
 async function main() {
   console.log('🌱 Seeding DevCircle...')
 
+  // Clear existing data (optional but recommended for fresh experience)
+  await prisma.videoLike.deleteMany()
+  await prisma.videoComment.deleteMany()
+  await prisma.video.deleteMany()
+  await prisma.comment.deleteMany()
+  await prisma.post.deleteMany()
+  await prisma.account.deleteMany()
+  await prisma.user.deleteMany()
+  await prisma.tag.deleteMany()
+
+  const hashedPassword = await bcrypt.hash('password123', 12)
+
   // Create users
-  const password = await bcrypt.hash('password123', 12)
+  const users = await Promise.all([
+    prisma.user.create({
+      data: {
+        email: 'alice@devcircle.dev',
+        username: 'alice',
+        name: 'Alice Dev',
+        bio: 'Full-stack developer. Loves React and PostgreSQL. 👨‍💻',
+        role: Role.ADMIN,
+        image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop',
+        accounts: {
+          create: {
+            type: 'credentials',
+            provider: 'credentials',
+            providerAccountId: 'alice@devcircle.dev',
+            access_token: hashedPassword,
+          }
+        }
+      }
+    }),
+    prisma.user.create({
+      data: {
+        email: 'bob@devcircle.dev',
+        username: 'bob',
+        name: 'Bob Builder',
+        bio: 'Backend engineer. Rust enthusiast. Building robust systems.',
+        image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop',
+        accounts: {
+          create: {
+            type: 'credentials',
+            provider: 'credentials',
+            providerAccountId: 'bob@devcircle.dev',
+            access_token: hashedPassword,
+          }
+        }
+      }
+    }),
+    prisma.user.create({
+      data: {
+        email: 'carlos@devcircle.dev',
+        username: 'carlos',
+        name: 'Carlos Code',
+        bio: 'Learning Next.js. Building in public. 🚀',
+        location: 'Alicante, ES',
+        image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop',
+        accounts: {
+          create: {
+            type: 'credentials',
+            provider: 'credentials',
+            providerAccountId: 'carlos@devcircle.dev',
+            access_token: hashedPassword,
+          }
+        }
+      }
+    })
+  ])
 
-  const alice = await prisma.user.upsert({
-    where: { email: 'alice@devcircle.dev' },
-    update: {},
-    create: {
-      email: 'alice@devcircle.dev',
-      username: 'alice',
-      name: 'Alice Dev',
-      bio: 'Full-stack developer. Loves React and PostgreSQL.',
-      role: Role.ADMIN,
-    },
-  })
-
-  const bob = await prisma.user.upsert({
-    where: { email: 'bob@devcircle.dev' },
-    update: {},
-    create: {
-      email: 'bob@devcircle.dev',
-      username: 'bob',
-      name: 'Bob Builder',
-      bio: 'Backend engineer. Rust enthusiast.',
-    },
-  })
-
-  const carlos = await prisma.user.upsert({
-    where: { email: 'carlos@devcircle.dev' },
-    update: {},
-    create: {
-      email: 'carlos@devcircle.dev',
-      username: 'carlos',
-      name: 'Carlos Code',
-      bio: 'Learning Next.js. Building in public.',
-      website: 'https://carlos.dev',
-      location: 'Alicante, ES',
-    },
-  })
+  const [alice, bob, carlos] = users
 
   // Create tags
   const tagNames = ['react', 'nextjs', 'typescript', 'postgresql', 'rust', 'css', 'devops', 'opensource']
-  const tags = await Promise.all(
-    tagNames.map(name =>
-      prisma.tag.upsert({ where: { name }, update: {}, create: { name } })
-    )
-  )
+  await Promise.all(tagNames.map(name => prisma.tag.create({ data: { name } })))
 
-  // Create posts
-  const post1 = await prisma.post.create({
-    data: {
-      content: 'Just shipped a new feature using Server Actions in Next.js 14. The DX is incredible — no more API routes for simple mutations! 🚀',
-      codeSnip: `// Server Action - no API route needed!
-async function createPost(formData: FormData) {
-  'use server'
-  const content = formData.get('content') as string
-  await db.post.create({ data: { content, authorId: session.user.id } })
-  revalidatePath('/feed')
-}`,
-      language: 'typescript',
-      authorId: alice.id,
-      tags: {
-        create: [
-          { tag: { connect: { name: 'nextjs' } } },
-          { tag: { connect: { name: 'typescript' } } },
-        ],
-      },
-    },
-  })
+  // Create high-fidelity clips
+  const clips = await Promise.all([
+    prisma.video.create({
+      data: {
+        title: 'React Server Components en 30s',
+        description: 'La forma más rápida de entender por qué las Server Components son el futuro del desarrollo web. #nextjs #react',
+        url: 'https://player.vimeo.com/external/370331493.sd.mp4?s=7b01b69828d57a9bc2cf1896796c95c2e171b3e7&profile_id=139&oauth2_token_id=57447761',
+        authorId: alice.id,
+        tags: ['react', 'nextjs'],
+        views: 1240,
+      }
+    }),
+    prisma.video.create({
+      data: {
+        title: 'Optimize SQL Queries',
+        description: 'No uses SELECT * en producción. Usa índices y proyecciones para mejorar el rendimiento de tu DB. #postgresql #backend',
+        url: 'https://player.vimeo.com/external/370331493.sd.mp4?s=7b01b69828d57a9bc2cf1896796c95c2e171b3e7&profile_id=139&oauth2_token_id=57447761',
+        authorId: bob.id,
+        tags: ['postgresql', 'backend'],
+        views: 890,
+      }
+    }),
+    prisma.video.create({
+      data: {
+        title: 'Dark Mode con Tailwind CSS v4',
+        description: 'Implementa el modo oscuro dinámico en menos de 1 minuto con las nuevas variables CSS de Tailwind. #css #tailwind',
+        url: 'https://player.vimeo.com/external/370331493.sd.mp4?s=7b01b69828d57a9bc2cf1896796c95c2e171b3e7&profile_id=139&oauth2_token_id=57447761',
+        authorId: carlos.id,
+        tags: ['css', 'frontend'],
+        views: 2150,
+      }
+    })
+  ])
 
-  const post2 = await prisma.post.create({
-    data: {
-      content: 'Hot take: Prisma + PostgreSQL is the best combo for Next.js apps in 2025. Type safety from DB to UI with zero boilerplate.',
-      authorId: bob.id,
-      tags: {
-        create: [
-          { tag: { connect: { name: 'postgresql' } } },
-        ],
-      },
-    },
-  })
-
-  const post3 = await prisma.post.create({
-    data: {
-      content: 'Working on DevCircle, a social platform for developers. Building in public with Next.js, Prisma and PostgreSQL. Follow the journey! 👨‍💻',
-      authorId: carlos.id,
-      tags: {
-        create: [
-          { tag: { connect: { name: 'nextjs' } } },
-          { tag: { connect: { name: 'opensource' } } },
-        ],
-      },
-    },
-  })
-
-  // Create follows
-  await prisma.follow.createMany({
+  // Create interactions
+  await prisma.videoLike.createMany({
     data: [
-      { followerId: carlos.id, followingId: alice.id },
-      { followerId: carlos.id, followingId: bob.id },
-      { followerId: alice.id, followingId: bob.id },
-    ],
-    skipDuplicates: true,
+      { userId: bob.id, videoId: clips[0].id },
+      { userId: carlos.id, videoId: clips[0].id },
+      { userId: alice.id, videoId: clips[1].id },
+    ]
   })
 
-  // Create likes
-  await prisma.like.createMany({
+  await prisma.videoComment.createMany({
     data: [
-      { userId: bob.id, postId: post1.id },
-      { userId: carlos.id, postId: post1.id },
-      { userId: alice.id, postId: post2.id },
-      { userId: carlos.id, postId: post2.id },
-    ],
-    skipDuplicates: true,
+      { content: '¡Increíble explicación! Super claro.', userId: bob.id, videoId: clips[0].id },
+      { content: 'Exacto, el SELECT * es un error de novato.', userId: carlos.id, videoId: clips[1].id },
+    ]
   })
 
-  // Create comments
-  await prisma.comment.create({
-    data: {
-      content: 'Game changer! I ditched all my API routes last week.',
-      authorId: bob.id,
-      postId: post1.id,
-    },
-  })
-
-  await prisma.comment.create({
-    data: {
-      content: 'Agreed 100%. The type safety all the way from DB to frontend is the killer feature.',
-      authorId: carlos.id,
-      postId: post2.id,
-    },
-  })
-
-  console.log('✅ Seed complete!')
-  console.log(`   Users: alice, bob, carlos`)
-  console.log(`   Posts: ${3}`)
-  console.log(`   Tags:  ${tagNames.join(', ')}`)
+  console.log('✅ Base de Datos Poblada con Éxito!')
+  console.log(`   🚀 Usuarios: alice, bob, carlos (Password: password123)`)
+  console.log(`   🎬 Clips: ${clips.length}`)
 }
 
 main()

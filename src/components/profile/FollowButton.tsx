@@ -7,12 +7,13 @@ import { cn } from '@/lib/utils'
 import toast from 'react-hot-toast'
 
 interface Props {
-  targetUserId:    string
+  targetUserId: string
   initialFollowing: boolean
-  username:        string
+  username: string
+  className?: string
 }
 
-export function FollowButton({ targetUserId, initialFollowing, username }: Props) {
+export function FollowButton({ targetUserId, initialFollowing, username, className }: Props) {
   const [following, setFollowing] = useState(initialFollowing)
   const [isPending, startTransition] = useTransition()
 
@@ -37,7 +38,8 @@ export function FollowButton({ targetUserId, initialFollowing, username }: Props
         'flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-150',
         following
           ? 'border border-surface-border text-text-secondary hover:border-red-400 hover:text-red-400 hover:bg-red-400/5'
-          : 'btn-primary'
+          : 'btn-primary',
+        className
       )}
     >
       {following ? (
