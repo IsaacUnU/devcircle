@@ -52,7 +52,13 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         token.id       = user.id
         token.username = (user as any).username
         token.role     = (user as any).role
+        // NUNCA incluir image en el token — si es Base64 revienta la cookie (431)
+        delete token.picture
+        delete (token as any).image
       }
+      // Asegurarse de que nunca haya imagen en el token
+      delete token.picture
+      delete (token as any).image
       return token
     },
     async session({ session, token }) {
@@ -60,6 +66,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         session.user.id       = token.id as string
         session.user.username = token.username as string
         session.user.role     = token.role as string
+        // Eliminar imagen de la sesión — el sidebar la carga via /api/user/avatar
+        delete (session.user as any).image
       }
       return session
     },

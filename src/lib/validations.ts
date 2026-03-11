@@ -12,8 +12,13 @@ export const registerSchema = z.object({
     .min(3, 'Mínimo 3 caracteres')
     .max(20, 'Máximo 20 caracteres')
     .regex(/^[a-zA-Z0-9_]+$/, 'Solo letras, números y guiones bajos'),
-  name: z.string().min(2, 'Mínimo 2 caracteres').max(50),
-  password: z.string().min(6, 'Mínimo 6 caracteres'),
+  name: z.string().min(2, 'Mínimo 2 caracteres').max(50, 'Máximo 50 caracteres'),
+  password: z.string().min(8, 'Mínimo 8 caracteres'),
+  // Campos opcionales del perfil
+  bio:      z.string().max(200, 'Máximo 200 caracteres').optional(),
+  website:  z.string().url('URL inválida').optional().or(z.literal('')),
+  location: z.string().max(80).optional(),
+  country:  z.string().max(60).optional(),
 })
 
 export const createPostSchema = z.object({
@@ -24,10 +29,11 @@ export const createPostSchema = z.object({
 })
 
 export const updateProfileSchema = z.object({
-  name: z.string().min(2).max(50).optional(),
-  bio: z.string().max(200).optional(),
-  website: z.string().url().optional().or(z.literal('')),
-  location: z.string().max(50).optional(),
+  name:     z.string().min(2, 'Mínimo 2 caracteres').max(50).optional(),
+  bio:      z.string().max(200, 'Máximo 200 caracteres').optional(),
+  website:  z.string().url('URL inválida').optional().or(z.literal('')),
+  location: z.string().max(80).optional(),
+  country:  z.string().max(60).optional(),
 })
 
 export const createCommentSchema = z.object({

@@ -64,6 +64,8 @@ model User {
   website       String?
   location      String?
   reputation    Int       @default(0)
+  verified      Boolean   @default(false)
+  notifPrefs    Json?     // { likes: bool, comments: bool, follows: bool, mentions: bool }
   role          Role      @default(USER)
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
@@ -90,7 +92,11 @@ model User {
   following Follow[] @relation("Follower")
 
   projects Project[]
+  events   Event[]
   groups   GroupMember[]
+  groupsCreated Group[]   @relation("GroupCreator")
+  groupPosts    GroupPost[] @relation("GroupPostAuthor")
+  groupInvites  GroupInvite[]
   jobs     Job[]
 
   @@index([username])
@@ -376,25 +382,98 @@ model Group {
   id          String   @id @default(cuid())
   name        String   @unique
   description String?  @db.Text
-  image       String?
+  image       String?  // avatar del grupo
+  banner      String?  // imagen de cabecera
   creatorId   String
+  isPrivate   Boolean  @default(false)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
+  creator User          @relation("GroupCreator", fields: [creatorId], references: [id], onDelete: Cascade)
   members GroupMember[]
+  posts   GroupPost[]
+  invites GroupInvite[]
 
+  @@index([creatorId])
   @@map("groups")
 }
 
+model GroupPost {
+  id        String   @id @default(cuid())
+  content   String   @db.Text
+  authorId  String
+  groupId   String
+  createdAt DateTime @default(now())
+
+  author User  @relation("GroupPostAuthor", fields: [authorId], references: [id], onDelete: Cascade)
+  group  Group @relation(fields: [groupId], references: [id], onDelete: Cascade)
+
+  @@index([groupId])
+  @@index([authorId])
+  @@map("group_posts")
+}
+
 model GroupMember {
-  id      String @id @default(cuid())
-  groupId String
-  userId  String
-  role    String @default("MEMBER") // ADMIN, MEMBER
+  id        String   @id @default(cuid())
+  groupId   String
+  userId    String
+  role      String   @default("MEMBER") // ADMIN, MODERATOR, MEMBER
+  joinedAt  DateTime @default(now())
 
   group Group @relation(fields: [groupId], references: [id], onDelete: Cascade)
   user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([groupId, userId])
   @@map("group_members")
+}
+
+model GroupInvite {
+  id        String   @id @default(cuid())
+  groupId   String
+  userId    String?  // null = solicitud pública, filled = invitación directa
+  token     String   @unique @default(cuid()) // para enlace de invitación
+  status    String   @default("PENDING") // PENDING, ACCEPTED, REJECTED
+  createdAt DateTime @default(now())
+  expiresAt DateTime?
+
+  group Group @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  user  User? @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([groupId])
+  @@index([token])
+  @@map("group_invites")
+}
+
+// ─── EVENTS ─────────────────────────────────────────────────────────────────
+
+model Event {
+  id          String    @id @default(cuid())
+  title       String
+  description String?   @db.Text
+  url         String?
+  location    String    // "Alicante", "Madrid", "Online"
+  country     String?   // "ES", "US" — código ISO
+  type        EventType @default(MEETUP)
+  startsAt    DateTime
+  endsAt      DateTime?
+  online      Boolean   @default(false)
+  authorId    String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  author User @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  @@index([startsAt])
+  @@index([country])
+  @@index([authorId])
+  @@map("events")
+}
+
+enum EventType {
+  HACKATHON
+  CONFERENCIA
+  MEETUP
+  WORKSHOP
+  WEBINAR
+  OTRO
 }

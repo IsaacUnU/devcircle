@@ -52,6 +52,7 @@ export async function updateProfile(data: {
   bio?: string
   website?: string
   location?: string
+  country?: string
 }) {
   const session = await auth()
   if (!session?.user?.id) throw new Error('No autenticado')
@@ -59,9 +60,15 @@ export async function updateProfile(data: {
   const parsed = updateProfileSchema.safeParse(data)
   if (!parsed.success) throw new Error(parsed.error.errors[0].message)
 
+  // Combinar ciudad y país en el campo location
+  const { country, location, ...rest } = parsed.data
+  const fullLocation = location && country
+    ? `${location}, ${country}`
+    : location || country || undefined
+
   const user = await db.user.update({
     where: { id: session.user.id },
-    data: parsed.data,
+    data: { ...rest, ...(fullLocation !== undefined ? { location: fullLocation } : {}) },
   })
 
   revalidatePath(`/profile/${user.username}`)

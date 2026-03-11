@@ -2,12 +2,13 @@
 
 import Link from 'next/link'
 import {
-    TrendingUp, Users, ExternalLink, Newspaper, Github,
+    TrendingUp, Users, ExternalLink, Github,
     BookOpen, Globe, Search, Trophy, Calendar, Zap, Star
 } from 'lucide-react'
 import { getAvatarUrl, cn } from '@/lib/utils'
 import { FollowButton } from '@/components/profile/FollowButton'
 import { useSession } from 'next-auth/react'
+import { EventsPanel } from '@/components/events/EventsPanel'
 
 interface RightSidebarProps {
     suggestedUsers: any[]
@@ -22,11 +23,7 @@ const DEV_RESOURCES = [
     { name: 'DevDocs', url: 'https://devdocs.io', icon: Search },
 ]
 
-const TECH_EVENTS = [
-    { name: 'DevCircle Hackathon 2026', date: '15 Mar', type: 'Hackathon', color: 'text-brand-400' },
-    { name: 'React Global Summit', date: '22 Mar', type: 'Conferencia', color: 'text-blue-400' },
-    { name: 'Madrid Dev Meetup', date: '28 Mar', type: 'Meetup', color: 'text-orange-400' },
-]
+// Eventos: gestionados por EventsPanel (DB + scraping externo)
 
 export function RightSidebar({ suggestedUsers, trendingTags, topDevs }: RightSidebarProps) {
     const { data: session } = useSession()
@@ -98,28 +95,13 @@ export function RightSidebar({ suggestedUsers, trendingTags, topDevs }: RightSid
                 </div>
             </section>
 
-            {/* 3. Tech Events */}
+            {/* 3. Eventos próximos — reales por ubicación del perfil */}
             <section className="space-y-4">
                 <div className="flex items-center gap-2 px-1">
                     <Calendar className="w-5 h-5 text-brand-400" />
                     <h2 className="font-bold text-text-primary text-sm uppercase tracking-wider">Eventos Próximos</h2>
                 </div>
-                <div className="card divide-y divide-white/5 overflow-hidden">
-                    {TECH_EVENTS.map((event) => (
-                        <div key={event.name} className="p-4 hover:bg-white/5 transition-all cursor-pointer group">
-                            <div className="flex items-center justify-between mb-1.5">
-                                <span className={cn("text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 bg-white/5 rounded-md", event.color)}>
-                                    {event.type}
-                                </span>
-                                <span className="text-[11px] font-bold text-text-muted">{event.date}</span>
-                            </div>
-                            <p className="text-sm font-bold text-text-primary leading-tight group-hover:text-brand-400 transition-colors">{event.name}</p>
-                        </div>
-                    ))}
-                    <button className="w-full p-3 text-xs text-brand-400 font-bold hover:bg-brand-500/5 transition-colors">
-                        Ver calendario completo
-                    </button>
-                </div>
+                <EventsPanel />
             </section>
 
             {/* 4. Suggested Users (Reduced) */}
