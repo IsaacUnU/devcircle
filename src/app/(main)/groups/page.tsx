@@ -14,8 +14,8 @@ export default async function GroupsPage() {
   ])
 
   return (
-    <div className="flex-1 flex max-w-[1240px] mx-auto">
-      <main className="flex-1 px-6 py-8 border-x border-surface-border min-h-screen">
+    <div className="flex w-full justify-center xl:justify-start">
+      <main className="flex-1 max-w-2xl px-6 py-8 border-x border-white/5 min-h-screen">
         <GroupHeader />
         <GroupsList groups={groups} />
       </main>
