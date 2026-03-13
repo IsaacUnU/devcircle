@@ -140,6 +140,24 @@ export async function toggleBookmark(postId: string) {
   return { bookmarked: !existing }
 }
 
+// ── Delete Comment ──────────────────────────────────────────────────────────
+export async function deleteComment(commentId: string) {
+  const session = await auth()
+  if (!session?.user?.id) throw new Error('No autenticado')
+
+  const comment = await db.comment.findUnique({
+    where: { id: commentId },
+    select: { authorId: true, postId: true },
+  })
+  if (!comment) throw new Error('Comentario no encontrado')
+  if (comment.authorId !== session.user.id && (session.user as any).role !== 'ADMIN') {
+    throw new Error('Sin permiso')
+  }
+
+  await db.comment.delete({ where: { id: commentId } })
+  revalidatePath(`/post/${comment.postId}`)
+}
+
 // ── Add Comment ──────────────────────────────────────────────────────────────
 export async function addComment(data: {
   content: string

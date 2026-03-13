@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef, useCallback } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import { Search, TrendingUp, Users, Hash, FileText, X, Loader2 } from 'lucide-react'
 import { cn, getAvatarUrl } from '@/lib/utils'
@@ -34,7 +35,8 @@ interface SearchClientProps {
 
 export function SearchClient({ trendingTags }: SearchClientProps) {
   const { data: session } = useSession()
-  const [query, setQuery] = useState('')
+  const searchParams = useSearchParams()
+  const [query, setQuery] = useState(() => searchParams.get('q') ?? '')
   const [tab, setTab] = useState<SearchTab>('all')
   const [results, setResults] = useState<SearchResult | null>(null)
   const [loading, setLoading] = useState(false)
@@ -87,7 +89,7 @@ export function SearchClient({ trendingTags }: SearchClientProps) {
           type="text"
           placeholder="Buscar devs, posts, #tags..."
           value={query}
-          onChange={e => setQuery(e.target.value)}
+          onChange={e => { setQuery(e.target.value); setTab('all') }}
           onFocus={() => setFocused(true)}
           onBlur={() => setFocused(false)}
           className="flex-1 bg-transparent text-text-primary placeholder:text-text-muted outline-none text-sm"

@@ -10,6 +10,7 @@ import toast from 'react-hot-toast'
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import { MessageCircle } from 'lucide-react'
+import { MentionTextarea } from '@/components/ui/MentionTextarea'
 
 interface CommentsWrapperProps {
   postId: string
@@ -59,21 +60,21 @@ export function CommentsWrapper({ postId, initialComments }: CommentsWrapperProp
       {session ? (
         <form onSubmit={handleSubmit} className="flex gap-2.5 sm:gap-3 items-start mb-8">
           <img src={avatar} alt="" className="w-9 h-9 rounded-full object-cover shrink-0 border border-white/10" />
-          <div className="flex-1 relative">
-            <textarea
-              value={content}
-              onChange={e => setContent(e.target.value)}
-              placeholder="¿Qué piensas?"
-              className="input min-h-[44px] h-[44px] py-2.5 px-4 pr-12 resize-none text-sm transition-all focus:h-24 custom-scrollbar w-full"
-            />
-            <button
-              type="submit"
-              disabled={!content.trim() || isPending}
-              className="absolute right-2 bottom-1.5 p-1.5 text-brand-400 hover:text-brand-300 disabled:opacity-30 transition-colors"
-            >
-              <Send className="w-4 h-4" />
-            </button>
-          </div>
+          <MentionTextarea
+            value={content}
+            onChange={setContent}
+            placeholder="¿Qué piensas?"
+            className="input min-h-[44px] h-[44px] py-2.5 px-4 pr-10 resize-none text-sm transition-all focus:h-24 custom-scrollbar w-full"
+            action={
+              <button
+                type="submit"
+                disabled={!content.trim() || isPending}
+                className="p-1.5 text-brand-400 hover:text-brand-300 disabled:opacity-30 transition-colors"
+              >
+                <Send className="w-4 h-4" />
+              </button>
+            }
+          />
         </form>
       ) : (
         <div className="card p-4 text-center mb-8 border-dashed">

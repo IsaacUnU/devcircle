@@ -7,6 +7,7 @@ import { Heart, MessageCircle, Bookmark, Share2, Code, MoreHorizontal, Trash2 } 
 import { formatCount, timeAgo, cn, getAvatarUrl } from '@/lib/utils'
 import { toggleLike, toggleBookmark, deletePost } from '@/lib/actions/posts'
 import type { PostWithMeta } from '@/types'
+import { RichText } from '@/components/ui/RichText'
 import toast from 'react-hot-toast'
 
 interface PostCardProps {
@@ -41,14 +42,15 @@ export function PostCard({ post, currentUserId }: PostCardProps) {
 
   function handleLike() {
     if (!currentUserId) { toast.error('Inicia sesión para dar like'); return }
-    setLiked(prev => !prev)
-    setLikeCount(prev => liked ? prev - 1 : prev + 1)
+    const wasLiked = liked
+    setLiked(!wasLiked)
+    setLikeCount(prev => wasLiked ? prev - 1 : prev + 1)
     startTransition(async () => {
       try {
         await toggleLike(post.id)
       } catch {
-        setLiked(prev => !prev)
-        setLikeCount(prev => liked ? prev + 1 : prev - 1)
+        setLiked(wasLiked)
+        setLikeCount(prev => wasLiked ? prev + 1 : prev - 1)
       }
     })
   }
@@ -140,7 +142,7 @@ export function PostCard({ post, currentUserId }: PostCardProps) {
       {/* Content */}
       <Link href={`/post/${post.id}`} className="block group/content">
         <p className="text-text-primary text-[15px] leading-relaxed mb-4 whitespace-pre-line group-hover/content:text-text-primary/90 transition-colors">
-          {post.content}
+          <RichText text={post.content} />
         </p>
       </Link>
 

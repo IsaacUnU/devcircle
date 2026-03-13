@@ -15,23 +15,32 @@ export async function GET() {
     },
   })
 
-  // Para las FOLLOW_REQUEST, buscamos el id real del FollowRequest
-  // así el cliente puede aceptar/rechazar directamente desde la notificación
-  const enriched = await Promise.all(
-    notifications.map(async n => {
-      if (n.type !== 'FOLLOW_REQUEST') return { ...n, followRequestId: null }
+  // Recopilar todos los senderIds de FOLLOW_REQUEST en una sola query
+  const followRequestSenderIds = notifications
+    .filter(n => n.type === 'FOLLOW_REQUEST')
+    .map(n => n.triggeredBy)
 
-      const req = await db.followRequest.findUnique({
-        where: { senderId_receiverId: { senderId: n.triggeredBy, receiverId: n.receiverId } },
-        select: { id: true, status: true },
+  // Una sola query en vez de N queries
+  const pendingRequests = followRequestSenderIds.length > 0
+    ? await db.followRequest.findMany({
+        where: {
+          senderId: { in: followRequestSenderIds },
+          receiverId: session.user.id,
+          status: 'PENDING',
+        },
+        select: { id: true, senderId: true },
       })
+    : []
 
-      return {
-        ...n,
-        followRequestId: req?.status === 'PENDING' ? req.id : null,
-      }
-    })
-  )
+  // Mapa senderId → requestId para lookup O(1)
+  const requestMap = new Map(pendingRequests.map(r => [r.senderId, r.id]))
+
+  const enriched = notifications.map(n => ({
+    ...n,
+    followRequestId: n.type === 'FOLLOW_REQUEST'
+      ? (requestMap.get(n.triggeredBy) ?? null)
+      : null,
+  }))
 
   return NextResponse.json({ notifications: enriched })
 }

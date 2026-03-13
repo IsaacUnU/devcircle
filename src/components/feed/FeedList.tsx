@@ -16,42 +16,48 @@ export function FeedList({ initialPosts, initialHasMore, currentUserId }: FeedLi
     const [page, setPage] = useState(1)
     const [hasMore, setHasMore] = useState(initialHasMore)
     const [isLoading, setIsLoading] = useState(false)
-    const observerRef = useRef<IntersectionObserver | null>(null)
     const loaderRef = useRef<HTMLDivElement>(null)
 
+    // Refs para evitar stale closures en el observer
+    const isLoadingRef = useRef(false)
+    const hasMoreRef = useRef(initialHasMore)
+    const pageRef = useRef(1)
+
     const loadMore = useCallback(async () => {
-        if (isLoading || !hasMore) return
+        if (isLoadingRef.current || !hasMoreRef.current) return
+        isLoadingRef.current = true
         setIsLoading(true)
         try {
-            const nextPage = page + 1
+            const nextPage = pageRef.current + 1
             const { posts: newPosts, hasMore: more } = await fetchMoreFeed(nextPage)
             setPosts(prev => [...prev, ...newPosts])
+            pageRef.current = nextPage
+            hasMoreRef.current = more
             setPage(nextPage)
             setHasMore(more)
         } catch (error) {
             console.error('Error loading more posts:', error)
         } finally {
+            isLoadingRef.current = false
             setIsLoading(false)
         }
-    }, [page, isLoading, hasMore])
+    }, [])
 
+    // Observer estable — no se reconecta en cada carga
     useEffect(() => {
-        if (!hasMore) return
+        const el = loaderRef.current
+        if (!el) return
 
-        observerRef.current = new IntersectionObserver(entries => {
-            if (entries[0].isIntersecting) {
-                loadMore()
-            }
-        }, { threshold: 0.1, rootMargin: '400px' })
+        const observer = new IntersectionObserver(
+            entries => {
+                if (entries[0].isIntersecting) loadMore()
+            },
+            { threshold: 0.1, rootMargin: '400px' }
+        )
 
-        if (loaderRef.current) {
-            observerRef.current.observe(loaderRef.current)
-        }
-
-        return () => {
-            if (observerRef.current) observerRef.current.disconnect()
-        }
-    }, [hasMore, loadMore])
+        observer.observe(el)
+        return () => observer.disconnect()
+    }, [loadMore]) // loadMore es estable gracias a useCallback sin deps que cambien
 
     if (posts.length === 0) {
         return (
@@ -76,13 +82,14 @@ export function FeedList({ initialPosts, initialHasMore, currentUserId }: FeedLi
                     currentUserId={currentUserId}
                 />
             ))}
-            
+
+            {/* Sentinel — siempre en el DOM mientras haya más páginas */}
             {hasMore && (
                 <div ref={loaderRef} className="py-8 flex justify-center">
-                    <Loader2 className="w-6 h-6 text-brand-500 animate-spin" />
+                    {isLoading && <Loader2 className="w-6 h-6 text-brand-500 animate-spin" />}
                 </div>
             )}
-            
+
             {!hasMore && posts.length > 0 && (
                 <div className="py-8 text-center text-sm text-text-muted font-medium">
                     Has llegado al final del feed ✨

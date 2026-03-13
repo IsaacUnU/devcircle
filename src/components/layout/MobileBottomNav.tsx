@@ -4,14 +4,11 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import {
-  Home, Search, Bell, Bookmark, User, Settings,
-  PlusCircle, Code2, Play, MessageSquare,
-  Users, Briefcase
+  Home, Search, Bell, Bookmark, Settings,
+  PlusCircle, MessageSquare
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useUIStore } from '@/lib/store'
-import { getAvatarUrl } from '@/lib/utils'
-import Image from 'next/image'
 
 // Items mostrados en el Bottom Nav móvil (los 5 más importantes)
 const mobileNavItems = [

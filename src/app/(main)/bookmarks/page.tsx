@@ -30,7 +30,7 @@ export default async function BookmarksPage() {
   const posts = bookmarks.map(b => b.post)
 
   return (
-    <main className="flex-1 max-w-2xl px-4 sm:px-6 py-4 sm:py-6 border-r border-surface-border min-h-screen">
+    <main className="flex-1 max-w-2xl px-4 sm:px-6 py-4 sm:py-6 border-x border-surface-border min-h-screen">
       <div className="flex items-center gap-3 mb-6">
         <Bookmark className="w-6 h-6 text-brand-400 fill-brand-400" />
         <h1 className="text-xl font-bold text-text-primary">Guardados</h1>

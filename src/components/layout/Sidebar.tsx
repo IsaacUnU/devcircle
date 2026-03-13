@@ -4,8 +4,8 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import {
-  Home, Search, Bell, Bookmark, User, Settings,
-  PlusCircle, Code2, LogOut, Play, MessageSquare,
+  Home, Search, Bell, Bookmark, Settings,
+  PlusCircle, Code2, LogOut, MessageSquare,
   Users, Briefcase
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
@@ -16,7 +16,6 @@ import { getAvatarUrl } from '@/lib/utils'
 const navItems = [
   { href: '/feed', label: 'Feed', icon: Home },
   { href: '/search', label: 'Explorar', icon: Search },
-  { href: '/clips', label: 'DevClips', icon: Play },
   { href: '/projects', label: 'Proyectos', icon: Code2 },
   { href: '/jobs', label: 'Empleos', icon: Briefcase },
   { href: '/groups', label: 'Grupos', icon: Users },
@@ -44,7 +43,9 @@ export function Sidebar() {
       {/* Nav */}
       <nav className="flex-1 space-y-1.5 px-2">
         {navItems.map(({ href, label, icon: Icon }) => {
-          const active = pathname === href || pathname.startsWith(href + '/')
+          const active = pathname === href
+            || pathname.startsWith(href + '/')
+            || (href === '/feed' && (pathname.startsWith('/post/') || pathname.startsWith('/profile/')))
           const showBadge = href === '/notifications' && unreadCount > 0
 
           return (

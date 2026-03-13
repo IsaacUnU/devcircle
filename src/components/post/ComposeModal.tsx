@@ -3,6 +3,7 @@
 import { useState, useTransition, useRef, useEffect } from 'react'
 import { X, Code, Tag, Send, Hash, TrendingUp } from 'lucide-react'
 import { useUIStore } from '@/lib/store'
+import { MentionTextarea } from '@/components/ui/MentionTextarea'
 import { createPost } from '@/lib/actions/posts'
 import { cn } from '@/lib/utils'
 import toast from 'react-hot-toast'
@@ -23,7 +24,7 @@ export function ComposeModal() {
   const [tags, setTags] = useState<string[]>([])
   const [showCode, setShowCode] = useState(false)
   const [isPending, startTransition] = useTransition()
-  const textareaRef = useRef<HTMLTextAreaElement>(null)
+  const firstRender = useRef(true)
 
   // — Autocomplete de tags —
   const [suggestions, setSuggestions] = useState<TagSuggestion[]>([])
@@ -32,7 +33,7 @@ export function ComposeModal() {
   const fetchRef = useRef<ReturnType<typeof setTimeout>>()
 
   useEffect(() => {
-    if (isComposeOpen) textareaRef.current?.focus()
+    if (isComposeOpen) firstRender.current = false
   }, [isComposeOpen])
 
   // Reset al cerrar
@@ -136,7 +137,7 @@ export function ComposeModal() {
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:p-4 z-[100]">
+    <div className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center sm:p-4">
       <div className="fixed inset-0 bg-black/80 backdrop-blur-sm sm:backdrop-blur-md animate-fade-in" onClick={closeCompose} />
 
       <div className="relative w-full sm:max-w-lg bg-surface sm:bg-transparent animate-slide-up mt-auto sm:mt-0 max-h-[90vh] flex flex-col rounded-t-3xl sm:rounded-none shadow-[0_-8px_30px_-15px_rgba(0,0,0,0.5)] sm:shadow-none">
@@ -150,14 +151,13 @@ export function ComposeModal() {
             </button>
           </div>
 
-          {/* Textarea — SIN autocomplete aquí */}
-          <textarea
-            ref={textareaRef}
+          {/* Textarea con soporte de @menciones y #hashtags */}
+          <MentionTextarea
             value={content}
-            onChange={e => setContent(e.target.value)}
+            onChange={setContent}
             placeholder="¿Qué estás construyendo? Comparte tu código, idea o pregunta..."
             className="input resize-none h-28 text-sm"
-            maxLength={MAX_CHARS}
+            autoFocus={isComposeOpen}
           />
 
           {/* Char counter */}

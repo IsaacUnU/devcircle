@@ -35,7 +35,7 @@ export default async function SettingsPage() {
     }
 
     return (
-        <main className="flex-1 max-w-4xl px-4 sm:px-6 py-4 sm:py-6 border-x border-surface-border min-h-screen">
+        <main className="flex-1 max-w-2xl px-4 sm:px-6 py-4 sm:py-6 border-x border-surface-border min-h-screen">
             <div className="flex items-center gap-3 mb-8">
                 <Settings className="w-6 h-6 text-brand-400" />
                 <div>

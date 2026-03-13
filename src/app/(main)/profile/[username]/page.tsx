@@ -33,7 +33,8 @@ export default async function ProfilePage({ params }: Props) {
   if (!user) notFound()
 
   const isOwn      = session?.user?.id === user.id
-  const isFollowing = (user.followers?.length ?? 0) > 0
+  // followers array sólo contiene el follow del usuario actual (filtrado en getUserProfile)
+  const isFollowing = session?.user?.id ? (user.followers?.length ?? 0) > 0 : false
   const avatar     = user.image ?? getAvatarUrl(user.username)
   const privacy: PrivacySettings = { ...DEFAULT_PRIVACY, ...((user.privacySettings as any) ?? {}) }
   const isPrivate  = privacy.isPrivate && !isOwn && !isFollowing

@@ -85,7 +85,7 @@ export function RightSidebar({ suggestedUsers, trendingTags, topDevs }: RightSid
                     {trendingTags.slice(0, 5).map(tag => (
                         <Link
                             key={tag.name}
-                            href={`/search?q=${tag.name}`}
+                            href={`/search?q=%23${encodeURIComponent(tag.name)}`}
                             className="flex items-center justify-between p-2 rounded-xl hover:bg-brand-500/10 transition-all group"
                         >
                             <div className="flex flex-col">
@@ -164,12 +164,9 @@ export function RightSidebar({ suggestedUsers, trendingTags, topDevs }: RightSid
                 </div>
             </section>
 
-            {/* Footer Links */}
+            {/* Footer */}
             <div className="flex flex-wrap gap-x-4 gap-y-2 px-4 py-4 text-[10px] text-text-muted border-t border-white/5">
-                <a href="#" className="hover:text-text-primary transition-colors">Ayuda</a>
-                <a href="#" className="hover:text-text-primary transition-colors">Privacidad</a>
-                <a href="#" className="hover:text-text-primary transition-colors">Términos</a>
-                <a href="#" className="hover:text-text-primary transition-colors">© 2026 DevCircle</a>
+                <span>© {new Date().getFullYear()} DevCircle</span>
             </div>
         </aside>
     )
