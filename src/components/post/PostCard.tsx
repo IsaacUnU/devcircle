@@ -1,10 +1,11 @@
 'use client'
 
 import Link from 'next/link'
-import { useState, useTransition } from 'react'
-import { Heart, MessageCircle, Bookmark, Share2, Code } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import { useState, useTransition, useRef, useEffect } from 'react'
+import { Heart, MessageCircle, Bookmark, Share2, Code, MoreHorizontal, Trash2 } from 'lucide-react'
 import { formatCount, timeAgo, cn, getAvatarUrl } from '@/lib/utils'
-import { toggleLike, toggleBookmark } from '@/lib/actions/posts'
+import { toggleLike, toggleBookmark, deletePost } from '@/lib/actions/posts'
 import type { PostWithMeta } from '@/types'
 import toast from 'react-hot-toast'
 
@@ -14,13 +15,29 @@ interface PostCardProps {
 }
 
 export function PostCard({ post, currentUserId }: PostCardProps) {
+  const router = useRouter()
   const [isPending, startTransition] = useTransition()
   const [liked, setLiked] = useState(() => (post.likes?.length ?? 0) > 0)
   const [likeCount, setLikeCount] = useState(post._count.likes)
   const [bookmarked, setBookmarked] = useState(() => (post.bookmarks?.length ?? 0) > 0)
   const [showCode, setShowCode] = useState(false)
+  const [showMenu, setShowMenu] = useState(false)
+  const [deleted, setDeleted] = useState(false)
+  const menuRef = useRef<HTMLDivElement>(null)
 
+  const isOwner = currentUserId === post.author.id
   const authorImage = post.author.image ?? getAvatarUrl(post.author.username)
+
+  // Close menu on outside click
+  useEffect(() => {
+    function handleClick(e: MouseEvent) {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setShowMenu(false)
+      }
+    }
+    if (showMenu) document.addEventListener('mousedown', handleClick)
+    return () => document.removeEventListener('mousedown', handleClick)
+  }, [showMenu])
 
   function handleLike() {
     if (!currentUserId) { toast.error('Inicia sesión para dar like'); return }
@@ -54,8 +71,24 @@ export function PostCard({ post, currentUserId }: PostCardProps) {
     toast.success('Enlace copiado')
   }
 
+  function handleDelete() {
+    if (!confirm('¿Seguro que quieres eliminar este post? Esta acción no se puede deshacer.')) return
+    setShowMenu(false)
+    startTransition(async () => {
+      try {
+        await deletePost(post.id)
+        setDeleted(true)
+        toast.success('Post eliminado')
+      } catch (err: any) {
+        toast.error(err.message ?? 'Error al eliminar')
+      }
+    })
+  }
+
+  if (deleted) return null
+
   return (
-    <article className="card p-5 hover:border-surface-hover transition-colors animate-fade-in">
+    <article className="card p-4 sm:p-5 hover:border-surface-hover transition-colors animate-fade-in">
       {/* Author */}
       <div className="flex items-start gap-3 mb-4">
         <Link href={`/profile/${post.author.username}`} className="shrink-0">
@@ -78,6 +111,30 @@ export function PostCard({ post, currentUserId }: PostCardProps) {
             <time className="text-text-muted text-xs opacity-80">{timeAgo(post.createdAt)}</time>
           </div>
         </div>
+
+        {/* Owner menu */}
+        {isOwner && (
+          <div className="relative" ref={menuRef}>
+            <button
+              onClick={() => setShowMenu(prev => !prev)}
+              className="p-1.5 rounded-lg text-text-muted hover:text-text-primary hover:bg-surface-hover transition-all"
+            >
+              <MoreHorizontal className="w-4 h-4" />
+            </button>
+            {showMenu && (
+              <div className="absolute right-0 top-8 z-20 w-44 py-1 rounded-xl bg-surface border border-surface-border shadow-xl animate-fade-in">
+                <button
+                  onClick={handleDelete}
+                  disabled={isPending}
+                  className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-red-400 hover:bg-red-400/10 transition-colors"
+                >
+                  <Trash2 className="w-4 h-4" />
+                  Eliminar post
+                </button>
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
       {/* Content */}
@@ -105,13 +162,17 @@ export function PostCard({ post, currentUserId }: PostCardProps) {
         </div>
       )}
 
-      {/* Tags */}
+      {/* Tags — clickable */}
       {post.tags.length > 0 && (
         <div className="flex flex-wrap gap-1.5 mb-4">
           {post.tags.map(({ tag }) => (
-            <span key={tag.name} className="tag">
+            <Link
+              key={tag.name}
+              href={`/search?q=%23${encodeURIComponent(tag.name)}`}
+              className="tag hover:bg-brand-500/20 hover:text-brand-300 transition-colors cursor-pointer"
+            >
               #{tag.name}
-            </span>
+            </Link>
           ))}
         </div>
       )}

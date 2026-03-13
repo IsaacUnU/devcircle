@@ -67,11 +67,11 @@ export function ProfileTab({ user }: ProfileTabProps) {
         <h2 className="text-sm font-bold text-text-primary mb-5 flex items-center gap-2">
           <Camera className="w-4 h-4 text-brand-400" /> Foto de perfil
         </h2>
-        <div className="flex items-center gap-5">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-5">
           <div className="relative shrink-0">
-            <img src={avatarUrl || getAvatarUrl(user.username)} alt="" className="w-20 h-20 rounded-full border-2 border-brand-500/30 object-cover" />
+            <img src={avatarUrl || getAvatarUrl(user.username)} alt="" className="w-16 h-16 sm:w-20 sm:h-20 rounded-full border-2 border-brand-500/30 object-cover" />
           </div>
-          <div className="flex-1 space-y-2">
+          <div className="flex-1 w-full space-y-2">
             <p className="text-xs text-text-muted">Pega la URL de tu foto (GitHub, Gravatar, etc.)</p>
             <p className="text-[11px] text-text-muted/60">📌 Subida desde dispositivo disponible próximamente con Supabase Storage</p>
             <div className="flex gap-2">
@@ -116,7 +116,7 @@ export function ProfileTab({ user }: ProfileTabProps) {
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-xs font-bold text-text-muted uppercase mb-1.5 ml-1">Ciudad</label>
               <div className="relative">

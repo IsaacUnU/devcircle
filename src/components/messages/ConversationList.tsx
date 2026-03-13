@@ -97,7 +97,7 @@ export function ConversationList({ conversations, currentUserId, activeId }: Pro
                     className="w-10 h-10 rounded-full"
                   />
                   {unread && (
-                    <div className="absolute -top-0.5 -right-0.5 w-3 h-3 rounded-full bg-brand-500 border-2 border-bg" />
+                    <div className="absolute -top-0.5 -right-0.5 w-3 h-3 rounded-full bg-brand-500 border-2 border-surface" />
                   )}
                 </div>
                 <div className="flex-1 min-w-0">

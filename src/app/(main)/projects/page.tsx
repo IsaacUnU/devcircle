@@ -4,6 +4,12 @@ import { ProjectCard } from '@/components/projects/ProjectCard'
 import { RightSidebar } from '@/components/layout/RightSidebar'
 import { ProjectHeader } from '@/components/projects/ProjectHeader'
 import { Sparkles, Code2 } from 'lucide-react'
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+    title: 'Proyectos',
+    description: 'Descubre y comparte proyectos increíbles creados por la comunidad de DevCircle.',
+}
 
 export default async function ProjectsPage() {
     const [session, projects, suggested, trending, topDevs] = await Promise.all([
@@ -16,18 +22,18 @@ export default async function ProjectsPage() {
 
     return (
         <div className="flex-1 flex max-w-[1240px] mx-auto">
-            <main className="flex-1 px-6 py-8 border-x border-surface-border min-h-screen">
+            <main className="flex-1 px-4 sm:px-6 py-4 sm:py-8 border-x border-surface-border min-h-screen">
                 <ProjectHeader />
 
                 {/* Featured Section placeholder */}
-                <section className="mb-10 p-6 rounded-3xl bg-gradient-to-br from-brand-600/20 to-surface border border-brand-500/20 relative overflow-hidden group">
+                <section className="mb-8 p-4 sm:p-6 rounded-2xl sm:rounded-3xl bg-gradient-to-br from-brand-600/20 to-surface border border-brand-500/20 relative overflow-hidden group">
                     <div className="relative z-10 flex flex-col md:flex-row items-center gap-8">
                         <div className="flex-1">
                             <div className="flex items-center gap-2 text-brand-400 text-xs font-bold uppercase tracking-widest mb-3">
                                 <Sparkles className="w-4 h-4" />
                                 Destacado de la semana
                             </div>
-                            <h2 className="text-3xl font-black text-white mb-4 leading-tight">DevCircle v2: La Red Social para Developers</h2>
+                            <h2 className="text-xl sm:text-3xl font-black text-white mb-3 sm:mb-4 leading-tight">DevCircle v2: La Red Social para Developers</h2>
                             <p className="text-text-secondary mb-6 leading-relaxed">
                                 Explora el código fuente detrás de esta increíble plataforma. Construida con Next.js 14, Prisma, PostgreSQL y un diseño UI/UX de otro nivel.
                             </p>
@@ -49,7 +55,11 @@ export default async function ProjectsPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {projects.length > 0 ? (
                         projects.map((project: any) => (
-                            <ProjectCard key={project.id} project={project} />
+                            <ProjectCard
+                                key={project.id}
+                                project={project}
+                                currentUserId={session?.user?.id}
+                            />
                         ))
                     ) : (
                         <div className="col-span-full py-20 text-center">

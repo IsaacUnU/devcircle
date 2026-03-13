@@ -1,4 +1,5 @@
 import { Sidebar } from '@/components/layout/Sidebar'
+import { MobileBottomNav } from '@/components/layout/MobileBottomNav'
 import { ComposeModal } from '@/components/post/ComposeModal'
 import { NotificationPoller } from '@/components/providers/NotificationPoller'
 import { ProjectModal } from '@/components/projects/ProjectModal'
@@ -19,6 +20,8 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
                     {children}
                 </div>
             </div>
+            {/* Bottom nav visible solo en móvil (oculto en lg+) */}
+            <MobileBottomNav />
         </div>
     )
 }

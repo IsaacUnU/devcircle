@@ -40,9 +40,13 @@ export function NewMessageModal({ onClose, currentUserId }: Props) {
   }
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
-      <div className="bg-surface border border-surface-border rounded-2xl w-full max-w-md shadow-2xl">
-        <div className="flex items-center justify-between p-4 border-b border-surface-border">
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:p-4 overflow-hidden">
+      <div className="fixed inset-0 bg-black/50 backdrop-blur-sm animate-fade-in" onClick={onClose} />
+      
+      <div className="relative w-full sm:max-w-md bg-surface sm:bg-transparent animate-slide-up mt-auto sm:mt-0 max-h-[90vh] flex flex-col rounded-t-3xl sm:rounded-none shadow-[0_-8px_30px_-15px_rgba(0,0,0,0.5)] sm:shadow-none">
+        <div className="bg-surface border-t sm:border border-surface-border rounded-t-3xl sm:rounded-2xl shadow-2xl overflow-y-auto custom-scrollbar flex-1">
+          <div className="w-12 h-1.5 bg-surface-border rounded-full mx-auto mt-4 mb-2 sm:hidden shrink-0" />
+          <div className="flex items-center justify-between p-4 sm:p-5 border-b border-surface-border">
           <div className="flex items-center gap-2">
             <MessageSquarePlus className="w-5 h-5 text-brand-400" />
             <h2 className="font-bold text-text-primary">Nuevo mensaje</h2>
@@ -86,12 +90,11 @@ export function NewMessageModal({ onClose, currentUserId }: Props) {
                   </div>
                 </button>
               ))
-            ) : query ? (
-              <p className="text-center text-sm text-text-muted py-4">Sin resultados</p>
             ) : (
               <p className="text-center text-sm text-text-muted py-4">Escribe para buscar devs</p>
             )}
           </div>
+        </div>
         </div>
       </div>
     </div>

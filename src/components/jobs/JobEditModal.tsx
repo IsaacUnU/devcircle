@@ -70,11 +70,12 @@ export function JobEditModal({ job, onClose, onUpdated }: Props) {
     }
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-y-auto custom-scrollbar">
-            <div className="fixed inset-0 bg-black/80 backdrop-blur-md" onClick={onClose} />
+        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:p-4 overflow-hidden">
+            <div className="fixed inset-0 bg-black/80 backdrop-blur-sm sm:backdrop-blur-md animate-fade-in" onClick={onClose} />
 
-            <div className="relative w-full max-w-xl my-auto animate-slide-up">
-                <div className="card p-6 shadow-2xl glass border-brand-500/20">
+            <div className="relative w-full sm:max-w-xl bg-surface sm:bg-transparent animate-slide-up mt-auto sm:mt-0 max-h-[90vh] flex flex-col rounded-t-3xl sm:rounded-none shadow-[0_-8px_30px_-15px_rgba(0,0,0,0.5)] sm:shadow-none">
+                <div className="card p-5 sm:p-6 shadow-2xl glass border-t sm:border border-brand-500/20 overflow-y-auto custom-scrollbar rounded-t-3xl sm:rounded-2xl bg-surface/95 sm:bg-surface/80">
+                    <div className="w-12 h-1.5 bg-surface-border rounded-full mx-auto mb-6 sm:hidden" />
 
                     {/* Header */}
                     <div className="flex items-center justify-between mb-8">

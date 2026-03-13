@@ -70,7 +70,7 @@ export function SearchClient({ trendingTags }: SearchClientProps) {
   ]
 
   return (
-    <main className="flex-1 max-w-2xl px-6 py-6 border-x border-surface-border min-h-screen">
+    <main className="flex-1 max-w-2xl px-4 sm:px-6 py-4 sm:py-6 border-x border-surface-border min-h-screen">
       {/* Search bar */}
       <div className={cn(
         'relative flex items-center gap-3 px-4 py-3 rounded-2xl border transition-all duration-200',

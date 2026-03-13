@@ -10,7 +10,7 @@ export default async function GroupPage({ params }: Props) {
   if (!group) notFound()
 
   return (
-    <div className="flex-1 max-w-3xl mx-auto px-4 py-6 w-full">
+    <div className="flex-1 max-w-3xl mx-auto px-3 sm:px-4 py-4 sm:py-6 w-full">
       <GroupPageClient
         group={group}
         currentUserId={session?.user?.id ?? null}

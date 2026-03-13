@@ -114,12 +114,9 @@ export async function getUserProfile(username: string) {
       location: true,
       createdAt: true,
       reputation: true,
+      privacySettings: true,
       _count: {
-        select: {
-          posts: true,
-          followers: true,
-          following: true,
-        },
+        select: { posts: true, followers: true, following: true },
       },
       followers: session?.user?.id
         ? { where: { followerId: session.user.id }, select: { id: true } }
@@ -127,7 +124,18 @@ export async function getUserProfile(username: string) {
     },
   })
 
-  return user
+  if (!user || !session?.user?.id) return user
+
+  // ¿Hay solicitud de follow pendiente?
+  const pendingRequest = await db.followRequest.findUnique({
+    where: { senderId_receiverId: { senderId: session.user.id, receiverId: user.id } },
+    select: { status: true },
+  })
+
+  return {
+    ...user,
+    hasPendingRequest: pendingRequest?.status === 'PENDING',
+  }
 }
 
 // ── User Posts ────────────────────────────────────────────────────────────────
@@ -259,7 +267,7 @@ export async function getSuggestedUsers() {
 
     // Tags en común (max +3)
     const theirTags = new Set(user.posts.flatMap(p => p.tags.map(t => t.tag.name)))
-    const common    = [...myTags].filter(t => theirTags.has(t)).length
+    const common    = Array.from(myTags).filter(t => theirTags.has(t)).length
     score += Math.min(common, 3)
 
     return { ...user, score }

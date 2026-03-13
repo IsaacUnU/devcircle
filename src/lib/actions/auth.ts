@@ -4,6 +4,7 @@ import bcrypt from 'bcryptjs'
 import { db } from '@/lib/db'
 import { registerSchema } from '@/lib/validations'
 import { revalidatePath } from 'next/cache'
+import { rateLimit, RATE_LIMITS } from '@/lib/rateLimit'
 
 export async function register(data: any) {
     const parsed = registerSchema.safeParse(data)
@@ -12,6 +13,10 @@ export async function register(data: any) {
     }
 
     const { email, username, name, password, bio, website, location, country } = parsed.data
+
+    // Rate limit por email para evitar spam de registros
+    const rl = await rateLimit('register', email, RATE_LIMITS.register)
+    if (!rl.ok) throw new Error(rl.message)
 
     const existingEmail = await db.user.findUnique({ where: { email } })
     if (existingEmail) throw new Error('El email ya está registrado')
@@ -34,12 +39,13 @@ export async function register(data: any) {
             bio:      bio      || null,
             website:  website  || null,
             location: fullLocation,
+            password: hashedPassword,   // campo dedicado en User
             accounts: {
                 create: {
                     type: 'credentials',
                     provider: 'credentials',
                     providerAccountId: email,
-                    access_token: hashedPassword,
+                    // access_token ya no se usa para la contraseña
                 },
             },
         },

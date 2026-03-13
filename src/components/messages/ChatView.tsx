@@ -99,7 +99,7 @@ export function ChatView({ conversationId, currentUserId, otherUser, initialMess
             {/* Messages */}
             <div
                 ref={scrollRef}
-                className="flex-1 overflow-y-auto p-6 space-y-6 scrollbar-hide"
+                className="flex-1 overflow-y-auto p-3 sm:p-6 space-y-4 sm:space-y-6 scrollbar-hide"
             >
                 {messages.map((msg, i) => {
                     const isMe = msg.senderId === currentUserId

@@ -63,10 +63,12 @@ model User {
   image         String?
   website       String?
   location      String?
+  password      String?   @db.Text  // bcrypt hash — null para usuarios OAuth
   reputation    Int       @default(0)
   verified      Boolean   @default(false)
-  notifPrefs    Json?     // { likes: bool, comments: bool, follows: bool, mentions: bool }
-  role          Role      @default(USER)
+  notifPrefs      Json?   // { likes: bool, comments: bool, follows: bool, mentions: bool }
+  privacySettings Json?  // { isPrivate, showFollowers, showFollowing, whoCanMessage, whoCanComment }
+  role            Role   @default(USER)
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 
@@ -99,6 +101,9 @@ model User {
   groupInvites  GroupInvite[]
   jobs     Job[]
 
+  followRequestsSent     FollowRequest[] @relation("RequestSender")
+  followRequestsReceived FollowRequest[] @relation("RequestReceiver")
+
   @@index([username])
   @@index([email])
   @@map("users")
@@ -109,7 +114,24 @@ enum Role {
   ADMIN
 }
 
-// ─── FOLLOWS ────────────────────────────────────────────────────────────────
+// ─── FOLLOW REQUESTS (perfil privado) ───────────────────────────────────────
+
+model FollowRequest {
+  id         String   @id @default(cuid())
+  senderId   String
+  receiverId String
+  status     String   @default("PENDING") // PENDING, ACCEPTED, REJECTED
+  createdAt  DateTime @default(now())
+
+  sender   User @relation("RequestSender",   fields: [senderId],   references: [id], onDelete: Cascade)
+  receiver User @relation("RequestReceiver", fields: [receiverId], references: [id], onDelete: Cascade)
+
+  @@unique([senderId, receiverId])
+  @@index([receiverId, status])
+  @@map("follow_requests")
+}
+
+// ─── FOLLOWS ─────────────────────────────────────────────────────────────────
 
 model Follow {
   id          String   @id @default(cuid())
@@ -238,6 +260,7 @@ model Notification {
   receiver User @relation("NotificationReceiver", fields: [receiverId], references: [id], onDelete: Cascade)
   trigger  User @relation("NotificationTrigger", fields: [triggeredBy], references: [id], onDelete: Cascade)
 
+  @@unique([type, triggeredBy, receiverId])
   @@index([receiverId, read])
   @@index([createdAt])
   @@map("notifications")
@@ -247,6 +270,8 @@ enum NotificationType {
   LIKE
   COMMENT
   FOLLOW
+  FOLLOW_REQUEST
+  FOLLOW_ACCEPTED
   MENTION
   REPLY
   REPUTATION
@@ -368,6 +393,7 @@ model Job {
   salary      String?
   description String   @db.Text
   url         String?
+  techStack   String[]
   authorId    String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt

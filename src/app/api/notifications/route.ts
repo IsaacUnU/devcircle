@@ -15,7 +15,25 @@ export async function GET() {
     },
   })
 
-  return NextResponse.json({ notifications })
+  // Para las FOLLOW_REQUEST, buscamos el id real del FollowRequest
+  // así el cliente puede aceptar/rechazar directamente desde la notificación
+  const enriched = await Promise.all(
+    notifications.map(async n => {
+      if (n.type !== 'FOLLOW_REQUEST') return { ...n, followRequestId: null }
+
+      const req = await db.followRequest.findUnique({
+        where: { senderId_receiverId: { senderId: n.triggeredBy, receiverId: n.receiverId } },
+        select: { id: true, status: true },
+      })
+
+      return {
+        ...n,
+        followRequestId: req?.status === 'PENDING' ? req.id : null,
+      }
+    })
+  )
+
+  return NextResponse.json({ notifications: enriched })
 }
 
 export async function PATCH() {

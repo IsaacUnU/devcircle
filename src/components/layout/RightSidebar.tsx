@@ -34,7 +34,10 @@ export function RightSidebar({ suggestedUsers, trendingTags, topDevs }: RightSid
             <section className="space-y-4">
                 <div className="flex items-center gap-2 px-1">
                     <Trophy className="w-5 h-5 text-yellow-500" />
-                    <h2 className="font-bold text-text-primary text-sm uppercase tracking-wider">Top Contribuidores</h2>
+                    <Link href={`/leaderboard`}>
+                        <h2 className="font-bold text-text-primary text-sm uppercase 
+                        tracking-wider cursor-pointer hover:text-brand-400 transition-colors">Top Contribuidores</h2>
+                    </Link>
                 </div>
                 <div className="card p-4 space-y-4">
                     {topDevs.map((user, i) => (

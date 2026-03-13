@@ -3,6 +3,12 @@ import { getJobs, getSuggestedUsers, getTrendingTags, getTopContributors } from 
 import { RightSidebar } from '@/components/layout/RightSidebar'
 import { JobHeader } from '@/components/jobs/JobHeader'
 import { JobsList } from '@/components/jobs/JobsList'
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+    title: 'Empleos',
+    description: 'Encuentra las mejores oportunidades laborales en tecnología.',
+}
 
 export default async function JobsPage() {
     const [session, jobs, suggested, trending, topDevs] = await Promise.all([
@@ -15,7 +21,7 @@ export default async function JobsPage() {
 
     return (
         <div className="flex w-full justify-center xl:justify-start">
-            <main className="flex-1 max-w-2xl px-6 py-8 border-x border-white/5 min-h-screen">
+            <main className="flex-1 max-w-2xl px-4 sm:px-6 py-4 sm:py-8 border-x border-white/5 min-h-screen">
                 <JobHeader />
                 <JobsList initialJobs={jobs as any} currentUserId={session?.user?.id} />
             </main>

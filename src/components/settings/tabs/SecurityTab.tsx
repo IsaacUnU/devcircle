@@ -15,14 +15,14 @@ interface SecurityTabProps {
 
 export function SecurityTab({ isOAuth, email }: SecurityTabProps) {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
-  const [deleteInput, setDeleteInput]             = useState('')
-  const [deletePass, setDeletePass]               = useState('')
-  const [isPendingDelete, startDelete]            = useTransition()
+  const [deleteInput, setDeleteInput] = useState('')
+  const [deletePass, setDeletePass] = useState('')
+  const [isPendingDelete, startDelete] = useTransition()
 
   // ── Cambiar contraseña ──────────────────────────────────────────────────────
   const [showCurrent, setShowCurrent] = useState(false)
-  const [showNew, setShowNew]         = useState(false)
-  const [isPendingPass, startPass]    = useTransition()
+  const [showNew, setShowNew] = useState(false)
+  const [isPendingPass, startPass] = useTransition()
   const passForm = useForm<{ current: string; next: string; confirm: string }>()
 
   const onChangePassword = (data: any) => {

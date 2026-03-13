@@ -5,11 +5,15 @@ import { getFeed, getSuggestedUsers, getTrendingTags, getTopContributors } from 
 import { PostCard } from '@/components/post/PostCard'
 import { RightSidebar } from '@/components/layout/RightSidebar'
 import { Sparkles } from 'lucide-react'
+import { FeedList } from '@/components/feed/FeedList'
 
-export const metadata: Metadata = { title: 'Feed' }
+export const metadata: Metadata = { 
+  title: 'Feed',
+  description: 'Descubre los últimos posts, proyectos y conversaciones de la comunidad de desarrolladores de DevCircle.',
+}
 
 export default async function FeedPage() {
-  const [session, { posts }, suggested, trending, topDevs] = await Promise.all([
+  const [session, { posts, hasMore }, suggested, trending, topDevs] = await Promise.all([
     auth(),
     getFeed(),
     getSuggestedUsers(),
@@ -20,7 +24,7 @@ export default async function FeedPage() {
   return (
     <div className="flex w-full justify-center xl:justify-start">
       {/* Main feed */}
-      <main className="flex-1 max-w-2xl px-6 py-8 border-x border-white/5 min-h-screen">
+      <main className="flex-1 max-w-2xl px-4 sm:px-6 py-4 sm:py-8 border-x border-white/5 min-h-screen">
         <div className="flex items-center gap-3 mb-8 px-2">
           <div className="w-10 h-10 rounded-xl bg-brand-500/10 flex items-center justify-center border border-brand-500/20">
             <Sparkles className="w-6 h-6 text-brand-400" />
@@ -31,27 +35,11 @@ export default async function FeedPage() {
           </div>
         </div>
 
-        {posts.length === 0 ? (
-          <div className="card p-16 text-center shadow-xl">
-            <div className="w-16 h-16 bg-surface-hover rounded-full flex items-center justify-center mx-auto mb-6 border border-white/5">
-              <Sparkles className="w-8 h-8 text-text-muted opacity-30" />
-            </div>
-            <p className="text-text-primary font-bold text-lg mb-2">Tu feed está muy tranquilo</p>
-            <p className="text-sm text-text-muted max-w-xs mx-auto">
-              Sigue a otros developers de la comunidad para ver sus proyectos y aprendizajes aquí.
-            </p>
-          </div>
-        ) : (
-          <div className="space-y-6">
-            {posts.map(post => (
-              <PostCard
-                key={post.id}
-                post={post as any}
-                currentUserId={session?.user?.id}
-              />
-            ))}
-          </div>
-        )}
+        <FeedList 
+          initialPosts={posts} 
+          initialHasMore={hasMore} 
+          currentUserId={session?.user?.id}
+        />
       </main>
 
       {/* Right sidebar */}

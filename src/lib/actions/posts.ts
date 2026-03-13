@@ -5,6 +5,7 @@ import { auth } from '@/lib/auth'
 import { db } from '@/lib/db'
 import { createPostSchema, createCommentSchema } from '@/lib/validations'
 import { updateReputation } from './reputation'
+import { rateLimit, RATE_LIMITS } from '@/lib/rateLimit'
 
 // ── Create Post ─────────────────────────────────────────────────────────────
 export async function createPost(data: {
@@ -15,6 +16,9 @@ export async function createPost(data: {
 }) {
   const session = await auth()
   if (!session?.user?.id) throw new Error('No autenticado')
+
+  const rl = await rateLimit('createPost', session.user.id, RATE_LIMITS.createPost)
+  if (!rl.ok) throw new Error(rl.message)
 
   const parsed = createPostSchema.safeParse(data)
   if (!parsed.success) throw new Error(parsed.error.errors[0].message)
@@ -94,8 +98,16 @@ export async function toggleLike(postId: string) {
       // Reputation: +2 for the post author when liked
       await updateReputation(post.authorId, 2)
 
-      await db.notification.create({
-        data: {
+      await db.notification.upsert({
+        where: {
+          type_triggeredBy_receiverId: {
+            type: 'LIKE',
+            triggeredBy: session.user.id,
+            receiverId: post.authorId,
+          },
+        },
+        update: { read: false, createdAt: new Date(), postId },
+        create: {
           type: 'LIKE',
           receiverId: post.authorId,
           triggeredBy: session.user.id,
@@ -137,6 +149,9 @@ export async function addComment(data: {
   const session = await auth()
   if (!session?.user?.id) throw new Error('No autenticado')
 
+  const rl = await rateLimit('addComment', session.user.id, RATE_LIMITS.addComment)
+  if (!rl.ok) throw new Error(rl.message)
+
   const parsed = createCommentSchema.safeParse(data)
   if (!parsed.success) throw new Error(parsed.error.errors[0].message)
 
@@ -150,12 +165,26 @@ export async function addComment(data: {
     include: { author: true },
   })
 
-  // Notify post author
+  // Notify post author — upsert para evitar unique constraint si comenta varias veces
   const post = await db.post.findUnique({ where: { id: data.postId } })
   if (post && post.authorId !== session.user.id) {
-    await db.notification.create({
-      data: {
-        type: data.parentId ? 'REPLY' : 'COMMENT',
+    const notifType = data.parentId ? 'REPLY' : 'COMMENT'
+    await db.notification.upsert({
+      where: {
+        type_triggeredBy_receiverId: {
+          type: notifType,
+          triggeredBy: session.user.id,
+          receiverId: post.authorId,
+        },
+      },
+      update: {
+        read: false,
+        createdAt: new Date(),
+        commentId: comment.id,
+        postId: data.postId,
+      },
+      create: {
+        type: notifType,
         receiverId: post.authorId,
         triggeredBy: session.user.id,
         postId: data.postId,

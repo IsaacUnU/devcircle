@@ -2,7 +2,7 @@ import { z } from 'zod'
 
 export const loginSchema = z.object({
   email: z.string().email('Email inválido'),
-  password: z.string().min(6, 'Mínimo 6 caracteres'),
+  password: z.string().min(8, 'Mínimo 8 caracteres'),
 })
 
 export const registerSchema = z.object({
@@ -59,6 +59,7 @@ export const createJobSchema = z.object({
   salary: z.string().optional(),
   description: z.string().min(10).max(5000),
   url: z.string().url().optional().or(z.literal('')),
+  techStack: z.array(z.string()).max(10).optional(),
 })
 
 export const createGroupSchema = z.object({

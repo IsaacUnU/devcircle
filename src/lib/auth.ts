@@ -33,13 +33,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         })
         if (!user) return null
 
-        // For OAuth users without password
-        const account = await db.account.findFirst({
-          where: { userId: user.id, type: 'credentials' },
-        })
-        if (!account?.access_token) return null
+        // Usuarios OAuth no tienen contraseña local
+        if (!user.password) return null
 
-        const valid = await bcrypt.compare(parsed.data.password, account.access_token)
+        const valid = await bcrypt.compare(parsed.data.password, user.password)
         if (!valid) return null
 
         return user

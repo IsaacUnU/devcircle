@@ -84,13 +84,17 @@ export function JobDetailModal({ job, currentUserId, onClose, onEdit, onDeleted 
         <div
             ref={backdropRef}
             onClick={e => { if (e.target === backdropRef.current) onClose() }}
-            className="fixed inset-0 z-50 flex items-center justify-center p-4"
+            className="fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:p-4 overflow-hidden"
             style={{ background: 'rgba(0,0,0,0.80)', backdropFilter: 'blur(6px)' }}
         >
-            <div className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto card shadow-2xl border-brand-500/20">
+            <div className="relative w-full sm:max-w-2xl bg-surface sm:bg-transparent animate-slide-up mt-auto sm:mt-0 max-h-[90vh] flex flex-col rounded-t-3xl sm:rounded-none shadow-[0_-8px_30px_-15px_rgba(0,0,0,0.5)] sm:shadow-none">
+                <div className="w-full bg-surface-card pt-4 pb-2 sm:hidden rounded-t-3xl shrink-0 border-b border-surface-border">
+                    <div className="w-12 h-1.5 bg-surface-border rounded-full mx-auto" />
+                </div>
+                <div className="card shadow-2xl sm:border border-brand-500/20 overflow-y-auto custom-scrollbar sm:rounded-2xl bg-surface/95 sm:bg-surface/80 flex-1 flex flex-col">
 
                 {/* Header */}
-                <div className="sticky top-0 z-10 flex items-start justify-between gap-4 p-6 pb-4 bg-surface-card border-b border-surface-border">
+                <div className="sticky top-0 z-10 flex items-start justify-between gap-4 p-5 sm:p-6 pb-4 bg-surface-card border-b border-surface-border">
                     <div className="flex gap-4 flex-1 min-w-0">
                         <div className="w-12 h-12 rounded-2xl bg-surface-hover border border-surface-border flex items-center justify-center shrink-0">
                             <Building2 className="w-6 h-6 text-brand-400" />
@@ -201,6 +205,7 @@ export function JobDetailModal({ job, currentUserId, onClose, onEdit, onDeleted 
                     <button onClick={onClose} className="btn-ghost px-5 py-2.5 rounded-xl text-sm font-bold">
                         Cerrar
                     </button>
+                </div>
                 </div>
             </div>
         </div>

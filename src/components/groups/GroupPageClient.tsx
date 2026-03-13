@@ -208,24 +208,24 @@ export function GroupPageClient({ group: initialGroup, currentUserId }: GroupPag
           <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-surface to-transparent" />
         </div>
 
-        <div className="px-6 pb-5 -mt-8 relative">
-          <div className="flex items-end justify-between mb-3">
-            <div className="w-16 h-16 rounded-2xl border-4 border-surface overflow-hidden bg-surface-hover flex items-center justify-center shadow-xl shrink-0">
+          <div className="px-4 sm:px-6 pb-5 -mt-8 relative">
+          <div className="flex items-start sm:items-end justify-between mb-3 gap-2">
+            <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl border-4 border-surface overflow-hidden bg-surface-hover flex items-center justify-center shadow-xl shrink-0">
               {group.image
                 ? <img src={group.image} alt={group.name} className="w-full h-full object-cover" />
-                : <Users className="w-8 h-8 text-brand-400" />
+                : <Users className="w-7 h-7 sm:w-8 sm:h-8 text-brand-400" />
               }
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1.5 flex-wrap justify-end">
               {!currentUserId && <span className="text-xs text-text-muted">Inicia sesión para unirte</span>}
               {currentUserId && !isMember && !group.isPrivate && (
-                <button onClick={handleJoin} disabled={isPending} className="btn-primary px-4 py-2 text-sm">Unirse</button>
+                <button onClick={handleJoin} disabled={isPending} className="btn-primary px-3 sm:px-4 py-2 text-sm">Unirse</button>
               )}
               {currentUserId && !isMember && group.isPrivate && (
                 <button onClick={handleRequestJoin} disabled={isPending || joinRequested}
-                  className="flex items-center gap-1.5 px-4 py-2 text-sm rounded-xl border border-brand-500/30 text-brand-400 hover:bg-brand-500/10 transition-all disabled:opacity-50">
-                  <Lock className="w-3.5 h-3.5" />
-                  {joinRequested ? 'Solicitud enviada' : 'Solicitar acceso'}
+                  className="flex items-center gap-1 sm:gap-1.5 px-3 sm:px-4 py-2 text-xs sm:text-sm rounded-xl border border-brand-500/30 text-brand-400 hover:bg-brand-500/10 transition-all disabled:opacity-50">
+                  <Lock className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+                  {joinRequested ? 'Enviada' : 'Solicitar'}
                 </button>
               )}
               {currentUserId && isMember && (
@@ -236,14 +236,16 @@ export function GroupPageClient({ group: initialGroup, currentUserId }: GroupPag
               )}
               {currentUserId && isMember && !isCreator && (
                 <button onClick={handleLeave} disabled={isPending}
-                  className="flex items-center gap-1.5 px-3 py-2 text-sm rounded-xl border border-white/10 text-text-muted hover:border-red-500/30 hover:text-red-400 transition-all">
-                  <LogOut className="w-3.5 h-3.5" /> Salir
+                  className="flex items-center gap-1 px-2 sm:px-3 py-2 text-xs sm:text-sm rounded-xl border border-white/10 text-text-muted hover:border-red-500/30 hover:text-red-400 transition-all">
+                  <LogOut className="w-3.5 h-3.5" />
+                  <span className="hidden sm:inline">Salir</span>
                 </button>
               )}
               {isAdmin && (
                 <button onClick={() => setShowEditModal(true)}
-                  className="flex items-center gap-1.5 px-3 py-2 text-sm rounded-xl border border-brand-500/30 text-brand-400 hover:bg-brand-500/10 transition-all">
-                  <Settings className="w-3.5 h-3.5" /> Gestionar
+                  className="flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-2 text-xs sm:text-sm rounded-xl border border-brand-500/30 text-brand-400 hover:bg-brand-500/10 transition-all">
+                  <Settings className="w-3.5 h-3.5" />
+                  <span className="hidden sm:inline">Gestionar</span>
                 </button>
               )}
             </div>
@@ -257,12 +259,14 @@ export function GroupPageClient({ group: initialGroup, currentUserId }: GroupPag
             {muted && <span className="flex items-center gap-1 text-[10px] font-bold bg-white/5 text-text-muted px-2 py-0.5 rounded-full"><BellOff className="w-3 h-3" /> Silenciado</span>}
           </div>
           {group.description && <p className="text-sm text-text-secondary mb-3 leading-relaxed">{group.description}</p>}
-          <div className="flex items-center gap-4 text-xs text-text-muted">
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-text-muted">
             <span className="flex items-center gap-1"><Users className="w-3.5 h-3.5" /> {group._count.members} miembros</span>
-            <span>· Creado por</span>
-            <Link href={`/profile/${group.creator.username}`} className="flex items-center gap-1 text-brand-400 hover:underline">
-              <Crown className="w-3 h-3" /> {group.creator.name ?? group.creator.username}
-            </Link>
+            <span className="hidden sm:inline">·</span>
+            <span className="flex items-center gap-1">Creado por
+              <Link href={`/profile/${group.creator.username}`} className="flex items-center gap-1 text-brand-400 hover:underline ml-1">
+                <Crown className="w-3 h-3" /> {group.creator.name ?? group.creator.username}
+              </Link>
+            </span>
           </div>
         </div>
       </div>
@@ -306,11 +310,11 @@ export function GroupPageClient({ group: initialGroup, currentUserId }: GroupPag
               <p className="text-text-muted text-sm">Sin publicaciones todavía. ¡Sé el primero!</p>
             </div>
           ) : group.posts.map((post: any) => (
-            <div key={post.id} className="card p-5">
+            <div key={post.id} className="card p-4 sm:p-5">
               <div className="flex items-center gap-3 mb-3">
                 <Link href={`/profile/${post.author.username}`}>
                   <img src={post.author.image ?? getAvatarUrl(post.author.username)} alt=""
-                    className="w-9 h-9 rounded-full border border-white/10 object-cover" />
+                    className="w-8 h-8 sm:w-9 sm:h-9 rounded-full border border-white/10 object-cover" />
                 </Link>
                 <div className="flex-1">
                   <Link href={`/profile/${post.author.username}`}
@@ -337,7 +341,7 @@ export function GroupPageClient({ group: initialGroup, currentUserId }: GroupPag
       {tab === 'members' && (
         <div className="card divide-y divide-surface-border overflow-hidden">
           {group.members.map((m: any) => (
-            <div key={m.userId} className="flex items-center gap-3 px-5 py-3 hover:bg-white/[0.02] transition-colors">
+            <div key={m.userId} className="flex items-center gap-3 px-3 sm:px-5 py-3 hover:bg-white/[0.02] transition-colors">
               <Link href={`/profile/${m.user.username}`}>
                 <img src={m.user.image ?? getAvatarUrl(m.user.username)} alt=""
                   className="w-10 h-10 rounded-full border border-white/10 object-cover" />

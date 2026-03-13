@@ -48,7 +48,7 @@ export default async function MessagesPage() {
 
       {/* Empty state */}
       <div className="hidden md:flex flex-1 flex-col items-center justify-center bg-[#0a0a0a]/50 p-6 text-center">
-        <div className="w-20 h-20 rounded-3xl bg-surface-hover flex items-center justify-center border border-surface-border mb-6 animate-float">
+        <div className="w-20 h-20 rounded-3xl bg-surface-hover flex items-center justify-center border border-surface-border mb-6 animate-pulse">
           <MessageSquare className="w-10 h-10 text-brand-400 opacity-50" />
         </div>
         <h2 className="text-xl font-bold text-text-primary mb-2">Tus mensajes</h2>
