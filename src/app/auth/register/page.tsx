@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { RegisterForm } from '@/components/auth/RegisterForm'
 import { Code2, Github } from 'lucide-react'
 
-export const metadata: Metadata = { title: 'Registrarse | DevCircle' }
+export const metadata: Metadata = { title: 'Registrarse | Devora' }
 
 export default function RegisterPage() {
     return (
@@ -13,7 +13,7 @@ export default function RegisterPage() {
                     <div className="w-16 h-16 rounded-2xl bg-brand-500/10 flex items-center justify-center border border-brand-500/20 mb-4">
                         <Code2 className="w-10 h-10 text-brand-500" />
                     </div>
-                    <h1 className="text-3xl font-black tracking-tighter uppercase italic">DevCircle</h1>
+                    <h1 className="text-3xl font-black tracking-tighter uppercase italic">Devora</h1>
                     <p className="text-text-muted font-medium mt-1">Únete a la elite de desarrolladores</p>
                 </div>
 

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { timeAgo, getAvatarUrl } from '@/lib/utils'
 import { cn } from '@/lib/utils'
 import Link from 'next/link'
@@ -41,7 +41,17 @@ function InlineReplyForm({
   const { data: session } = useSession()
   const [content, setContent] = useState('')
   const [loading, setLoading] = useState(false)
-  const avatar = session?.user?.image ?? getAvatarUrl((session?.user as any)?.username ?? '')
+  const [freshAvatar, setFreshAvatar] = useState<string | null>(null)
+
+  useEffect(() => {
+    if (!session?.user?.id) return
+    fetch('/api/user/avatar')
+      .then(r => r.json())
+      .then(d => { if (d.image) setFreshAvatar(d.image) })
+      .catch(() => { })
+  }, [session?.user?.id])
+
+  const avatar = freshAvatar ?? session?.user?.image ?? getAvatarUrl((session?.user as any)?.username ?? '')
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -59,7 +69,7 @@ function InlineReplyForm({
           id: (session?.user as any)?.id,
           username: (session?.user as any)?.username ?? '',
           name: session?.user?.name ?? null,
-          image: session?.user?.image ?? null,
+          image: freshAvatar ?? session?.user?.image ?? null,
         },
         replies: [],
       })

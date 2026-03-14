@@ -9,7 +9,7 @@ import { FeedList } from '@/components/feed/FeedList'
 
 export const metadata: Metadata = { 
   title: 'Feed',
-  description: 'Descubre los últimos posts, proyectos y conversaciones de la comunidad de desarrolladores de DevCircle.',
+  description: 'Descubre los últimos posts, proyectos y conversaciones de la comunidad de desarrolladores de Devora.',
 }
 
 export default async function FeedPage() {

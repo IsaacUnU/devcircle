@@ -129,7 +129,7 @@ export function SearchClient({ trendingTags }: SearchClientProps) {
           <div>
             <div className="flex items-center gap-2 mb-4">
               <TrendingUp className="w-5 h-5 text-brand-400" />
-              <h2 className="font-semibold text-text-primary">Trending en DevCircle</h2>
+              <h2 className="font-semibold text-text-primary">Trending en Devora</h2>
             </div>
 
             {trendingTags.length === 0 ? (
@@ -186,7 +186,11 @@ export function SearchClient({ trendingTags }: SearchClientProps) {
                   {results.users.map(user => (
                     <Link key={user.id} href={`/profile/${user.username}`}
                       className="card p-4 flex items-center gap-3 hover:border-brand-500/30 transition-all group">
-                      <img src={user.image ?? getAvatarUrl(user.username)} alt="" className="w-11 h-11 rounded-full" />
+                      <img 
+                        src={user.image ?? getAvatarUrl(user.username)} 
+                        alt="" 
+                        className="w-11 h-11 avatar object-cover shadow-sm" 
+                      />
                       <div className="flex-1 min-w-0">
                         <p className="font-semibold text-text-primary group-hover:text-brand-400 transition-colors">{user.name ?? user.username}</p>
                         <p className="text-sm text-text-muted">@{user.username}</p>

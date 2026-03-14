@@ -1,4 +1,4 @@
-# DevCircle 🔵
+# Devora 🚀
 
 > La red social definitiva para desarrolladores. Comparte proyectos, código, clips y conecta con una comunidad global de talento técnico.
 
@@ -101,4 +101,4 @@ npm run test:e2e
 - [ ] Streaming en vivo para sesiones de live coding.
 
 ---
-Hecho con 💙 por la comunidad de **DevCircle**.
+Hecho con 💚 por la comunidad de **Devora**.

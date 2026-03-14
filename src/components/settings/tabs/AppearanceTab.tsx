@@ -25,7 +25,7 @@ export function AppearanceTab() {
 
   const applyTheme = (id: string) => {
     setTheme(id)
-    // Por ahora DevCircle es dark-only, guardamos la preferencia
+    // Por ahora Devora es dark-only, guardamos la preferencia
     // y mostramos un aviso si eligen claro
     if (id === 'light') {
       toast('El tema claro estará disponible próximamente', { icon: '🎨' })

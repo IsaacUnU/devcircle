@@ -82,7 +82,7 @@ export function NewMessageModal({ onClose, currentUserId }: Props) {
                   <img
                     src={user.image ?? getAvatarUrl(user.username)}
                     alt=""
-                    className="w-9 h-9 rounded-full"
+                    className="w-9 h-9 avatar object-cover shadow-sm"
                   />
                   <div>
                     <p className="text-sm font-medium text-text-primary">{user.name ?? user.username}</p>

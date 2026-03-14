@@ -80,7 +80,7 @@ export function ProjectModal() {
                             <label className="block text-xs font-bold text-text-muted uppercase mb-1.5 ml-1">Título del Proyecto</label>
                             <input
                                 {...register('title')}
-                                placeholder="Ej: DevCircle, Mi Portafolio, etc."
+                                placeholder="Ej: Devora, Mi Portafolio, etc."
                                 className={cn("input", errors.title && "border-red-500/50")}
                             />
                             {errors.title && <p className="text-[10px] text-red-500 mt-1 ml-1">{errors.title.message}</p>}

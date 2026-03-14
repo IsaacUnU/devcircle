@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useTransition } from 'react'
+import { useState, useTransition, useEffect } from 'react'
 import { CommentList } from './CommentList'
 import { getAvatarUrl } from '@/lib/utils'
 import { addComment } from '@/lib/actions/posts'
@@ -22,8 +22,17 @@ export function CommentsWrapper({ postId, initialComments }: CommentsWrapperProp
   const [comments, setComments] = useState(initialComments)
   const [content, setContent] = useState('')
   const [isPending, startTransition] = useTransition()
+  const [freshAvatar, setFreshAvatar] = useState<string | null>(null)
 
-  const avatar = session?.user?.image ?? getAvatarUrl((session?.user as any)?.username ?? 'anon')
+  useEffect(() => {
+    if (!session?.user?.id) return
+    fetch('/api/user/avatar')
+      .then(r => r.json())
+      .then(d => { if (d.image) setFreshAvatar(d.image) })
+      .catch(() => { })
+  }, [session?.user?.id])
+
+  const avatar = freshAvatar ?? session?.user?.image ?? getAvatarUrl((session?.user as any)?.username ?? 'anon')
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -42,7 +51,7 @@ export function CommentsWrapper({ postId, initialComments }: CommentsWrapperProp
             id: (session?.user as any)?.id,
             username: (session?.user as any)?.username ?? '',
             name: session?.user?.name ?? null,
-            image: session?.user?.image ?? null,
+            image: freshAvatar ?? session?.user?.image ?? null,
           },
           replies: [],
         }

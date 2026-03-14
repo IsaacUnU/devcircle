@@ -34,7 +34,7 @@ test.describe('Feed', () => {
 test.describe('Navegación', () => {
   test('logo lleva al feed', async ({ page }) => {
     await page.goto('/auth/login')
-    const logo = page.locator('text=DevCircle').first()
+    const logo = page.locator('text=Devora').first()
     await expect(logo).toBeVisible()
   })
 

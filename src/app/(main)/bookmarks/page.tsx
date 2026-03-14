@@ -5,7 +5,7 @@ import { db } from '@/lib/db'
 import { PostCard } from '@/components/post/PostCard'
 import { Bookmark } from 'lucide-react'
 
-export const metadata: Metadata = { title: 'Guardados · DevCircle' }
+export const metadata: Metadata = { title: 'Guardados · Devora' }
 
 export default async function BookmarksPage() {
   const session = await auth()

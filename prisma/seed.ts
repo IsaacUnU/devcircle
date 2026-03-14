@@ -1,5 +1,5 @@
 /**
- * DevCircle — Seed de desarrollo
+ * Devora — Seed de desarrollo
  * Crea usuarios realistas de prueba + admin IsaacUnU
  * Ejecutar con: npm run db:seed
  */
@@ -14,10 +14,10 @@ const db = new PrismaClient()
 const users = [
   {
     username: 'IsaacUnU',
-    email: 'isaac@devcircle.dev',
+    email: 'isaac@devora.dev',
     name: 'Isaac López',
     password: 'Admin1234!',
-    bio: '🚀 Full-stack dev & creador de DevCircle. Apasionado del open-source y las redes sociales para devs.',
+    bio: '🚀 Full-stack dev & creador de Devora. Apasionado del open-source y las redes sociales para devs.',
     website: 'https://github.com/isaaclopez',
     location: 'Alicante, España',
     role: 'ADMIN' as const,
@@ -26,7 +26,7 @@ const users = [
   },
   {
     username: 'alexdev',
-    email: 'alex@devcircle.dev',
+    email: 'alex@devora.dev',
     name: 'Alejandro Martín',
     password: 'Test1234!',
     bio: '💻 Backend developer obsesionado con Rust y sistemas distribuidos. Coffee addict ☕',
@@ -38,7 +38,7 @@ const users = [
   },
   {
     username: 'saramontoya',
-    email: 'sara@devcircle.dev',
+    email: 'sara@devora.dev',
     name: 'Sara Montoya',
     password: 'Test1234!',
     bio: '🎨 Frontend dev & UX lover. React, TypeScript y mucho CSS. Creo que el diseño importa tanto como el código.',
@@ -50,7 +50,7 @@ const users = [
   },
   {
     username: 'carlosml',
-    email: 'carlos@devcircle.dev',
+    email: 'carlos@devora.dev',
     name: 'Carlos Jiménez',
     password: 'Test1234!',
     bio: '🤖 ML Engineer en love con Python y PyTorch. Kaggle grandmaster. Building AI things.',
@@ -61,7 +61,7 @@ const users = [
   },
   {
     username: 'lauraops',
-    email: 'laura@devcircle.dev',
+    email: 'laura@devora.dev',
     name: 'Laura García',
     password: 'Test1234!',
     bio: '☁️ DevOps & Cloud architect. AWS, Kubernetes, Terraform. Si no está automatizado, no cuenta.',
@@ -72,7 +72,7 @@ const users = [
   },
   {
     username: 'miguelsec',
-    email: 'miguel@devcircle.dev',
+    email: 'miguel@devora.dev',
     name: 'Miguel Rodríguez',
     password: 'Test1234!',
     bio: '🔐 Cybersecurity engineer & ethical hacker. CTF player. Bug bounty hunter.',
@@ -84,7 +84,7 @@ const users = [
   },
   {
     username: 'anaruby',
-    email: 'ana@devcircle.dev',
+    email: 'ana@devora.dev',
     name: 'Ana Fernández',
     password: 'Test1234!',
     bio: '💎 Ruby on Rails dev & open-source contributor. Amante de la simplicidad y el código limpio.',
@@ -117,8 +117,8 @@ const posts = [
   },
   {
     authorUsername: 'IsaacUnU',
-    content: '¡DevCircle ya está en marcha! 🎉 La red social hecha por y para developers.\n\nSin algoritmos raros, sin ads, sin ruido. Solo código, proyectos y gente que comparte tu pasión.\n\nBienvenidos a todos 💜',
-    tags: ['devcircle', 'community', 'developers'],
+    content: '¡Devora ya está en marcha! 🎉 La red social hecha por y para developers.\n\nSin algoritmos raros, sin ads, sin ruido. Solo código, proyectos y gente que comparte tu pasión.\n\nBienvenidos a todos 💜',
+    tags: ['devora', 'community', 'developers'],
   },
   {
     authorUsername: 'lauraops',
@@ -149,7 +149,7 @@ const posts = [
 // ── Función principal ────────────────────────────────────────────────────────
 
 async function main() {
-  console.log('🌱 Iniciando seed de DevCircle...\n')
+  console.log('🌱 Iniciando seed de Devora...\n')
 
   // 1. Crear usuarios
   console.log('👤 Creando usuarios...')
@@ -305,13 +305,13 @@ async function main() {
   console.log('🎉 Seed completado con éxito!\n')
   console.log('📋 CREDENCIALES DE ACCESO:')
   console.log('─'.repeat(55))
-  console.log('👑 ADMIN  → isaac@devcircle.dev     | Admin1234!')
-  console.log('👤 TEST   → alex@devcircle.dev      | Test1234!')
-  console.log('👤 TEST   → sara@devcircle.dev      | Test1234!')
-  console.log('👤 TEST   → carlos@devcircle.dev    | Test1234!')
-  console.log('👤 TEST   → laura@devcircle.dev     | Test1234!')
-  console.log('👤 TEST   → miguel@devcircle.dev    | Test1234!')
-  console.log('👤 TEST   → ana@devcircle.dev       | Test1234!')
+  console.log('👑 ADMIN  → isaac@devora.dev     | Admin1234!')
+  console.log('👤 TEST   → alex@devora.dev      | Test1234!')
+  console.log('👤 TEST   → sara@devora.dev      | Test1234!')
+  console.log('👤 TEST   → carlos@devora.dev    | Test1234!')
+  console.log('👤 TEST   → laura@devora.dev     | Test1234!')
+  console.log('👤 TEST   → miguel@devora.dev    | Test1234!')
+  console.log('👤 TEST   → ana@devora.dev       | Test1234!')
   console.log('─'.repeat(55))
   console.log(`\n✅ ${users.length} usuarios | ${createdPosts.length} posts | ${likeCount} likes | ${comments.length} comentarios`)
 }

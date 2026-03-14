@@ -72,7 +72,7 @@ export function VideoUploadModal({ isOpen, onClose }: VideoUploadModalProps) {
         startTransition(async () => {
             try {
                 // In a real app we would use UploadThing or S3 here.
-                // For DevCircle, we simulate the "device upload" by using the blob URL 
+                // For Devora, we simulate the "device upload" by using the blob URL 
                 // to demonstrate the perfect tool behavior requested.
                 const simulatedUrl = previewUrl!
 
@@ -226,7 +226,7 @@ export function VideoUploadModal({ isOpen, onClose }: VideoUploadModalProps) {
                                     <div className="flex items-center gap-2 text-text-muted">
                                         <Info className="w-4 h-4 shrink-0" />
                                         <p className="text-[10px] leading-tight max-w-[200px]">
-                                            Al publicar, tu vídeo estará disponible para toda la comunidad de DevCircle.
+                                            Al publicar, tu vídeo estará disponible para toda la comunidad de Devora.
                                         </p>
                                     </div>
                                     <button

@@ -8,7 +8,7 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
     title: 'Proyectos',
-    description: 'Descubre y comparte proyectos increíbles creados por la comunidad de DevCircle.',
+    description: 'Descubre y comparte proyectos increíbles creados por la comunidad de Devora.',
 }
 
 export default async function ProjectsPage() {
@@ -33,7 +33,7 @@ export default async function ProjectsPage() {
                                 <Sparkles className="w-4 h-4" />
                                 Destacado de la semana
                             </div>
-                            <h2 className="text-xl sm:text-3xl font-black text-white mb-3 sm:mb-4 leading-tight">DevCircle v2: La Red Social para Developers</h2>
+                            <h2 className="text-xl sm:text-3xl font-black text-white mb-3 sm:mb-4 leading-tight">Devora v2: La Red Social para Developers</h2>
                             <p className="text-text-secondary mb-6 leading-relaxed">
                                 Explora el código fuente detrás de esta increíble plataforma. Construida con Next.js 14, Prisma, PostgreSQL y un diseño UI/UX de otro nivel.
                             </p>

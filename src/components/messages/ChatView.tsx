@@ -83,7 +83,7 @@ export function ChatView({ conversationId, currentUserId, otherUser, initialMess
                         <img
                             src={otherUser.image ?? getAvatarUrl(otherUser.username)}
                             alt=""
-                            className="w-9 h-9 rounded-full shadow-lg"
+                            className="w-9 h-9 avatar object-cover shadow-lg"
                         />
                         <div className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-brand-500 rounded-full border-2 border-[#161b22]" />
                     </div>

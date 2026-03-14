@@ -7,7 +7,7 @@ import { SettingsLayout } from '@/components/settings/SettingsLayout'
 import { getPendingFollowRequests } from '@/lib/actions/privacy'
 import { DEFAULT_PRIVACY, type PrivacySettings } from '@/lib/privacy'
 
-export const metadata: Metadata = { title: 'Ajustes · DevCircle' }
+export const metadata: Metadata = { title: 'Ajustes · Devora' }
 
 export default async function SettingsPage() {
     const session = await auth()

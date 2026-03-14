@@ -1,4 +1,4 @@
-// DevCircle - Prisma Schema v2
+// Devora - Prisma Schema v2
 // Stack: PostgreSQL + Next.js + NextAuth
 
 generator client {

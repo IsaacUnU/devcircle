@@ -3,7 +3,7 @@ import { auth } from '@/lib/auth'
 import { redirect } from 'next/navigation'
 import { NotificationsClient } from '@/components/notifications/NotificationsClient'
 
-export const metadata: Metadata = { title: 'Notificaciones · DevCircle' }
+export const metadata: Metadata = { title: 'Notificaciones · Devora' }
 
 export default async function NotificationsPage() {
   const session = await auth()

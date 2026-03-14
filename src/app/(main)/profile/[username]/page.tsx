@@ -22,7 +22,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!user) return { title: 'Usuario no encontrado' }
   return {
     title: `${user.name ?? user.username} (@${user.username})`,
-    description: user.bio ?? `Perfil de ${user.username} en DevCircle`,
+    description: user.bio ?? `Perfil de ${user.username} en Devora`,
   }
 }
 

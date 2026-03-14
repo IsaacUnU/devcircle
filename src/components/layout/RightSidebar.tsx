@@ -166,7 +166,7 @@ export function RightSidebar({ suggestedUsers, trendingTags, topDevs }: RightSid
 
             {/* Footer */}
             <div className="flex flex-wrap gap-x-4 gap-y-2 px-4 py-4 text-[10px] text-text-muted border-t border-white/5">
-                <span>© {new Date().getFullYear()} DevCircle</span>
+                <span>© {new Date().getFullYear()} Devora</span>
             </div>
         </aside>
     )

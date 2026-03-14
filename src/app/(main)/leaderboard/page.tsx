@@ -6,7 +6,7 @@ import { Trophy, TrendingUp, Star, Users, FileText, Heart } from 'lucide-react'
 import Link from 'next/link'
 import { getAvatarUrl } from '@/lib/utils'
 
-export const metadata: Metadata = { title: 'Leaderboard · DevCircle' }
+export const metadata: Metadata = { title: 'Leaderboard · Devora' }
 
 async function getLeaderboardData() {
   const [byReputation, byPosts, byFollowers] = await Promise.all([
@@ -108,7 +108,7 @@ export default async function LeaderboardPage() {
     },
     {
       title: 'Top Seguidores',
-      description: 'Los devs más seguidos de DevCircle',
+      description: 'Los devs más seguidos de Devora',
       icon: Users,
       color: 'text-brand-400',
       users: byFollowers,

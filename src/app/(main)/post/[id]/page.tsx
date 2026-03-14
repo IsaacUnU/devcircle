@@ -12,7 +12,7 @@ interface Props { params: { id: string } }
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const post = await db.post.findUnique({ where: { id: params.id } })
   if (!post) return { title: 'Post no encontrado' }
-  return { title: `Post · DevCircle`, description: post.content.substring(0, 160) }
+  return { title: `Post · Devora`, description: post.content.substring(0, 160) }
 }
 
 export default async function PostDetailPage({ params }: Props) {

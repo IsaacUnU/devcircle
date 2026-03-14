@@ -5,7 +5,7 @@ import { db } from '@/lib/db'
 import { MessageSquare } from 'lucide-react'
 import { ConversationList } from '@/components/messages/ConversationList'
 
-export const metadata: Metadata = { title: 'Mensajes · DevCircle' }
+export const metadata: Metadata = { title: 'Mensajes · Devora' }
 
 export default async function MessagesPage() {
   const session = await auth()

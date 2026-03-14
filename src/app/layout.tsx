@@ -8,17 +8,21 @@ import './globals.css'
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
 
 export const metadata: Metadata = {
-  title:       { default: 'DevCircle', template: '%s | DevCircle' },
+  title: { default: 'Devora', template: '%s | Devora' },
   description: 'La red social para developers. Comparte proyectos, aprende y conecta.',
-  keywords:    ['developers', 'programming', 'community', 'code', 'open source'],
-  authors:     [{ name: 'DevCircle' }],
+  keywords: ['developers', 'programming', 'community', 'code', 'open source'],
+  authors: [{ name: 'Devora' }],
   openGraph: {
-    type:        'website',
-    locale:      'es_ES',
-    url:         'https://devcircle.dev',
-    siteName:    'DevCircle',
-    title:       'DevCircle — Red social para developers',
+    type: 'website',
+    locale: 'es_ES',
+    url: 'https://devora.dev',
+    siteName: 'Devora',
+    title: 'Devora — Red social para developers',
     description: 'Comparte proyectos, aprende y conecta con otros developers.',
+  },
+  icons: {
+    icon: '/favicon.svg',
+    apple: '/favicon.svg',
   },
 }
 
@@ -34,8 +38,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               toastOptions={{
                 style: {
                   background: '#161b22',
-                  color:      '#e6edf3',
-                  border:     '1px solid #21262d',
+                  color: '#e6edf3',
+                  border: '1px solid #21262d',
                 },
               }}
             />

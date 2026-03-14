@@ -38,23 +38,27 @@ export function Sidebar() {
     fetch('/api/user/avatar')
       .then(r => r.json())
       .then(d => { if (d.image) setFreshAvatar(d.image) })
-      .catch(() => {})
+      .catch(() => { })
   }, [session?.user?.id])
 
   const avatarSrc = freshAvatar ?? session?.user?.image ?? getAvatarUrl(session?.user?.username ?? '')
 
   return (
     <aside className="sticky top-0 h-screen w-64 hidden lg:flex flex-col border-r border-surface-border bg-surface px-4 py-8 z-40 glass shrink-0">
-      {/* Logo */}
-      <Link href="/feed" className="flex items-center gap-3 px-4 mb-10 group">
-        <div className="w-10 h-10 rounded-xl bg-brand-500/10 flex items-center justify-center border border-brand-500/20 group-hover:scale-105 transition-transform duration-200">
-          <Code2 className="w-6 h-6 text-brand-400" />
-        </div>
-        <span className="text-xl font-extrabold tracking-tight text-text-primary bg-clip-text">DevCircle</span>
-      </Link>
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 z-10">
+        <Link href="/feed" className="block group">
+          <div className="w-48 h-48 flex items-center justify-center transition-transform duration-200 group-hover:scale-110">
+            <img
+              src="/logo-devora.png"
+              alt="Devora"
+              className="w-full h-full object-contain drop-shadow-[0_4px_12px_rgba(74,222,128,0.5)]"
+            />
+          </div>
+        </Link>
+      </div>
 
       {/* Nav */}
-      <nav className="flex-1 space-y-1.5 px-2">
+      <nav className="flex-1 space-y-1.5 px-2 mt-36">
         {navItems.map(({ href, label, icon: Icon }) => {
           const active = pathname === href
             || pathname.startsWith(href + '/')

@@ -12,7 +12,7 @@ export default function LoginPage() {
         {/* Logo */}
         <div className="flex items-center justify-center gap-2 mb-8">
           <Code2 className="w-8 h-8 text-brand-500" />
-          <span className="text-2xl font-bold tracking-tight">DevCircle</span>
+          <span className="text-2xl font-bold tracking-tight">Devora</span>
         </div>
 
         <div className="card p-6">
