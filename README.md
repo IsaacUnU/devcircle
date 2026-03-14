@@ -1,8 +1,28 @@
 # DevCircle 🔵
 
-> Red social para developers. Comparte proyectos, código y conecta con otros devs.
+> La red social definitiva para desarrolladores. Comparte proyectos, código, clips y conecta con una comunidad global de talento técnico.
 
-**Stack:** Next.js 14 App Router · Prisma · PostgreSQL · TypeScript · Tailwind CSS · NextAuth v5
+**Stack Moderno:** Next.js 14 (App Router) · Prisma · PostgreSQL · Supabase (Realtime) · TypeScript · Tailwind CSS · NextAuth v5 · TanStack Query
+
+---
+
+## ✨ Características Principales
+
+### 📱 Contenido y Comunidad
+- **Feed Inteligente**: Algoritmo que prioriza contenido de tus intereses y conexiones.
+- **DevClips (Reels)**: Comparte pequeños clips de video sobre tus avances o tips rápidos.
+- **Grupos Temáticos**: Comunidades privadas o públicas con sistema de invitaciones y moderación.
+- **Eventos**: Calendario integrado para Meetups, Hackathons y Conferencias.
+
+### 💼 Carrera y Portafolio
+- **Showcase de Proyectos**: Destaca tus mejores trabajos con tech stack detallado y enlaces a repositorios.
+- **Tablón de Empleos**: Encuentra oportunidades exclusivas para desarrolladores (Full-time, Freelance, Remote).
+- **Sistema de Reputación**: Gana puntos por tus contribuciones y ayuda a la comunidad.
+
+### 💬 Comunicación en Tiempo Real
+- **Mensajería Directa**: Chats instantáneos con soporte para compartición de código.
+- **Notificaciones en Vivo**: Alertas al instante (likes, menciones, solicitudes) gracias a Supabase Realtime.
+- **Perfiles Privados**: Control total sobre quién te sigue y ve tu actividad.
 
 ---
 
@@ -10,144 +30,75 @@
 
 ### 1. Requisitos
 - Node.js 18+
-- PostgreSQL (local o [Neon](https://neon.tech) / [Supabase](https://supabase.com) gratis)
+- PostgreSQL (local o [Neon](https://neon.tech) / [Supabase](https://supabase.com))
 
-### 2. Instalar dependencias
+### 2. Instalación rápida
 ```bash
 npm install
-```
-
-### 3. Configurar variables de entorno
-```bash
 cp .env.example .env
-# Edita .env con tu DATABASE_URL y NEXTAUTH_SECRET
+# Edita .env con tus credenciales (DATABASE_URL, NEXTAUTH_SECRET, etc.)
 ```
 
-### 4. Base de datos
+### 3. Base de datos y arranque
 ```bash
-npm run db:push     # Crea las tablas
-npm run db:seed     # Añade datos de prueba
-npm run db:studio   # Abre Prisma Studio (GUI)
-```
-
-### 5. Arrancar
-```bash
-npm run dev
-# http://localhost:3000
+npm run db:push     # Sincroniza el esquema de Prisma con la base de datos
+npm run db:seed     # Inserta datos de prueba para desarrollo
+npm run dev         # Inicia el servidor de desarrollo en http://localhost:3000
 ```
 
 ---
 
-## 📁 Estructura del proyecto
+## 📁 Estructura del Proyecto
 
 ```
 src/
-├── app/                    # Next.js App Router
-│   ├── (main)/             # Layout con sidebar
-│   │   ├── profile/[username]/
-│   │   └── post/[id]/
-│   ├── auth/               # Login / Register
-│   │   ├── login/
-│   │   └── register/
-│   ├── feed/               # Feed principal
-│   ├── api/                # Route handlers
-│   └── layout.tsx          # Root layout
-│
-├── components/
-│   ├── auth/               # LoginForm, RegisterForm
-│   ├── layout/             # Sidebar
-│   ├── post/               # PostCard, ComposeModal
-│   └── profile/            # FollowButton
-│
+├── app/                    # App Router (Rutas, API, Modales)
+├── components/             # Componentes de UI (Radix, Tailwind, Lucide)
+├── hooks/                  # Hooks personalizados (Realtime, Query, Form)
 ├── lib/
-│   ├── actions/            # Server Actions (mutations)
-│   │   ├── posts.ts        # createPost, toggleLike, addComment...
-│   │   └── users.ts        # toggleFollow, updateProfile...
-│   ├── auth.ts             # NextAuth config
-│   ├── db.ts               # Prisma client singleton
-│   ├── queries.ts          # Server-side data fetching
-│   ├── store.ts            # Zustand UI store
-│   ├── utils.ts            # Helpers (cn, timeAgo, formatCount...)
-│   └── validations.ts      # Zod schemas
-│
-├── tests/                  # Vitest unit tests
-├── types/                  # TypeScript types
-└── middleware.ts            # Auth middleware
-
-prisma/
-├── schema.prisma           # Data model
-└── seed.ts                 # Seed data
-
-e2e/                        # Playwright E2E tests
+│   ├── actions/            # Server Actions para mutaciones de datos
+│   ├── queries/            # Lógica de obtención de datos (Server-side)
+│   ├── auth.ts             # Configuración de NextAuth.js v5
+│   └── supabase.ts         # Integración para funcionalidades Realtime
+└── store/                  # Estado global de la UI con Zustand
 ```
 
 ---
 
-## 🗄️ Modelo de datos
+## 🧪 Calidad y Testing
 
-```
-User ──── Post ──── Comment
-  │          │         │
-  │       PostTag    likes
-  │          │
-  │         Tag
-  │
-  ├── Follow (self-referential)
-  ├── Like
-  ├── Bookmark
-  └── Notification
-```
-
----
-
-## 🧪 Testing
+Mantenemos un estándar de calidad riguroso para asegurar la estabilidad del proyecto:
 
 ```bash
-# Unit tests (Vitest)
+# Tests unitarios y de integración (Vitest)
 npm run test
-npm run test -- --coverage
 
-# E2E tests (Playwright)
+# Tests End-to-End (Playwright)
 npm run test:e2e
-npx playwright show-report
 ```
 
 ---
 
-## ✨ Features implementadas
+## 🛠️ Tecnologías Utilizadas
 
-- [x] Autenticación con NextAuth (credentials + GitHub OAuth)
-- [x] Feed personalizado (posts de usuarios seguidos)
-- [x] Crear posts con código y tags
-- [x] Likes y bookmarks (optimistic UI)
-- [x] Comentarios y respuestas anidadas
-- [x] Sistema de follows
-- [x] Perfil de usuario
-- [x] Notificaciones
-- [x] Middleware de rutas protegidas
-
-## 🔜 Próximas features
-
-- [ ] Búsqueda de usuarios y posts
-- [ ] Feed infinito con TanStack Query
-- [ ] Subida de imágenes (Cloudinary / UploadThing)
-- [ ] Página de notificaciones
-- [ ] DMs entre usuarios
-- [ ] Trending tags
-- [ ] Registro con email/contraseña
+| Tecnología | Propósito |
+|------------|-----------|
+| **Next.js 14** | Framework principal (Server Components, Streaming) |
+| **Prisma** | ORM para una gestión de base de datos segura y tipada |
+| **Supabase** | Motor de tiempo real para DMs y notificaciones |
+| **NextAuth v5** | Sistema de autenticación robusto |
+| **Tailwind CSS** | Estilizado moderno y modo oscuro nativo |
+| **TanStack Query** | Sincronización de estado de servidor |
+| **Zustand** | Gestión de estado local y de UI |
 
 ---
 
-## 🛠️ Skills utilizadas
+## 🔜 Próximamente (Roadmap)
 
-| Área | Skill |
-|------|-------|
-| Arquitectura | `software-architecture`, `nextjs-app-router-patterns` |
-| Base de datos | `prisma-expert`, `postgresql`, `database-design` |
-| Auth | `auth-implementation-patterns` |
-| Frontend | `frontend-design`, `react-best-practices`, `tailwind-patterns` |
-| Estado | `react-state-management` |
-| TypeScript | `typescript-expert` |
-| Testing | `tdd-workflow`, `javascript-testing-patterns`, `e2e-testing-patterns` |
-| Calidad | `clean-code`, `debugging-strategies` |
-| Git | `git-advanced-workflows` |
+- [ ] Buscador global con filtros avanzados.
+- [ ] Integración con GitHub API para importar proyectos automáticamente.
+- [ ] Sistema de medallas (badges) por logros técnicos.
+- [ ] Streaming en vivo para sesiones de live coding.
+
+---
+Hecho con 💙 por la comunidad de **DevCircle**.
