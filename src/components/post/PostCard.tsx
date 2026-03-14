@@ -124,11 +124,11 @@ export function PostCard({ post, currentUserId }: PostCardProps) {
               <MoreHorizontal className="w-4 h-4" />
             </button>
             {showMenu && (
-              <div className="absolute right-0 top-8 z-20 w-44 py-1 rounded-xl bg-surface border border-surface-border shadow-xl animate-fade-in">
+              <div className="absolute right-0 top-8 z-20 w-44 py-1 rounded-xl bg-surface border border-surface-border shadow-xl animate-fade-in overflow-hidden">
                 <button
                   onClick={handleDelete}
                   disabled={isPending}
-                  className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-red-400 hover:bg-red-400/10 transition-colors"
+                  className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-red-400 hover:bg-red-500/10 transition-colors"
                 >
                   <Trash2 className="w-4 h-4" />
                   Eliminar post
