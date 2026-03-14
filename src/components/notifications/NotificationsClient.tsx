@@ -1,12 +1,14 @@
 'use client'
 
 import { useEffect, useState, useCallback } from 'react'
-import { Bell, Clock, CheckCheck, RefreshCw, UserCheck } from 'lucide-react'
+import { Bell, Clock, CheckCheck, UserCheck } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useUIStore } from '@/lib/store'
 import { NotificationItem } from './NotificationItem'
 import { getAvatarUrl } from '@/lib/utils'
 import { respondFollowRequest } from '@/lib/actions/privacy'
+import { useRealtimeTable } from '@/hooks/useRealtimeTable'
+import { useSession } from 'next-auth/react'
 import toast from 'react-hot-toast'
 
 type Tab = 'all' | 'requests'
@@ -14,9 +16,9 @@ type Tab = 'all' | 'requests'
 export function NotificationsClient() {
   const [notifications, setNotifications] = useState<any[]>([])
   const [loading, setLoading]             = useState(true)
-  const [lastFetch, setLastFetch]         = useState<Date | null>(null)
   const [activeTab, setActiveTab]         = useState<Tab>('all')
   const setUnreadCount                    = useUIStore(s => s.setUnreadCount)
+  const { data: session }                 = useSession()
 
   const fetchNotifications = useCallback(async () => {
     try {
@@ -24,18 +26,21 @@ export function NotificationsClient() {
       if (!res.ok) return
       const { notifications: data } = await res.json()
       setNotifications(data)
-      setLastFetch(new Date())
       const unread = data.filter((n: any) => !n.read).length
       setUnreadCount(unread)
     } catch {}
     finally { setLoading(false) }
   }, [setUnreadCount])
 
-  useEffect(() => {
-    fetchNotifications()
-    const interval = setInterval(fetchNotifications, 10_000)
-    return () => clearInterval(interval)
-  }, [fetchNotifications])
+  // Carga inicial
+  useEffect(() => { fetchNotifications() }, [fetchNotifications])
+
+  // Realtime: se dispara cuando llega una notificación nueva para este usuario
+  useRealtimeTable(
+    'notifications',
+    session?.user?.id ? { column: 'receiverId', value: session.user.id } : null,
+    fetchNotifications
+  )
 
   const markAllRead = async () => {
     await fetch('/api/notifications', { method: 'PATCH' })
@@ -66,11 +71,6 @@ export function NotificationsClient() {
           )}
         </div>
         <div className="flex items-center gap-3">
-          {lastFetch && (
-            <span className="flex items-center gap-1 text-[11px] text-text-muted">
-              <RefreshCw className="w-3 h-3" /> Auto · cada 10s
-            </span>
-          )}
           {unreadCount > 0 && activeTab === 'all' && (
             <button
               onClick={markAllRead}

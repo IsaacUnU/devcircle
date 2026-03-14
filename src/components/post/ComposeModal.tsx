@@ -1,9 +1,10 @@
 'use client'
 
 import { useState, useTransition, useRef, useEffect } from 'react'
-import { X, Code, Tag, Send, Hash, TrendingUp } from 'lucide-react'
+import { X, Code, Tag, Send, Hash, TrendingUp, ImageIcon, Loader2 } from 'lucide-react'
 import { useUIStore } from '@/lib/store'
 import { MentionTextarea } from '@/components/ui/MentionTextarea'
+import { uploadFile, POSTS_BUCKET } from '@/lib/supabase'
 import { createPost } from '@/lib/actions/posts'
 import { cn } from '@/lib/utils'
 import toast from 'react-hot-toast'
@@ -25,6 +26,11 @@ export function ComposeModal() {
   const [showCode, setShowCode] = useState(false)
   const [isPending, startTransition] = useTransition()
   const firstRender = useRef(true)
+  // — Imagen adjunta —
+  const [imageFile, setImageFile]     = useState<File | null>(null)
+  const [imagePreview, setImagePreview] = useState<string | null>(null)
+  const [uploadingImage, setUploadingImage] = useState(false)
+  const imageInputRef = useRef<HTMLInputElement>(null)
 
   // — Autocomplete de tags —
   const [suggestions, setSuggestions] = useState<TagSuggestion[]>([])
@@ -42,6 +48,7 @@ export function ComposeModal() {
       setContent(''); setCodeSnip(''); setTags([])
       setTagInput(''); setShowCode(false)
       setSuggestions([]); setShowSuggestions(false)
+      setImageFile(null); setImagePreview(null)
     }
   }, [isComposeOpen])
 
@@ -123,14 +130,38 @@ export function ComposeModal() {
     setTags(prev => prev.filter(t => t !== tag))
   }
 
+  // ── Imagen ─────────────────────────────────────────────────────────────
+  function handleImageSelect(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0]
+    if (!file) return
+    if (file.size > 10 * 1024 * 1024) { toast.error('La imagen supera los 10 MB'); return }
+    setImageFile(file)
+    setImagePreview(URL.createObjectURL(file))
+  }
+
+  function removeImage() {
+    setImageFile(null)
+    setImagePreview(null)
+    if (imageInputRef.current) imageInputRef.current.value = ''
+  }
+
   function handleSubmit() {
     if (!content.trim()) return
     startTransition(async () => {
       try {
-        await createPost({ content, codeSnip: showCode ? codeSnip : undefined, language: showCode ? language : undefined, tags })
+        let imageUrl: string | undefined
+        if (imageFile) {
+          setUploadingImage(true)
+          const ext  = imageFile.name.split('.').pop() ?? 'jpg'
+          const path = `posts/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`
+          imageUrl = await uploadFile(POSTS_BUCKET, path, imageFile)
+          setUploadingImage(false)
+        }
+        await createPost({ content, codeSnip: showCode ? codeSnip : undefined, language: showCode ? language : undefined, tags, image: imageUrl })
         toast.success('Post publicado 🚀')
         closeCompose()
       } catch (err: any) {
+        setUploadingImage(false)
         toast.error(err.message ?? 'Error al publicar')
       }
     })
@@ -167,7 +198,7 @@ export function ComposeModal() {
             </span>
           </div>
 
-          {/* Code toggle */}
+          {/* Code + Image toggles */}
           <div className="flex items-center gap-2 mb-3">
             <button
               onClick={() => setShowCode(prev => !prev)}
@@ -180,7 +211,40 @@ export function ComposeModal() {
               <Code className="w-3.5 h-3.5" />
               Añadir código
             </button>
+            <button
+              type="button"
+              onClick={() => imageInputRef.current?.click()}
+              className={cn('flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg border transition-all',
+                imagePreview
+                  ? 'border-brand-500 text-brand-400 bg-brand-500/10'
+                  : 'border-surface-border text-text-muted hover:border-brand-500 hover:text-brand-400'
+              )}
+            >
+              <ImageIcon className="w-3.5 h-3.5" />
+              {imagePreview ? 'Cambiar imagen' : 'Añadir imagen'}
+            </button>
+            <input
+              ref={imageInputRef}
+              type="file"
+              accept="image/jpeg,image/png,image/webp,image/gif"
+              className="hidden"
+              onChange={handleImageSelect}
+            />
           </div>
+
+          {/* Preview imagen */}
+          {imagePreview && (
+            <div className="relative mb-3 rounded-xl overflow-hidden border border-surface-border">
+              <img src={imagePreview} alt="" className="w-full max-h-48 object-cover" />
+              <button
+                type="button"
+                onClick={removeImage}
+                className="absolute top-2 right-2 w-6 h-6 rounded-full bg-black/60 flex items-center justify-center text-white hover:bg-black/80 transition-colors"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            </div>
+          )}
 
           {/* Code editor */}
           {showCode && (
@@ -269,11 +333,15 @@ export function ComposeModal() {
             <span className="text-xs text-text-muted">{tags.length}/5 tags</span>
             <button
               onClick={handleSubmit}
-              disabled={!content.trim() || isPending}
+              disabled={!content.trim() || isPending || uploadingImage}
               className="btn-primary flex items-center gap-2"
             >
-              <Send className="w-3.5 h-3.5" />
-              {isPending ? 'Publicando...' : 'Publicar'}
+              {uploadingImage
+                ? <><Loader2 className="w-3.5 h-3.5 animate-spin" /> Subiendo imagen...</>
+                : isPending
+                  ? <><Loader2 className="w-3.5 h-3.5 animate-spin" /> Publicando...</>
+                  : <><Send className="w-3.5 h-3.5" /> Publicar</>
+              }
             </button>
           </div>
         </div>

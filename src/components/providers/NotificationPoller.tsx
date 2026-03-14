@@ -1,16 +1,20 @@
 'use client'
 
 import { useEffect, useCallback } from 'react'
-import { useUIStore } from '@/lib/store'
 import { useSession } from 'next-auth/react'
-import { usePathname } from 'next/navigation'
+import { useUIStore } from '@/lib/store'
+import { supabase } from '@/lib/supabase'
 
+/**
+ * Monta una suscripción Realtime al badge de notificaciones.
+ * Reemplaza completamente el polling anterior de 10s/15s.
+ * Se renderiza null — solo efectos.
+ */
 export function NotificationPoller() {
   const { data: session } = useSession()
   const { setUnreadCount } = useUIStore()
-  const pathname = usePathname()
 
-  const poll = useCallback(async () => {
+  const fetchCount = useCallback(async () => {
     if (!session?.user?.id) return
     try {
       const res = await fetch('/api/notifications/count')
@@ -23,12 +27,26 @@ export function NotificationPoller() {
   useEffect(() => {
     if (!session?.user?.id) return
 
-    poll() // fetch inmediato
+    // Fetch inicial al montar
+    fetchCount()
 
-    // Cada 10s normalmente, cada 5s si estás EN la página de notificaciones
-    const interval = setInterval(poll, pathname === '/notifications' ? 5_000 : 10_000)
-    return () => clearInterval(interval)
-  }, [session?.user?.id, poll, pathname])
+    // Suscripción Realtime — dispara fetchCount en cada cambio
+    const channel = supabase
+      .channel(`notif-badge:${session.user.id}`)
+      .on(
+        'postgres_changes' as any,
+        {
+          event: '*',
+          schema: 'public',
+          table: 'notifications',
+          filter: `receiverId=eq.${session.user.id}`,
+        },
+        () => fetchCount()
+      )
+      .subscribe()
+
+    return () => { supabase.removeChannel(channel) }
+  }, [session?.user?.id, fetchCount])
 
   return null
 }

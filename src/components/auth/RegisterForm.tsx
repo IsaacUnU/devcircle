@@ -24,9 +24,9 @@ export function RegisterForm() {
   const [showPass, setShowPass] = useState(false)
   const [loading, setLoading] = useState(false)
 
-  const { register, handleSubmit, trigger, formState: { errors } } = useForm<RegisterInput>({
+  const { register, handleSubmit, trigger, watch, setValue, formState: { errors } } = useForm<RegisterInput>({
     resolver: zodResolver(registerSchema),
-    mode: 'onTouched',
+    mode: 'onBlur', // onTouched causaba que el campo username no permitía borrar
   })
 
   // Validar solo campos del paso 1 antes de avanzar
@@ -80,7 +80,23 @@ export function RegisterForm() {
             <div>
               <label className="text-xs font-bold text-text-muted uppercase mb-1.5 block ml-1">Usuario</label>
               <div className="relative">
-                <input {...register('username')} placeholder="johndoe" className={cn('input pl-9', errors.username && 'border-red-500/50')} disabled={loading} />
+                <input
+                  {...register('username')}
+                  placeholder="johndoe"
+                  autoComplete="off"
+                  autoCorrect="off"
+                  autoCapitalize="none"
+                  spellCheck="false"
+                  onChange={e => {
+                    // Normaliza en tiempo real: lowercase, sin espacios, solo chars válidos
+                    // Pero NO bloquea — deja que el usuario borre libremente
+                    const raw = e.target.value
+                    const cleaned = raw.toLowerCase().replace(/[^a-z0-9_]/g, '')
+                    setValue('username', cleaned, { shouldValidate: false, shouldDirty: true })
+                  }}
+                  className={cn('input pl-9', errors.username && 'border-red-500/50')}
+                  disabled={loading}
+                />
                 <span className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted text-sm font-bold">@</span>
               </div>
               {errors.username && <p className="text-[10px] text-red-400 mt-1 ml-1">{errors.username.message}</p>}

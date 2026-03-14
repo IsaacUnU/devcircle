@@ -120,19 +120,22 @@ export async function updateNotificationPrefs(prefs: Record<string, boolean>) {
   revalidatePath('/settings')
 }
 
-// ── Actualizar foto de perfil (solo URL externa) ──────────────────────────────
-// NOTA: Base64 desactivado — rompe cookies JWT (error 431). Pendiente Supabase Storage.
+// ── Actualizar foto de perfil (URL externa o Supabase Storage) ───────────────
 export async function updateAvatar(imageUrl: string) {
   const session = await auth()
   if (!session?.user?.id) throw new Error('No autenticado')
 
-  if (!imageUrl.startsWith('http')) throw new Error('Solo se admiten URLs externas por ahora')
+  if (!imageUrl.startsWith('http')) throw new Error('URL de imagen inválida')
 
-  await db.user.update({
+  const user = await db.user.update({
     where: { id: session.user.id },
     data: { image: imageUrl },
+    select: { username: true },
   })
 
-  revalidatePath('/profile')
+  // Revalidar todas las rutas donde puede aparecer el avatar
+  revalidatePath(`/profile/${user.username}`)
   revalidatePath('/settings')
+  revalidatePath('/feed')
+  revalidatePath('/', 'layout')
 }

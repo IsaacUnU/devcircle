@@ -1,9 +1,10 @@
 'use client'
 
-import { useState, useRef, useEffect, useTransition } from 'react'
-import { Send, Code2, MoreVertical } from 'lucide-react'
-import { cn, getAvatarUrl, timeAgo } from '@/lib/utils'
+import { useState, useRef, useEffect, useTransition, useCallback } from 'react'
+import { Send, MoreVertical } from 'lucide-react'
+import { cn, getAvatarUrl } from '@/lib/utils'
 import { sendMessage } from '@/lib/actions/messages'
+import { useRealtimeTable } from '@/hooks/useRealtimeTable'
 import Link from 'next/link'
 import toast from 'react-hot-toast'
 
@@ -37,30 +38,33 @@ interface Props {
 
 export function ChatWindow({ conversation, currentUserId, otherUser }: Props) {
   const [messages, setMessages] = useState<Message[]>(conversation.messages)
-  const [input, setInput] = useState('')
+  const [input, setInput]       = useState('')
   const [isPending, startTransition] = useTransition()
-  const bottomRef = useRef<HTMLDivElement>(null)
-  const inputRef = useRef<HTMLTextAreaElement>(null)
-  const pollRef = useRef<NodeJS.Timeout>()
+  const bottomRef  = useRef<HTMLDivElement>(null)
+  const inputRef   = useRef<HTMLTextAreaElement>(null)
 
-  // Scroll to bottom on new messages
+  // Scroll al fondo cuando llegan mensajes nuevos
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages])
 
-  // Poll for new messages every 3s
-  useEffect(() => {
-    pollRef.current = setInterval(async () => {
-      try {
-        const res = await fetch(`/api/messages/${conversation.id}`)
-        if (res.ok) {
-          const data = await res.json()
-          setMessages(data.messages)
-        }
-      } catch {}
-    }, 3000)
-    return () => clearInterval(pollRef.current)
+  // Fetch de mensajes actualizado
+  const fetchMessages = useCallback(async () => {
+    try {
+      const res = await fetch(`/api/messages/${conversation.id}`)
+      if (res.ok) {
+        const data = await res.json()
+        setMessages(data.messages)
+      }
+    } catch {}
   }, [conversation.id])
+
+  // Realtime: escucha INSERT en direct_messages de esta conversación
+  useRealtimeTable(
+    'direct_messages',
+    { column: 'conversationId', value: conversation.id },
+    fetchMessages
+  )
 
   const handleSend = () => {
     if (!input.trim()) return
@@ -85,7 +89,8 @@ export function ChatWindow({ conversation, currentUserId, otherUser }: Props) {
           receiverId: otherUser.id,
           content,
         })
-      } catch (e) {
+        // El Realtime se encarga de refrescar con el mensaje real de BD
+      } catch {
         toast.error('Error al enviar mensaje')
         setMessages(prev => prev.filter(m => m.id !== optimistic.id))
         setInput(content)
@@ -100,7 +105,7 @@ export function ChatWindow({ conversation, currentUserId, otherUser }: Props) {
     }
   }
 
-  // Group messages by date
+  // Agrupar mensajes por fecha
   const groupedMessages = messages.reduce((acc, msg) => {
     const date = new Date(msg.createdAt).toLocaleDateString('es-ES', {
       day: 'numeric', month: 'long', year: 'numeric'
@@ -118,7 +123,7 @@ export function ChatWindow({ conversation, currentUserId, otherUser }: Props) {
           <img
             src={otherUser.image ?? getAvatarUrl(otherUser.username)}
             alt=""
-            className="w-9 h-9 rounded-full"
+            className="w-9 h-9 rounded-full object-cover"
           />
           <div>
             <p className="font-semibold text-text-primary text-sm">
@@ -127,9 +132,15 @@ export function ChatWindow({ conversation, currentUserId, otherUser }: Props) {
             <p className="text-xs text-text-muted">@{otherUser.username}</p>
           </div>
         </Link>
-        <button className="text-text-muted hover:text-text-primary transition-colors p-2 rounded-lg hover:bg-surface-hover">
-          <MoreVertical className="w-5 h-5" />
-        </button>
+        <div className="flex items-center gap-2">
+          <span className="flex items-center gap-1.5 text-[10px] text-brand-400 bg-brand-500/10 border border-brand-500/20 rounded-full px-2 py-1">
+            <span className="w-1.5 h-1.5 rounded-full bg-brand-400 animate-pulse" />
+            En vivo
+          </span>
+          <button className="text-text-muted hover:text-text-primary transition-colors p-2 rounded-lg hover:bg-surface-hover">
+            <MoreVertical className="w-5 h-5" />
+          </button>
+        </div>
       </div>
 
       {/* Messages */}
@@ -143,49 +154,41 @@ export function ChatWindow({ conversation, currentUserId, otherUser }: Props) {
             </div>
             <div className="space-y-2">
               {msgs.map((msg, i) => {
-                const isMe = msg.senderId === currentUserId
-                const showAvatar = !isMe && (i === 0 || msgs[i - 1]?.senderId !== msg.senderId)
-                const isFirst = i === 0 || msgs[i - 1]?.senderId !== msg.senderId
-                const isLast = i === msgs.length - 1 || msgs[i + 1]?.senderId !== msg.senderId
+                const isMe      = msg.senderId === currentUserId
+                const isFirst   = i === 0 || msgs[i - 1]?.senderId !== msg.senderId
+                const isLast    = i === msgs.length - 1 || msgs[i + 1]?.senderId !== msg.senderId
+                const isOptimistic = msg.id.startsWith('temp-')
 
                 return (
-                  <div
-                    key={msg.id}
-                    className={cn('flex items-end gap-2', isMe ? 'flex-row-reverse' : 'flex-row')}
-                  >
-                    {/* Avatar (other user only) */}
+                  <div key={msg.id} className={cn('flex items-end gap-2', isMe ? 'flex-row-reverse' : 'flex-row')}>
+                    {/* Avatar (solo el otro usuario) */}
                     {!isMe && (
                       <div className="w-7 shrink-0">
                         {isLast && (
                           <img
                             src={otherUser.image ?? getAvatarUrl(otherUser.username)}
                             alt=""
-                            className="w-7 h-7 rounded-full"
+                            className="w-7 h-7 rounded-full object-cover"
                           />
                         )}
                       </div>
                     )}
 
-                    {/* Bubble */}
+                    {/* Burbuja */}
                     <div className={cn(
-                      'max-w-xs lg:max-w-md px-4 py-2 text-sm',
-                      isMe
-                        ? 'bg-brand-500 text-white'
-                        : 'bg-surface-hover text-text-primary',
-                      isFirst && isMe ? 'rounded-t-2xl' : '',
-                      isFirst && !isMe ? 'rounded-t-2xl' : '',
-                      isLast && isMe ? 'rounded-b-2xl rounded-tl-2xl' : '',
-                      isLast && !isMe ? 'rounded-b-2xl rounded-tr-2xl' : '',
+                      'max-w-xs lg:max-w-md px-4 py-2 text-sm transition-opacity',
+                      isOptimistic && 'opacity-70',
+                      isMe ? 'bg-brand-500 text-white' : 'bg-surface-hover text-text-primary',
+                      isFirst && isLast  ? 'rounded-2xl' : '',
+                      isFirst && !isLast ? (isMe ? 'rounded-t-2xl rounded-bl-2xl' : 'rounded-t-2xl rounded-br-2xl') : '',
+                      isLast && !isFirst ? (isMe ? 'rounded-b-2xl rounded-tl-2xl' : 'rounded-b-2xl rounded-tr-2xl') : '',
                       !isFirst && !isLast ? 'rounded-2xl' : '',
-                      isFirst && isLast ? 'rounded-2xl' : ''
                     )}>
                       <p className="whitespace-pre-wrap break-words">{msg.content}</p>
-                      <p className={cn(
-                        'text-xs mt-1',
-                        isMe ? 'text-white/60' : 'text-text-muted'
-                      )}>
+                      <p className={cn('text-xs mt-1', isMe ? 'text-white/60' : 'text-text-muted')}>
                         {new Date(msg.createdAt).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })}
                         {isMe && msg.read && <span className="ml-1">✓✓</span>}
+                        {isOptimistic && <span className="ml-1">⏳</span>}
                       </p>
                     </div>
                   </div>
@@ -208,7 +211,6 @@ export function ChatWindow({ conversation, currentUserId, otherUser }: Props) {
             placeholder={`Mensaje a @${otherUser.username}...`}
             rows={1}
             className="flex-1 bg-transparent text-sm text-text-primary placeholder:text-text-muted outline-none resize-none max-h-32"
-            style={{ height: 'auto' }}
             onInput={e => {
               const t = e.currentTarget
               t.style.height = 'auto'

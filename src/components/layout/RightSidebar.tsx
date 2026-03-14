@@ -46,7 +46,7 @@ export function RightSidebar({ suggestedUsers, trendingTags, topDevs }: RightSid
                                 <img
                                     src={user.image ?? getAvatarUrl(user.username)}
                                     alt=""
-                                    className="w-10 h-10 rounded-full border border-white/10"
+                                    className="w-10 h-10 rounded-full border border-white/10 object-cover"
                                 />
                                 <div className={cn(
                                     "absolute -top-1 -left-1 w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold shadow-lg border-2 border-surface",

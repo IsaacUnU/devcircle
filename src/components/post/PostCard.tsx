@@ -146,6 +146,17 @@ export function PostCard({ post, currentUserId }: PostCardProps) {
         </p>
       </Link>
 
+      {/* Imagen del post */}
+      {post.image && (
+        <Link href={`/post/${post.id}`} className="block mb-3">
+          <img
+            src={post.image}
+            alt="Imagen del post"
+            className="w-full rounded-xl object-cover max-h-80 border border-surface-border hover:opacity-95 transition-opacity"
+          />
+        </Link>
+      )}
+
       {/* Code snippet toggle */}
       {post.codeSnip && (
         <div className="mb-3">

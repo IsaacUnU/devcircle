@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useSession } from 'next-auth/react'
+import { useState, useEffect } from 'react'
 import {
   Home, Search, Bell, Bookmark, Settings,
   PlusCircle, Code2, LogOut, MessageSquare,
@@ -29,6 +30,18 @@ export function Sidebar() {
   const pathname = usePathname()
   const { data: session } = useSession()
   const { openCompose, unreadCount } = useUIStore()
+  // Imagen fresca desde BD (el JWT puede estar desactualizado tras cambiar avatar)
+  const [freshAvatar, setFreshAvatar] = useState<string | null>(null)
+
+  useEffect(() => {
+    if (!session?.user?.id) return
+    fetch('/api/user/avatar')
+      .then(r => r.json())
+      .then(d => { if (d.image) setFreshAvatar(d.image) })
+      .catch(() => {})
+  }, [session?.user?.id])
+
+  const avatarSrc = freshAvatar ?? session?.user?.image ?? getAvatarUrl(session?.user?.username ?? '')
 
   return (
     <aside className="sticky top-0 h-screen w-64 hidden lg:flex flex-col border-r border-surface-border bg-surface px-4 py-8 z-40 glass shrink-0">
@@ -95,9 +108,9 @@ export function Sidebar() {
             <Link href={`/profile/${session.user.username}`} className="flex items-center gap-3 flex-1 min-w-0">
               <div className="relative shrink-0">
                 <img
-                  src={session.user.image ?? getAvatarUrl(session.user.username)}
+                  src={avatarSrc}
                   alt=""
-                  className="w-10 h-10 rounded-full border border-white/10 ring-2 ring-transparent group-hover:ring-brand-500/30 transition-all shadow-lg"
+                  className="w-10 h-10 rounded-full border border-white/10 ring-2 ring-transparent group-hover:ring-brand-500/30 transition-all shadow-lg object-cover"
                 />
                 <div className="absolute bottom-0 right-0 w-3 h-3 bg-brand-500 rounded-full border-2 border-[#161b22] shadow-sm" />
               </div>

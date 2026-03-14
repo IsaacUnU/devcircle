@@ -13,6 +13,7 @@ export async function createPost(data: {
   codeSnip?: string
   language?: string
   tags?: string[]
+  image?: string
 }) {
   const session = await auth()
   if (!session?.user?.id) throw new Error('No autenticado')
@@ -30,6 +31,7 @@ export async function createPost(data: {
       content,
       codeSnip,
       language,
+      image: data.image ?? null,
       authorId: session.user.id,
       tags: tags?.length
         ? {

@@ -6,9 +6,11 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
+// Nota: usando Session Pooler de Supabase (puerto 5432) — compatible con Prisma sin pgbouncer
 
 // ─── AUTH (NextAuth) ────────────────────────────────────────────────────────
 

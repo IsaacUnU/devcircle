@@ -12,6 +12,9 @@ import { es } from 'date-fns/locale'
 import { getAvatarUrl } from '@/lib/utils'
 import { DEFAULT_PRIVACY, type PrivacySettings } from '@/lib/privacy'
 
+// Siempre leer datos frescos — el avatar puede cambiar en cualquier momento
+export const dynamic = 'force-dynamic'
+
 interface Props { params: { username: string } }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -55,7 +58,7 @@ export default async function ProfilePage({ params }: Props) {
         <div className="card p-4 sm:p-6 mb-6">
           <div className="flex items-start justify-between mb-4">
             <div className="relative">
-              <img src={avatar} alt="" className="w-16 h-16 avatar" />
+              <img src={avatar} alt="" className="w-16 h-16 avatar object-cover" />
               {privacy.isPrivate && (
                 <span className="absolute -bottom-1 -right-1 w-5 h-5 bg-surface rounded-full flex items-center justify-center border border-surface-border">
                   <Lock className="w-2.5 h-2.5 text-text-muted" />
