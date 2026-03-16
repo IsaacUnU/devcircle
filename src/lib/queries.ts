@@ -209,18 +209,18 @@ export async function getSuggestedUsers() {
   )
 
   // Ciudad y país del usuario actual
-  const myCity    = me.location?.split(',')[0].trim().toLowerCase() ?? ''
+  const myCity = me.location?.split(',')[0].trim().toLowerCase() ?? ''
   const myCountry = me.location?.split(',').at(-1)?.trim().toLowerCase() ?? ''
 
   // 2. Amigos de amigos: usuarios seguidos por quien sigo
   const friendsOfFriends = followingIds.length > 0
     ? await db.follow.findMany({
-        where: {
-          followerId: { in: followingIds },
-          followingId: { notIn: excludeIds },
-        },
-        select: { followingId: true },
-      })
+      where: {
+        followerId: { in: followingIds },
+        followingId: { notIn: excludeIds },
+      },
+      select: { followingId: true },
+    })
     : []
 
   const fofCount: Record<string, number> = {}
@@ -257,9 +257,9 @@ export async function getSuggestedUsers() {
     score += Math.min(user._count.posts / 10, 1)
 
     // Ubicación
-    const theirCity    = user.location?.split(',')[0].trim().toLowerCase() ?? ''
+    const theirCity = user.location?.split(',')[0].trim().toLowerCase() ?? ''
     const theirCountry = user.location?.split(',').at(-1)?.trim().toLowerCase() ?? ''
-    if (myCity && theirCity && myCity === theirCity)       score += 3
+    if (myCity && theirCity && myCity === theirCity) score += 3
     else if (myCountry && theirCountry && myCountry === theirCountry) score += 2
 
     // Amigos de amigos
@@ -267,7 +267,7 @@ export async function getSuggestedUsers() {
 
     // Tags en común (max +3)
     const theirTags = new Set(user.posts.flatMap(p => p.tags.map(t => t.tag.name)))
-    const common    = Array.from(myTags).filter(t => theirTags.has(t)).length
+    const common = Array.from(myTags).filter(t => theirTags.has(t)).length
     score += Math.min(common, 3)
 
     return { ...user, score }
@@ -385,4 +385,85 @@ export async function getGroup(groupId: string) {
     : null
 
   return { ...group, isMember, myRole }
+}
+
+// ── Explore / Discovery ───────────────────────────────────────────────────────
+
+/**
+ * getExplorePosts - Mix of recent and popular content
+ */
+export async function getExplorePosts(page = 1, limit = 10) {
+  const session = await auth()
+  const skip = (page - 1) * limit
+
+  return db.post.findMany({
+    where: { published: true },
+    skip,
+    take: limit,
+    orderBy: [
+      { likes: { _count: 'desc' } },
+      { createdAt: 'desc' },
+    ],
+    include: {
+      author: {
+        select: { id: true, username: true, name: true, image: true },
+      },
+      tags: {
+        include: { tag: { select: { name: true } } },
+      },
+      _count: {
+        select: { likes: true, comments: true },
+      },
+      likes: session?.user?.id
+        ? { where: { userId: session.user.id }, select: { id: true } }
+        : false,
+    },
+  })
+}
+
+/**
+ * getExploreMultimedia - Posts that contain images or external media
+ */
+export async function getExploreMultimedia(limit = 10) {
+  const session = await auth()
+  return db.post.findMany({
+    where: { 
+      published: true,
+      image: { not: null }, // Only posts with images
+    },
+    take: limit,
+    orderBy: { createdAt: 'desc' },
+    include: {
+      author: {
+        select: { id: true, username: true, name: true, image: true },
+      },
+      tags: {
+        include: { tag: { select: { name: true } } },
+      },
+      _count: {
+        select: { likes: true, comments: true },
+      },
+      likes: session?.user?.id
+        ? { where: { userId: session.user.id }, select: { id: true } }
+        : false,
+    },
+  })
+}
+
+/**
+ * getExploreEvents - Upcoming meetups and hackathons
+ */
+export async function getExploreEvents(limit = 5) {
+  return db.event.findMany({
+    where: {
+      startsAt: { gte: new Date() },
+    },
+    take: limit,
+    orderBy: { startsAt: 'asc' },
+    include: {
+      author: {
+        select: { id: true, username: true, name: true, image: true },
+      },
+    },
+  })
 }

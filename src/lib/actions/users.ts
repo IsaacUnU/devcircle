@@ -33,13 +33,28 @@ export async function toggleFollow(targetUserId: string) {
     // Reputation: +5 for the followed user
     await updateReputation(targetUserId, 5)
 
-    await db.notification.create({
-      data: {
-        type: 'FOLLOW',
-        receiverId: targetUserId,
-        triggeredBy: session.user.id,
-      },
-    })
+    try {
+      await db.notification.upsert({
+        where: {
+          type_triggeredBy_receiverId: {
+            type: 'FOLLOW',
+            triggeredBy: session.user.id,
+            receiverId: targetUserId,
+          }
+        },
+        create: {
+          type: 'FOLLOW',
+          receiverId: targetUserId,
+          triggeredBy: session.user.id,
+        },
+        update: {
+          read: false,
+          createdAt: new Date(),
+        }
+      })
+    } catch (e) {
+      console.warn('Duplicate notification ignored:', e)
+    }
   }
 
   revalidatePath(`/profile/${targetUserId}`)

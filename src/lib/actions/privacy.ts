@@ -98,13 +98,28 @@ export async function respondFollowRequest(requestId: string, action: 'accept' |
     await db.followRequest.update({ where: { id: requestId }, data: { status: 'ACCEPTED' } })
 
     // Notificar al que envió la solicitud que fue aceptada
-    await db.notification.create({
-      data: {
-        type: 'FOLLOW_ACCEPTED',
-        receiverId: request.senderId,      // le llega al que pidió seguir
-        triggeredBy: session.user.id,      // quien aceptó (el dueño del perfil)
-      },
-    })
+    try {
+      await db.notification.upsert({
+        where: {
+          type_triggeredBy_receiverId: {
+            type: 'FOLLOW_ACCEPTED',
+            triggeredBy: session.user.id,
+            receiverId: request.senderId,
+          }
+        },
+        create: {
+          type: 'FOLLOW_ACCEPTED',
+          receiverId: request.senderId,
+          triggeredBy: session.user.id,
+        },
+        update: {
+          read: false,
+          createdAt: new Date(),
+        }
+      })
+    } catch (e) {
+      console.warn('Duplicate notification ignored:', e)
+    }
   } else {
     await db.followRequest.update({ where: { id: requestId }, data: { status: 'REJECTED' } })
   }
