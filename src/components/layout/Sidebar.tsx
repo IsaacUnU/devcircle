@@ -49,8 +49,8 @@ export function Sidebar() {
   const isFloating = sidebarStyle === 'floating'
 
   const logoSrc = isCompact
-    ? "/web-app-manifest-192x192.png"
-    : (resolvedTheme === 'light' ? "/logo-devora-blanco.png" : "/logo-devora.png")
+    ? (resolvedTheme === 'light' ? "/favicon-blanco.png" : "/favicon-negro.png")
+    : (resolvedTheme === 'light' ? "/logo-devora-blanco.png" : "/logo-devora.png");
 
   return (
     <aside className={cn(
