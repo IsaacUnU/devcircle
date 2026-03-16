@@ -1,4 +1,5 @@
 import { create } from 'zustand'
+import { persist } from 'zustand/middleware'
 
 interface UIState {
   // Modals
@@ -27,30 +28,46 @@ interface UIState {
   unreadMessages: number
   setUnreadMessages: (count: number) => void
   incrementUnreadMessages: () => void
+
+  // Sidebar Style
+  sidebarStyle: 'full' | 'compact' | 'floating'
+  setSidebarStyle: (style: 'full' | 'compact' | 'floating') => void
 }
 
-export const useUIStore = create<UIState>((set) => ({
-  isComposeOpen: false,
-  openCompose: () => set({ isComposeOpen: true }),
-  closeCompose: () => set({ isComposeOpen: false }),
+export const useUIStore = create<UIState>()(
+  persist(
+    (set) => ({
+      isComposeOpen: false,
+      openCompose: () => set({ isComposeOpen: true }),
+      closeCompose: () => set({ isComposeOpen: false }),
 
-  isProjectModalOpen: false,
-  openProjectModal: () => set({ isProjectModalOpen: true }),
-  closeProjectModal: () => set({ isProjectModalOpen: false }),
+      isProjectModalOpen: false,
+      openProjectModal: () => set({ isProjectModalOpen: true }),
+      closeProjectModal: () => set({ isProjectModalOpen: false }),
 
-  isJobModalOpen: false,
-  openJobModal: () => set({ isJobModalOpen: true }),
-  closeJobModal: () => set({ isJobModalOpen: false }),
+      isJobModalOpen: false,
+      openJobModal: () => set({ isJobModalOpen: true }),
+      closeJobModal: () => set({ isJobModalOpen: false }),
 
-  isGroupModalOpen: false,
-  openGroupModal: () => set({ isGroupModalOpen: true }),
-  closeGroupModal: () => set({ isGroupModalOpen: false }),
+      isGroupModalOpen: false,
+      openGroupModal: () => set({ isGroupModalOpen: true }),
+      closeGroupModal: () => set({ isGroupModalOpen: false }),
 
-  unreadCount: 0,
-  setUnreadCount: (count: number) => set({ unreadCount: count }),
-  incrementUnread: () => set((state) => ({ unreadCount: state.unreadCount + 1 })),
+      unreadCount: 0,
+      setUnreadCount: (count: number) => set({ unreadCount: count }),
+      incrementUnread: () => set((state) => ({ unreadCount: state.unreadCount + 1 })),
 
-  unreadMessages: 0,
-  setUnreadMessages: (count: number) => set({ unreadMessages: count }),
-  incrementUnreadMessages: () => set((state) => ({ unreadMessages: state.unreadMessages + 1 })),
-}))
+      unreadMessages: 0,
+      setUnreadMessages: (count: number) => set({ unreadMessages: count }),
+      incrementUnreadMessages: () => set((state) => ({ unreadMessages: state.unreadMessages + 1 })),
+
+      sidebarStyle: 'full',
+      setSidebarStyle: (style) => set({ sidebarStyle: style }),
+    }),
+    {
+      name: 'devcircle-ui-storage',
+      // Solo persistimos lo que tiene sentido guardar (el estilo de la sidebar)
+      partialize: (state) => ({ sidebarStyle: state.sidebarStyle }),
+    }
+  )
+)

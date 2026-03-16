@@ -55,9 +55,10 @@ export function SettingsLayout({ user, pendingRequests }: SettingsLayoutProps) {
             className={cn(
               'flex items-center gap-2 md:gap-3 px-3 md:px-4 py-2 md:py-3 rounded-xl text-sm font-medium transition-all shrink-0 md:shrink md:w-full',
               activeTab === tab.id
-                ? 'bg-brand-500/10 text-brand-400 font-semibold'
-                : 'text-text-secondary hover:bg-surface-hover hover:text-text-primary'
+                ? 'bg-brand-500/15 text-brand-400 font-bold border-brand-500/20 shadow-[0_0_20px_rgba(34,197,94,0.1)]'
+                : 'text-text-secondary hover:bg-surface-hover hover:text-text-primary border-transparent'
             )}
+            style={activeTab === tab.id ? { borderLeft: '3px solid var(--brand-primary)' } : {}}
           >
             <tab.icon className="w-4 h-4 shrink-0" />
             <span className="whitespace-nowrap">{tab.label}</span>

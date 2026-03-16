@@ -8,7 +8,7 @@ import { GroupModal } from '@/components/groups/GroupModal'
 
 export default function MainLayout({ children }: { children: React.ReactNode }) {
     return (
-        <div className="flex min-h-screen justify-center bg-brand-surface">
+        <div className="flex min-h-screen justify-center bg-surface">
             <NotificationPoller />
             <div className="flex w-full max-w-[1300px]">
                 <Sidebar />

@@ -30,16 +30,16 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="es" suppressHydrationWarning>
       <body className={`${inter.variable} font-sans bg-surface text-text-primary antialiased`}>
-        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem={true}>
           <SessionProvider>
             {children}
             <Toaster
               position="bottom-right"
               toastOptions={{
+                className: 'glass !text-text-primary !border-surface-border',
                 style: {
-                  background: '#161b22',
-                  color: '#e6edf3',
-                  border: '1px solid #21262d',
+                  background: 'var(--glass-background)',
+                  backdropFilter: 'blur(12px)',
                 },
               }}
             />
