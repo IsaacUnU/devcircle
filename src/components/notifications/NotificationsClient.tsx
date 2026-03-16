@@ -166,7 +166,7 @@ function RequestsPanel({
     setLoadingId(requestId)
     try {
       await respondFollowRequest(requestId, action)
-      setDismissed(prev => new Set([...prev, requestId]))
+      setDismissed(prev => new Set([...Array.from(prev), requestId]))
       onRespond(requestId, action)
       toast.success(action === 'accept' ? 'Solicitud aceptada ✓' : 'Solicitud rechazada')
     } catch (err: any) {

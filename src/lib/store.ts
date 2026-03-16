@@ -29,6 +29,10 @@ interface UIState {
   setUnreadMessages: (count: number) => void
   incrementUnreadMessages: () => void
 
+  // Mobile Sidebar
+  isMobileSidebarOpen: boolean
+  setMobileSidebarOpen: (isOpen: boolean) => void
+
   // Sidebar Style
   sidebarStyle: 'full' | 'compact' | 'floating'
   setSidebarStyle: (style: 'full' | 'compact' | 'floating') => void
@@ -60,6 +64,9 @@ export const useUIStore = create<UIState>()(
       unreadMessages: 0,
       setUnreadMessages: (count: number) => set({ unreadMessages: count }),
       incrementUnreadMessages: () => set((state) => ({ unreadMessages: state.unreadMessages + 1 })),
+
+      isMobileSidebarOpen: false,
+      setMobileSidebarOpen: (isOpen) => set({ isMobileSidebarOpen: isOpen }),
 
       sidebarStyle: 'full',
       setSidebarStyle: (style) => set({ sidebarStyle: style }),
