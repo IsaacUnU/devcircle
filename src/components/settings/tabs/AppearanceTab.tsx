@@ -5,19 +5,8 @@ import { useTheme } from 'next-themes'
 import { Palette, Globe2, Monitor, Sun, Moon, Columns, Square, Layout } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useUIStore } from '@/lib/store'
+import { useTranslation } from '@/lib/i18n'
 import toast from 'react-hot-toast'
-
-const THEMES = [
-  { id: 'light', label: 'Claro', icon: Sun, preview: 'bg-white' },
-  { id: 'dark', label: 'Oscuro', icon: Moon, preview: 'bg-slate-900' },
-  { id: 'system', label: 'Sistema', icon: Monitor, preview: 'bg-gradient-to-br from-white to-slate-900' },
-]
-
-const SIDEBAR_STYLES = [
-  { id: 'full', label: 'Completa', icon: Columns },
-  { id: 'compact', label: 'Compacta', icon: Square },
-  { id: 'floating', label: 'Flotante', icon: Layout },
-]
 
 const LANGUAGES = [
   { id: 'es', label: 'ESP', name: 'Español' },
@@ -39,8 +28,21 @@ const LANGUAGES = [
 
 export function AppearanceTab() {
   const { theme, setTheme } = useTheme()
-  const { sidebarStyle, setSidebarStyle } = useUIStore()
-  const [language, setLang] = useState('es')
+  const { sidebarStyle, setSidebarStyle, language, setLanguage } = useUIStore()
+  const { dict } = useTranslation()
+  const t = dict.settings.appearance
+
+  const THEMES = [
+    { id: 'light', label: t.themes.light, icon: Sun, preview: 'bg-white' },
+    { id: 'dark', label: t.themes.dark, icon: Moon, preview: 'bg-slate-900' },
+    { id: 'system', label: t.themes.system, icon: Monitor, preview: 'bg-gradient-to-br from-white to-slate-900' },
+  ]
+
+  const SIDEBAR_STYLES = [
+    { id: 'full', label: t.sidebarStyles.full, icon: Columns },
+    { id: 'compact', label: t.sidebarStyles.compact, icon: Square },
+    { id: 'floating', label: t.sidebarStyles.floating, icon: Layout },
+  ]
 
   return (
     <div className="space-y-10 animate-fade-in max-w-xl pb-10">
@@ -48,41 +50,40 @@ export function AppearanceTab() {
       <section>
         <div className="mb-6">
           <h2 className="text-sm font-bold uppercase tracking-wider text-text-muted flex items-center gap-2">
-            <Palette className="w-4 h-4" /> Apariencia
+            <Palette className="w-4 h-4" /> {t.title}
           </h2>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-1.5">
-          {THEMES.map(t => (
+          {THEMES.map(t_theme => (
             <button
-              key={t.id}
+              key={t_theme.id}
               onClick={() => {
-                setTheme(t.id)
-                toast.success(`Tema ${t.label}`)
+                setTheme(t_theme.id)
+                toast.success(`${t.toasts.themeChanged}: ${t_theme.label}`)
               }}
               className={cn(
                 'group flex items-center gap-2 p-2 rounded-xl border transition-all duration-200 text-left',
-                theme === t.id
+                theme === t_theme.id
                   ? 'border-brand-500 bg-brand-500/5'
                   : 'border-surface-border bg-surface-card/30 hover:border-brand-500/30'
               )}
             >
               <div className={cn(
                 'w-10 h-10 rounded-lg border shadow-sm shrink-0 transition-transform duration-300 group-hover:scale-105',
-                t.preview,
-                theme === t.id ? 'border-brand-500/40' : 'border-black/5 dark:border-white/5'
+                t_theme.preview,
+                theme === t_theme.id ? 'border-brand-500/40' : 'border-black/5 dark:border-white/5'
               )} />
-
               <div className="flex flex-col items-start min-w-0 flex-1">
                 <span className={cn(
                   'text-sm font-bold',
-                  theme === t.id ? 'text-brand-500' : 'text-text-primary'
+                  theme === t_theme.id ? 'text-brand-500' : 'text-text-primary'
                 )}>
-                  {t.label}
+                  {t_theme.label}
                 </span>
-                {theme === t.id && (
+                {theme === t_theme.id && (
                   <span className="text-[10px] text-brand-500/70 font-medium leading-tight">
-                    Seleccionado
+                    {t.themes.selected}
                   </span>
                 )}
               </div>
@@ -95,7 +96,7 @@ export function AppearanceTab() {
       <section>
         <div className="mb-6">
           <h2 className="text-sm font-bold uppercase tracking-wider text-text-muted flex items-center gap-2">
-            <Layout className="w-4 h-4" /> Barra Lateral
+            <Layout className="w-4 h-4" /> {t.sidebarTitle}
           </h2>
         </div>
 
@@ -105,7 +106,7 @@ export function AppearanceTab() {
               key={s.id}
               onClick={() => {
                 setSidebarStyle(s.id as any)
-                toast.success(`Estilo ${s.label}`)
+                toast.success(`${t.toasts.styleChanged}: ${s.label}`)
               }}
               className={cn(
                 'group flex items-center gap-2 p-2 rounded-xl border transition-all duration-200 text-left',
@@ -130,7 +131,7 @@ export function AppearanceTab() {
                 </span>
                 {sidebarStyle === s.id && (
                   <span className="text-[10px] text-brand-500/70 font-medium leading-tight text-brand-500/60">
-                    Activo
+                    {t.sidebarStyles.active}
                   </span>
                 )}
               </div>
@@ -143,7 +144,7 @@ export function AppearanceTab() {
       <section>
         <div className="mb-6">
           <h2 className="text-sm font-bold uppercase tracking-wider text-text-muted flex items-center gap-2">
-            <Globe2 className="w-4 h-4" /> Idioma
+            <Globe2 className="w-4 h-4" /> {t.languageTitle}
           </h2>
         </div>
 
@@ -152,8 +153,8 @@ export function AppearanceTab() {
             <button
               key={l.id}
               onClick={() => {
-                setLang(l.id)
-                if (l.id !== 'es') toast.error('Próximamente')
+                setLanguage(l.id)
+                toast.success(`${t.toasts.languageChanged} ${l.name}`)
               }}
               className={cn(
                 'px-4 py-2 rounded-lg border text-xs font-bold transition-all duration-200',
@@ -169,4 +170,4 @@ export function AppearanceTab() {
       </section>
     </div>
   )
-}
+}

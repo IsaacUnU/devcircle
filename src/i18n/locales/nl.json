@@ -1,0 +1,288 @@
+{
+  "sidebar": {
+    "home": "Home",
+    "explore": "Ontdekken",
+    "clips": "Clips",
+    "notifications": "Meldingen",
+    "messages": "Berichten",
+    "jobs": "Vacatures",
+    "bookmarks": "Bewaard",
+    "profile": "Profiel",
+    "settings": "Instellingen",
+    "new_post": "Nieuw bericht",
+    "logout": "Uitloggen",
+    "projects": "Projecten",
+    "groups": "Groepen"
+  },
+  "post": {
+    "translate": "Bericht vertalen",
+    "see_original": "Origineel bekijken",
+    "translating": "Vertalen...",
+    "delete_confirm": "Weet je zeker dat je deze post wilt verwijderen? Deze actie kan niet ongedaan worden gemaakt.",
+    "delete_button": "Post verwijderen",
+    "hide_code": "Code verbergen",
+    "show_code": "Code bekijken",
+    "image_alt": "Post afbeelding",
+    "toasts": {
+      "login_like": "Log in om te liken",
+      "login_save": "Log in om op te slaan",
+      "saved": "Opgeslagen",
+      "unsaved": "Verwijderd uit bladwijzers",
+      "link_copied": "Link gekopieerd",
+      "deleted": "Post verwijderd",
+      "delete_error": "Fout bij verwijderen",
+      "translate_error": "Fout bij vertalen"
+    }
+  },
+  "settings": {
+    "tabs": {
+      "profile": "Profiel",
+      "security": "Account & Beveiliging",
+      "notifications": "Meldingen",
+      "appearance": "Uiterlijk",
+      "privacy": "Privacy"
+    },
+    "appearance": {
+      "title": "Uiterlijk",
+      "themeTitle": "Thema",
+      "themes": {
+        "light": "Licht",
+        "dark": "Donker",
+        "system": "Systeem",
+        "selected": "Geselecteerd"
+      },
+      "sidebarTitle": "Zijbalkstijl",
+      "sidebarStyles": {
+        "full": "Volledig",
+        "compact": "Compact",
+        "floating": "Zwevend",
+        "active": "Actief"
+      },
+      "languageTitle": "Taal",
+      "toasts": {
+        "themeChanged": "Thema gewijzigd",
+        "styleChanged": "Stijl gewijzigd",
+        "languageChanged": "Taal gewijzigd naar"
+      }
+    },
+    "profile_form": {
+      "avatar_title": "Profielfoto",
+      "upload_rules": "JPG, PNG, WEBP of GIF · Max. 5 MB",
+      "upload_file": "Bestand uploaden",
+      "external_url": "Externe URL",
+      "click_to_upload": "Klik om een afbeelding te selecteren",
+      "upload_button": "Foto uploaden",
+      "url_placeholder": "https://...",
+      "save_button": "Opslaan",
+      "public_info": "Openbare informatie",
+      "full_name": "Volledige naam",
+      "bio": "Bio",
+      "city": "Stad",
+      "country": "Land",
+      "select_country": "Selecteren...",
+      "website": "Website / Portfolio",
+      "saving": "Opslaan...",
+      "save_changes": "Wijzigingen opslaan",
+      "uploading_image": "Afbeelding uploaden...",
+      "name_placeholder": "Jouw naam",
+      "bio_placeholder": "Full-stack developer. Liefhebber van React en PostgreSQL...",
+      "city_placeholder": "Amsterdam",
+      "website_placeholder": "https://jouwportfolio.nl",
+      "new_tag": "NIEUW",
+      "countries_list": [
+        "Spanje", "Mexico", "Argentinië", "Colombia", "Chili", "Peru", "Venezuela",
+        "Verenigde Staten", "Verenigd Koninkrijk", "Duitsland", "Frankrijk", "Portugal", "Brazilië",
+        "Italië", "Nederland", "Zweden", "Polen", "Oekraïne", "India", "Canada",
+        "Australië", "Japan", "Zuid-Korea", "Overig"
+      ],
+      "toasts": {
+        "updated": "Profiel bijgewerkt",
+        "error": "Fout bij opslaan",
+        "invalid_format": "Formaat niet toegestaan",
+        "size_error": "Bestand overschrijdt de limiet van 5 MB",
+        "upload_success": "Profielfoto bijgewerkt!",
+        "upload_error": "Fout bij uploaden afbeelding",
+        "invalid_url": "Voer een geldige URL in"
+      }
+    },
+    "compose": {
+      "title": "Nieuw bericht",
+      "placeholder": "Wat ben je aan het bouwen? Deel je code, idee of vraag...",
+      "add_code": "Code toevoegen",
+      "hide_code": "Code verbergen",
+      "add_image": "Afbeelding toevoegen",
+      "change_image": "Afbeelding wijzigen",
+      "uploading_image": "Afbeelding uploaden...",
+      "publishing": "Publiceren...",
+      "publish": "Publiceren",
+      "code_lang_placeholder": "Taal (bijv. typescript, python...)",
+      "code_placeholder": "Plak je code hier",
+      "tags_placeholder": "Zoek of typ een tag...",
+      "popular_tags": "Populaire tags",
+      "toasts": {
+        "success": "Bericht gepubliceerd 🚀",
+        "error": "Fout bij publiceren",
+        "image_size": "Afbeelding overschrijdt 10 MB"
+      }
+    },
+    "auth": {
+      "login": {
+        "title": "Inloggen",
+        "email_label": "E-mail",
+        "email_placeholder": "jouw@email.com",
+        "password_label": "Wachtwoord",
+        "password_placeholder": "••••••••",
+        "login_button": "Inloggen",
+        "logging_in": "Inloggen...",
+        "error": "Onjuist e-mailadres of wachtwoord"
+      },
+      "register": {
+        "title": "Account aanmaken",
+        "step1": "Account",
+        "step2": "Profiel",
+        "username_label": "Gebruikersnaam",
+        "username_placeholder": "johndoe",
+        "name_label": "Echte naam",
+        "name_placeholder": "John Doe",
+        "email_label": "E-mail",
+        "email_placeholder": "jouw@email.com",
+        "password_label": "Wachtwoord",
+        "password_placeholder": "Minimaal 8 tekens",
+        "next_button": "Volgende",
+        "optional_note": "Optioneel — je kunt dit later invullen bij Instellingen",
+        "bio_label": "Bio",
+        "bio_placeholder": "Full-stack developer. Liefhebber van React en PostgreSQL...",
+        "city_label": "Stad",
+        "city_placeholder": "Amsterdam",
+        "country_label": "Land",
+        "select_country": "Selecteren...",
+        "website_label": "Website / Portfolio",
+        "website_placeholder": "https://jouwportfolio.nl",
+        "back_button": "Terug",
+        "create_button": "🚀 Mijn account aanmaken",
+        "creating": "Account aanmaken...",
+        "success": "Account aangemaakt! Je kunt nu inloggen.",
+        "error": "Fout bij registreren"
+      }
+    },
+    "security": {
+      "password_title": "Wachtwoord wijzigen",
+      "current_password": "Huidig wachtwoord",
+      "new_password": "Nieuw wachtwoord",
+      "confirm_password": "Bevestigen",
+      "password_placeholder": "••••••••",
+      "new_password_hint": "Minimaal 8 tekens",
+      "confirm_placeholder": "Herhaal wachtwoord",
+      "update_button": "Wachtwoord bijwerken",
+      "updating_password": "Opslaan...",
+      "oauth_title": "OAuth-account",
+      "oauth_description": "Je account is gekoppeld aan GitHub/Google. Het wachtwoord wordt beheerd via dat platform.",
+      "email_title": "E-Mail wijzigen",
+      "current_email": "Huidig e-mailadres",
+      "new_email": "Nieuw e-mailadres",
+      "new_email_placeholder": "nieuw@email.com",
+      "confirm_email_password": "Huidig wachtwoord (ter bevestiging)",
+      "change_email_button": "E-mail wijzigen",
+      "updating_email": "Opslaan...",
+      "oauth_email_description": "Beheer je e-mail via je GitHub/Google-account.",
+      "sessions_title": "Actieve sessies",
+      "sessions_description": "Log uit op alle apparaten waar je momenteel bent ingelogd.",
+      "revoke_sessions_button": "Uitloggen op alle apparaten",
+      "delete_account_title": "Account verwijderen",
+      "delete_account_description": "Deze actie is permanent en onomkeerbaar. Al je posts, reacties, volgers en gegevens worden verwijderd.",
+      "delete_account_button": "Mijn account verwijderen",
+      "delete_confirm_phrase": "Typ MIJN ACCOUNT VERWIJDEREN om te bevestigen",
+      "delete_input_placeholder": "MIJN ACCOUNT VERWIJDEREN",
+      "cancel_button": "Annuleren",
+      "confirm_delete_button": "Verwijdering bevestigen",
+      "deleting": "Verwijderen...",
+      "toasts": {
+        "password_updated": "Wachtwoord bijgewerkt",
+        "email_updated": "E-mail bijgewerkt",
+        "sessions_revoked": "Sessies beëindigd",
+        "account_deleted": "Account verwijderd",
+        "phrase_error": "Typ de bevestigingszin"
+      }
+    },
+    "privacy": {
+      "title": "Privacyinstellingen",
+      "private_account_title": "Privéaccount",
+      "private_account_description": "Met een privéaccount moeten anderen een verzoek sturen om je te volgen. Je kunt deze verzoeken accepteren of weigeren.",
+      "activate_private_profile": "Geactiveerd privéprofiel",
+      "profile_private_status": "Je profiel is privé — goedkeuring is vereist om je te volgen",
+      "profile_public_status": "Je profiel is openbaar — iedereen kan je volgen",
+      "visibility_lists_title": "Zichtbaarheid van lijsten",
+      "visibility_lists_description": "Kies wie je volgers- en volgend-lijsten kan zien.",
+      "show_followers_label": "Wie kan je volgers zien?",
+      "show_followers_description": "De lijst met mensen die jou volgen",
+      "show_following_label": "Wie kan zien wie jij volgt?",
+      "show_following_description": "De lijst met mensen die jij volgt",
+      "interactions_title": "Interacties",
+      "interactions_description": "Beheer wie met jou kan via interactie.",
+      "who_can_message_label": "Wie kan je berichten sturen?",
+      "who_can_message_description": "Directe berichten in je inbox",
+      "who_can_comment_label": "Wie kan op je posts reageren?",
+      "who_can_comment_description": "Reacties op jouw publicaties",
+      "follow_requests_title": "Volgverzoeken",
+      "follow_requests_description": "Mensen die hebben gevraagd om je te volgen en wachten op jouw reactie.",
+      "no_requests": "Je hebt geen openstaande verzoeken",
+      "accept_button": "Accepteren",
+      "reject_button": "Weigeren",
+      "save_button": "Privacyinstellingen opslaan",
+      "saving": "Opslaan...",
+      "toasts": {
+        "saved": "Privacyinstellingen opgeslagen",
+        "request_accepted": "Verzoek geaccepteerd",
+        "request_rejected": "Verzoek geweigerend",
+        "error": "Fout bij opslaan"
+      },
+      "options": {
+        "everyone": "Iedereen",
+        "followers": "Alleen volgers",
+        "nobody": "Alleen ik"
+      }
+    },
+    "notifications_settings": {
+      "title": "Melding instellingen",
+      "description": "Beheer welke meldingen je wilt ontvangen.",
+      "save_button": "Voorkeuren opslaan",
+      "saving": "Opslaan...",
+      "toasts": {
+        "saved": "Voorkeuren opgeslagen",
+        "error": "Fout bij opslaan"
+      },
+      "prefs": {
+        "likes_label": "Likes",
+        "likes_desc": "Wanneer iemand je post leuk vindt",
+        "comments_label": "Reacties",
+        "comments_desc": "Wanneer iemand reageert op je post",
+        "follows_label": "Nieuwe volgers",
+        "follows_desc": "Wanneer iemand je begint te volgen",
+        "mentions_label": "Vermeldingen",
+        "mentions_desc": "Wanneer je bent genoemd met @gebruikersnaam",
+        "replies_label": "Antwoorden",
+        "replies_desc": "Wanneer iemand antwoordt op jouw reactie",
+        "reputation_label": "Reputatie",
+        "reputation_desc": "Wanneer je reputatiepunten verdient of verliest"
+      }
+    }
+  },
+  "comments": {
+    "placeholder": "Wat denk je?",
+    "reply_placeholder": "Antwoorden op @{username}...",
+    "submit_comment": "Kommentar plaatsen",
+    "submit_reply": "Antwoord plaatsen",
+    "reply_button": "Beantwoorden",
+    "delete_button": "Reactie verwijderen",
+    "delete_confirm": "Deze reactie verwijderen?",
+    "empty_state": "Schrijf de eerste reactie...",
+    "toasts": {
+      "comment_published": "Reactie geplaatst",
+      "reply_published": "Antwoord geplaatst",
+      "deleted": "Reactie verwijderd",
+      "error_commenting": "Fout bij plaatsen reactie",
+      "error_replying": "Fout bij antwoorden",
+      "error_deleting": "Fout bij verwijderen"
+    }
+  }
+}

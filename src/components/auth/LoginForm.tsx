@@ -7,12 +7,15 @@ import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { Eye, EyeOff } from 'lucide-react'
 import { loginSchema, type LoginInput } from '@/lib/validations'
+import { useTranslation } from '@/lib/i18n'
 import toast from 'react-hot-toast'
 
 export function LoginForm() {
   const router = useRouter()
   const [showPass, setShowPass] = useState(false)
   const [loading, setLoading] = useState(false)
+  const { dict } = useTranslation()
+  const t = (dict as any).settings.auth.login
 
   const { register, handleSubmit, formState: { errors } } = useForm<LoginInput>({
     resolver: zodResolver(loginSchema),
@@ -23,7 +26,7 @@ export function LoginForm() {
     try {
       const res = await signIn('credentials', { ...data, redirect: false })
       if (res?.error) {
-        toast.error('Email o contraseña incorrectos')
+        toast.error(t.error)
       } else {
         router.push('/feed')
         router.refresh()
@@ -37,12 +40,12 @@ export function LoginForm() {
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
       <div>
         <label className="text-sm font-medium text-text-secondary mb-1.5 block">
-          Email
+          {t.email_label}
         </label>
         <input
           {...register('email')}
           type="email"
-          placeholder="tu@email.com"
+          placeholder={t.email_placeholder}
           className="input"
           autoComplete="email"
         />
@@ -53,13 +56,13 @@ export function LoginForm() {
 
       <div>
         <label className="text-sm font-medium text-text-secondary mb-1.5 block">
-          Contraseña
+          {t.password_label}
         </label>
         <div className="relative">
           <input
             {...register('password')}
             type={showPass ? 'text' : 'password'}
-            placeholder="••••••••"
+            placeholder={t.password_placeholder}
             className="input pr-10"
             autoComplete="current-password"
           />
@@ -77,7 +80,7 @@ export function LoginForm() {
       </div>
 
       <button type="submit" disabled={loading} className="btn-primary w-full">
-        {loading ? 'Iniciando sesión...' : 'Iniciar sesión'}
+        {loading ? t.logging_in : t.login_button}
       </button>
     </form>
   )

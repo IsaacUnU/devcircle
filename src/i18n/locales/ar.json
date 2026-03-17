@@ -1,0 +1,121 @@
+{
+  "sidebar": {
+    "home": "الرئيسية",
+    "explore": "استكشاف",
+    "clips": "كليبس",
+    "notifications": "الإشعارات",
+    "messages": "الرسائل",
+    "jobs": "الوظائف",
+    "bookmarks": "المحفوظات",
+    "profile": "الملف الشخصي",
+    "settings": "الإعدادات",
+    "new_post": "منشور جديد",
+    "logout": "تسجيل الخروج",
+    "projects": "المشاريع",
+    "groups": "المجموعات"
+  },
+  "post": {
+    "translate": "ترجمة المنشور",
+    "see_original": "عرض الأصل",
+    "translating": "جاري الترجمة..."
+  },
+  "settings": {
+    "tabs": {
+      "profile": "الملف الشخصي",
+      "security": "الحساب والأمان",
+      "notifications": "الإشعارات",
+      "appearance": "المظهر",
+      "privacy": "الخصوصية"
+    },
+    "appearance": {
+      "title": "المظهر",
+      "themeTitle": "السمة",
+      "themes": {
+        "light": "فاتح",
+        "dark": "داكن",
+        "system": "النظام",
+        "selected": "تم الاختيار"
+      },
+      "sidebarTitle": "نمط الشريط الجانبي",
+      "sidebarStyles": {
+        "full": "كامل",
+        "compact": "مدمج",
+        "floating": "عائم",
+        "active": "نشط"
+      },
+      "languageTitle": "اللغة",
+      "toasts": {
+        "themeChanged": "تم تغيير السمة",
+        "styleChanged": "تم تغيير النمط",
+        "languageChanged": "تم تغيير اللغة إلى"
+      }
+    },
+    "profile_form": {
+      "avatar_title": "صورة الملف الشخصي",
+      "upload_rules": "JPG, PNG, WEBP أو GIF · الحد الأقصى 5 ميجابايت",
+      "upload_file": "تحميل ملف",
+      "external_url": "رابط خارجي",
+      "click_to_upload": "انقر لاختيار صورة",
+      "upload_button": "تحميل الصورة",
+      "url_placeholder": "https://...",
+      "save_button": "حفظ",
+      "public_info": "المعلومات العامة",
+      "full_name": "الاسم الكامل",
+      "bio": "نبذة شخصية",
+      "city": "المدينة",
+      "country": "البلد",
+      "select_country": "اختر...",
+      "website": "الموقع / المعرض",
+      "saving": "جاري الحفظ...",
+      "save_changes": "حفظ التغييرات",
+      "toasts": {
+        "updated": "تم تحديث الملف الشخصي",
+        "error": "خطأ في الحفظ",
+        "invalid_format": "صيغة غير مدعومة",
+        "size_error": "الملف يتجاوز الحد الأقصى 5 ميجابايت",
+        "upload_success": "تم تحديث صورة الملف الشخصي!",
+        "upload_error": "خطأ في تحميل الصورة",
+        "invalid_url": "أدخل رابطاً صالحاً"
+      },
+      "new_tag": "جديد"
+    },
+    "compose": {
+      "title": "منشور جديد",
+      "placeholder": "ماذا تبني؟ شارك شفرتك، فكرتك أو سؤالك...",
+      "add_code": "إضافة شفرة",
+      "hide_code": "إخفاء الشفرة",
+      "add_image": "إضافة صورة",
+      "change_image": "تغيير الصورة",
+      "uploading_image": "جاري تحميل الصورة...",
+      "publishing": "جاري النشر...",
+      "publish": "نشر",
+      "code_lang_placeholder": "اللغة (مثلاً: typescript، python...)",
+      "code_placeholder": "الصق شفرتك هنا",
+      "tags_placeholder": "ابحث أو اكتب وسماً...",
+      "popular_tags": "أوسمة شائعة",
+      "toasts": {
+        "success": "تم النشر بنجاح 🚀",
+        "error": "خطأ في النشر",
+        "image_size": "الصورة تتجاوز 10 ميجابايت"
+      }
+    }
+  },
+  "comments": {
+    "placeholder": "ما رأيك؟",
+    "reply_placeholder": "الرد على @{username}...",
+    "submit_comment": "نشر التعليق",
+    "submit_reply": "نشر الرد",
+    "reply_button": "رد",
+    "delete_button": "حذف التعليق",
+    "delete_confirm": "هل تريد حذف هذا التعليق؟",
+    "empty_state": "كن أول من يعلق...",
+    "toasts": {
+      "comment_published": "تم نشر التعليق",
+      "reply_published": "تم نشر الرد",
+      "deleted": "تم حذف التعليق",
+      "error_commenting": "خطأ في التعليق",
+      "error_replying": "خطأ في الرد",
+      "error_deleting": "خطأ في الحذف"
+    }
+  }
+}

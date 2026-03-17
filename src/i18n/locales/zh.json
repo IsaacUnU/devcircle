@@ -1,0 +1,288 @@
+{
+  "sidebar": {
+    "home": "首页",
+    "explore": "探索",
+    "clips": "剪辑",
+    "notifications": "通知",
+    "messages": "消息",
+    "jobs": "职位",
+    "bookmarks": "书签",
+    "profile": "个人资料",
+    "settings": "设置",
+    "new_post": "发帖",
+    "logout": "退出登录",
+    "projects": "项目",
+    "groups": "小组"
+  },
+  "post": {
+    "translate": "翻译帖子",
+    "see_original": "查看原文",
+    "translating": "翻译中...",
+    "delete_confirm": "确定删除这条动态吗？删除后将无法恢复。",
+    "delete_button": "删除动态",
+    "hide_code": "隐藏代码",
+    "show_code": "查看代码",
+    "image_alt": "动态图片",
+    "toasts": {
+      "login_like": "请先登录再点赞",
+      "login_save": "请先登录再保存",
+      "saved": "已保存",
+      "unsaved": "已从书签中移除",
+      "link_copied": "链接已复制",
+      "deleted": "动态已删除",
+      "delete_error": "删除失败",
+      "translate_error": "翻译失败"
+    }
+  },
+  "settings": {
+    "tabs": {
+      "profile": "个人资料",
+      "security": "账号与安全",
+      "notifications": "通知",
+      "appearance": "外观",
+      "privacy": "隐私"
+    },
+    "appearance": {
+      "title": "外观",
+      "themeTitle": "主题",
+      "themes": {
+        "light": "浅色",
+        "dark": "深色",
+        "system": "系统默认",
+        "selected": "已选择"
+      },
+      "sidebarTitle": "侧边栏样式",
+      "sidebarStyles": {
+        "full": "宽版",
+        "compact": "紧凑",
+        "floating": "浮动",
+        "active": "正在使用"
+      },
+      "languageTitle": "语言",
+      "toasts": {
+        "themeChanged": "主题已更改",
+        "styleChanged": "样式已更改",
+        "languageChanged": "语言已更改为"
+      }
+    },
+    "profile_form": {
+      "avatar_title": "个人头像",
+      "upload_rules": "JPG, PNG, WEBP 或 GIF · 最大 5 MB",
+      "upload_file": "上传文件",
+      "external_url": "外部 URL",
+      "click_to_upload": "点击选择图片",
+      "upload_button": "上传照片",
+      "url_placeholder": "https://...",
+      "save_button": "保存",
+      "public_info": "公开信息",
+      "full_name": "全名",
+      "bio": "个人简介",
+      "city": "城市",
+      "country": "国家",
+      "select_country": "选择...",
+      "website": "网站 / 作品集",
+      "saving": "保存中...",
+      "save_changes": "保存更改",
+      "uploading_image": "图片上传中...",
+      "name_placeholder": "你的姓名",
+      "bio_placeholder": "全栈开发。热爱 React 和 PostgreSQL...",
+      "city_placeholder": "北京",
+      "website_placeholder": "https://yourportfolio.cn",
+      "new_tag": "新",
+      "countries_list": [
+        "西班牙", "墨西哥", "阿根廷", "哥伦比亚", "智利", "秘鲁", "委内瑞拉",
+        "美国", "英国", "德国", "法国", "葡萄牙", "巴西",
+        "意大利", "荷兰", "瑞典", "波兰", "乌克兰", "印度", "加拿大",
+        "澳大利亚", "日本", "韩国", "其他"
+      ],
+      "toasts": {
+        "updated": "个人资料已更新",
+        "error": "保存出错",
+        "invalid_format": "格式不允许",
+        "size_error": "文件超过 5 MB 限制",
+        "upload_success": "头像更新成功！",
+        "upload_error": "上传图片出错",
+        "invalid_url": "请输入有效的 URL"
+      }
+    },
+    "compose": {
+      "title": "发布新动态",
+      "placeholder": "你正在构建什么？分享你的代码、想法或问题...",
+      "add_code": "添加代码",
+      "hide_code": "隐藏代码",
+      "add_image": "添加图片",
+      "change_image": "更好图片",
+      "uploading_image": "图片上传中...",
+      "publishing": "发布中...",
+      "publish": "发布",
+      "code_lang_placeholder": "语言 (如: typescript, python...)",
+      "code_placeholder": "在此粘贴你的代码",
+      "tags_placeholder": "搜索或输入标签...",
+      "popular_tags": "热门标签",
+      "toasts": {
+        "success": "动态已发布 🚀",
+        "error": "发布出错",
+        "image_size": "图片超过 10 MB"
+      }
+    },
+    "auth": {
+      "login": {
+        "title": "登录",
+        "email_label": "电子邮件",
+        "email_placeholder": "your@email.com",
+        "password_label": "密码",
+        "password_placeholder": "••••••••",
+        "login_button": "登录",
+        "logging_in": "登录中...",
+        "error": "电子邮件或密码错误"
+      },
+      "register": {
+        "title": "创建账号",
+        "step1": "账号",
+        "step2": "资料",
+        "username_label": "用户名",
+        "username_placeholder": "johndoe",
+        "name_label": "真实姓名",
+        "name_placeholder": "张三",
+        "email_label": "电子邮件",
+        "email_placeholder": "your@email.com",
+        "password_label": "密码",
+        "password_placeholder": "最少 8 个字符",
+        "next_button": "下一步",
+        "optional_note": "可选 — 你可以在以后通过“设置”来完善",
+        "bio_label": "个人简介",
+        "bio_placeholder": "全栈开发。热爱 React 和 PostgreSQL...",
+        "city_label": "城市",
+        "city_placeholder": "北京",
+        "country_label": "国家",
+        "select_country": "请选择...",
+        "website_label": "网站 / 作品集",
+        "website_placeholder": "https://yourportfolio.cn",
+        "back_button": "上一步",
+        "create_button": "🚀 创建我的账号",
+        "creating": "账号创建中...",
+        "success": "账号已创建！请登录。",
+        "error": "注册出错"
+      }
+    },
+    "security": {
+      "password_title": "更改密码",
+      "current_password": "当前密码",
+      "new_password": "新密码",
+      "confirm_password": "确认",
+      "password_placeholder": "••••••••",
+      "new_password_hint": "最少 8 个字符",
+      "confirm_placeholder": "重复新密码",
+      "update_button": "更新密码",
+      "updating_password": "保存中...",
+      "oauth_title": "OAuth 账号",
+      "oauth_description": "你的账号已关联 GitHub/Google。密码由相应平台管理。",
+      "email_title": "更改电子邮件",
+      "current_email": "当前电子邮件",
+      "new_email": "新电子邮件",
+      "new_email_placeholder": "new@email.com",
+      "confirm_email_password": "当前密码 (用于确认)",
+      "change_email_button": "更改电子邮件",
+      "updating_email": "保存中...",
+      "oauth_email_description": "请通过你的 GitHub/Google 账号管理电子邮件。",
+      "sessions_title": "活跃会话",
+      "sessions_description": "在所有已登录的设备上退出登录。",
+      "revoke_sessions_button": "在所有设备上退出登录",
+      "delete_account_title": "注销账号",
+      "delete_account_description": "此操作无法撤销。你的所有动态、评论、粉丝和数据将被永久删除。",
+      "delete_account_button": "注销我的账号",
+      "delete_confirm_phrase": "请输入 注销我的账号 以确认",
+      "delete_input_placeholder": "注销我的账号",
+      "cancel_button": "取消",
+      "confirm_delete_button": "确认注销",
+      "deleting": "注销中...",
+      "toasts": {
+        "password_updated": "密码已更新",
+        "email_updated": "电子邮件已更新",
+        "sessions_revoked": "已在所有设备上退出",
+        "account_deleted": "账号已注销",
+        "phrase_error": "请输入确认短语"
+      }
+    },
+    "privacy": {
+      "title": "隐私设置",
+      "private_account_title": "私密账号",
+      "private_account_description": "启用后，他人需发送关注请求才能关注你。你可以接受或拒绝。",
+      "activate_private_profile": "启用私密个人资料",
+      "profile_private_status": "你的资料已设为私密 — 关注需审核",
+      "profile_public_status": "你的资料已公开 — 任何人均可关注",
+      "visibility_lists_title": "列表可见性",
+      "visibility_lists_description": "选择谁可以查看你的粉丝和关注列表。",
+      "show_followers_label": "谁可以看到你的粉丝？",
+      "show_followers_description": "关注你的人员列表",
+      "show_following_label": "谁可以看到你的关注？",
+      "show_following_description": "你关注的人员列表",
+      "interactions_title": "互动控制",
+      "interactions_description": "管理谁可以与你互动。",
+      "who_can_message_label": "谁可以给你发消息？",
+      "who_can_message_description": "私信箱中的直接对话",
+      "who_can_comment_label": "谁可以在你的动态下评论？",
+      "who_can_comment_description": "针对你帖子的评论",
+      "follow_requests_title": "关注请求",
+      "follow_requests_description": "已请求关注你并等待回复的人员。",
+      "no_requests": "暂无待理请求",
+      "accept_button": "接受",
+      "reject_button": "拒绝",
+      "save_button": "保存隐私设置",
+      "saving": "保存中...",
+      "toasts": {
+        "saved": "隐私设置已保存",
+        "request_accepted": "已接受请求",
+        "request_rejected": "已拒绝请求",
+        "error": "保存出错"
+      },
+      "options": {
+        "everyone": "所有人",
+        "followers": "仅限关注我的人",
+        "nobody": "仅限自己"
+      }
+    },
+    "notifications_settings": {
+      "title": "通知设置",
+      "description": "管理你希望接收的通知类型。",
+      "save_button": "保存偏好",
+      "saving": "保存中...",
+      "toasts": {
+        "saved": "偏好已保存",
+        "error": "保存出错"
+      },
+      "prefs": {
+        "likes_label": "点赞",
+        "likes_desc": "当有人点赞你的动态时",
+        "comments_label": "评论",
+        "comments_desc": "当有人评论你的动态时",
+        "follows_label": "新粉丝",
+        "follows_desc": "当有人开始关注你时",
+        "mentions_label": "提及",
+        "mentions_desc": "当有人使用 @用户名 提及你时",
+        "replies_label": "回复",
+        "replies_desc": "当有人回复你的评论时",
+        "reputation_label": "声望",
+        "reputation_desc": "当你的声望点数发生变化时"
+      }
+    }
+  },
+  "comments": {
+    "placeholder": "你怎么看？",
+    "reply_placeholder": "回复 @{username}...",
+    "submit_comment": "发表评论",
+    "submit_reply": "发表回复",
+    "reply_button": "回复",
+    "delete_button": "删除评论",
+    "delete_confirm": "确定删除这条评论吗？",
+    "empty_state": "快来抢沙发吧...",
+    "toasts": {
+      "comment_published": "评论已发表",
+      "reply_published": "回复已发表",
+      "deleted": "评论已删除",
+      "error_commenting": "发表评论出错",
+      "error_replying": "发表回复出错",
+      "error_deleting": "删除失败"
+    }
+  }
+}

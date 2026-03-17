@@ -9,6 +9,7 @@ import { updatePrivacySettings, respondFollowRequest } from '@/lib/actions/priva
 import type { PrivacySettings } from '@/lib/privacy'
 import { getAvatarUrl } from '@/lib/utils'
 import { cn } from '@/lib/utils'
+import { useTranslation } from '@/lib/i18n'
 import toast from 'react-hot-toast'
 
 type Visibility = 'everyone' | 'followers' | 'nobody'
@@ -30,16 +31,15 @@ const VISIBILITY_OPTIONS: { value: Visibility; label: string; icon: any }[] = [
 ]
 
 function VisibilitySelect({
-  value, onChange, label, description, icon: Icon,
+  value, onChange, label, description, icon: Icon, options
 }: {
   value: Visibility
   onChange: (v: Visibility) => void
   label: string
   description: string
   icon: any
+  options: { value: Visibility; label: string; icon: any }[]
 }) {
-  const current = VISIBILITY_OPTIONS.find(o => o.value === value)!
-
   return (
     <div className="flex items-center justify-between py-4 border-b border-surface-border last:border-0">
       <div className="flex items-start gap-3">
@@ -57,7 +57,7 @@ function VisibilitySelect({
           onChange={e => onChange(e.target.value as Visibility)}
           className="appearance-none bg-surface-2 border border-surface-border text-text-secondary text-xs font-medium px-3 py-2 pr-7 rounded-lg cursor-pointer hover:border-brand-500/50 transition-colors focus:outline-none focus:border-brand-500"
         >
-          {VISIBILITY_OPTIONS.map(opt => (
+          {options.map(opt => (
             <option key={opt.value} value={opt.value}>{opt.label}</option>
           ))}
         </select>
@@ -72,6 +72,14 @@ export function PrivacyTab({ initialSettings, pendingRequests }: PrivacyTabProps
   const [isPending, startTransition] = useTransition()
   const [respondingId, setRespondingId] = useState<string | null>(null)
   const [localRequests, setLocalRequests] = useState(pendingRequests)
+  const { dict } = useTranslation()
+  const t = (dict as any).settings.privacy
+
+  const VISIBILITY_OPTIONS: { value: Visibility; label: string; icon: any }[] = [
+    { value: 'everyone', label: t.options.everyone, icon: Eye },
+    { value: 'followers', label: t.options.followers, icon: Users },
+    { value: 'nobody', label: t.options.nobody, icon: EyeOff },
+  ]
 
   function set<K extends keyof PrivacySettings>(key: K, value: PrivacySettings[K]) {
     setSettings(prev => ({ ...prev, [key]: value }))
@@ -81,9 +89,9 @@ export function PrivacyTab({ initialSettings, pendingRequests }: PrivacyTabProps
     startTransition(async () => {
       try {
         await updatePrivacySettings(settings)
-        toast.success('Ajustes de privacidad guardados')
+        toast.success(t.toasts.saved)
       } catch (err: any) {
-        toast.error(err.message ?? 'Error al guardar')
+        toast.error(err.message ?? t.toasts.error)
       }
     })
   }
@@ -93,9 +101,9 @@ export function PrivacyTab({ initialSettings, pendingRequests }: PrivacyTabProps
     try {
       await respondFollowRequest(requestId, action)
       setLocalRequests(prev => prev.filter(r => r.id !== requestId))
-      toast.success(action === 'accept' ? 'Solicitud aceptada' : 'Solicitud rechazada')
+      toast.success(action === 'accept' ? t.toasts.request_accepted : t.toasts.request_rejected)
     } catch (err: any) {
-      toast.error(err.message ?? 'Error')
+      toast.error(err.message ?? t.toasts.error)
     } finally {
       setRespondingId(null)
     }
@@ -108,21 +116,21 @@ export function PrivacyTab({ initialSettings, pendingRequests }: PrivacyTabProps
       <div className="card p-6">
         <h2 className="text-sm font-bold text-text-primary mb-1 flex items-center gap-2">
           <Lock className="w-4 h-4 text-brand-400" />
-          Cuenta privada
+          {t.private_account_title}
         </h2>
         <p className="text-xs text-text-muted mb-5">
-          Con la cuenta privada, las personas tendrán que enviarte una solicitud para seguirte. Tú la aceptas o rechazas.
+          {t.private_account_description}
         </p>
 
         <label className="flex items-center justify-between cursor-pointer group">
           <div>
             <p className="text-sm font-semibold text-text-primary group-hover:text-brand-400 transition-colors">
-              Activar perfil privado
+              {t.activate_private_profile}
             </p>
             <p className="text-xs text-text-muted mt-0.5">
               {settings.isPrivate
-                ? 'Tu perfil es privado — se requiere aprobación para seguirte'
-                : 'Tu perfil es público — cualquiera puede seguirte'}
+                ? t.profile_private_status
+                : t.profile_public_status}
             </p>
           </div>
           {/* Toggle switch */}
@@ -146,24 +154,26 @@ export function PrivacyTab({ initialSettings, pendingRequests }: PrivacyTabProps
       <div className="card p-6">
         <h2 className="text-sm font-bold text-text-primary mb-1 flex items-center gap-2">
           <Eye className="w-4 h-4 text-brand-400" />
-          Visibilidad de listas
+          {t.visibility_lists_title}
         </h2>
         <p className="text-xs text-text-muted mb-4">
-          Elige quién puede ver tus listas de seguidores y seguidos.
+          {t.visibility_lists_description}
         </p>
         <VisibilitySelect
           value={settings.showFollowers}
           onChange={v => set('showFollowers', v)}
-          label="¿Quién puede ver tus seguidores?"
-          description="La lista de personas que te siguen"
+          label={t.show_followers_label}
+          description={t.show_followers_description}
           icon={Users}
+          options={VISIBILITY_OPTIONS}
         />
         <VisibilitySelect
           value={settings.showFollowing}
           onChange={v => set('showFollowing', v)}
-          label="¿Quién puede ver a quién sigues?"
-          description="La lista de personas a las que sigues"
+          label={t.show_following_label}
+          description={t.show_following_description}
           icon={Eye}
+          options={VISIBILITY_OPTIONS}
         />
       </div>
 
@@ -171,24 +181,26 @@ export function PrivacyTab({ initialSettings, pendingRequests }: PrivacyTabProps
       <div className="card p-6">
         <h2 className="text-sm font-bold text-text-primary mb-1 flex items-center gap-2">
           <MessageSquare className="w-4 h-4 text-brand-400" />
-          Interacciones
+          {t.interactions_title}
         </h2>
         <p className="text-xs text-text-muted mb-4">
-          Controla quién puede interactuar contigo.
+          {t.interactions_description}
         </p>
         <VisibilitySelect
           value={settings.whoCanMessage}
           onChange={v => set('whoCanMessage', v)}
-          label="¿Quién puede enviarte mensajes?"
-          description="Mensajes directos en tu bandeja"
+          label={t.who_can_message_label}
+          description={t.who_can_message_description}
           icon={MessageSquare}
+          options={VISIBILITY_OPTIONS}
         />
         <VisibilitySelect
           value={settings.whoCanComment}
           onChange={v => set('whoCanComment', v)}
-          label="¿Quién puede comentar tus posts?"
-          description="Comentarios en tus publicaciones"
+          label={t.who_can_comment_label}
+          description={t.who_can_comment_description}
           icon={MessageSquareOff}
+          options={VISIBILITY_OPTIONS}
         />
       </div>
 
@@ -197,7 +209,7 @@ export function PrivacyTab({ initialSettings, pendingRequests }: PrivacyTabProps
         <div className="card p-6">
           <h2 className="text-sm font-bold text-text-primary mb-1 flex items-center gap-2">
             <Clock className="w-4 h-4 text-brand-400" />
-            Solicitudes de seguimiento
+            {t.follow_requests_title}
             {localRequests.length > 0 && (
               <span className="ml-1 bg-brand-500 text-white text-[10px] font-bold rounded-full px-1.5 py-0.5">
                 {localRequests.length}
@@ -205,13 +217,13 @@ export function PrivacyTab({ initialSettings, pendingRequests }: PrivacyTabProps
             )}
           </h2>
           <p className="text-xs text-text-muted mb-4">
-            Personas que han solicitado seguirte y están esperando tu respuesta.
+            {t.follow_requests_description}
           </p>
 
           {localRequests.length === 0 ? (
             <div className="py-8 text-center text-text-muted text-sm">
               <UserX className="w-8 h-8 mx-auto mb-2 opacity-30" />
-              No tienes solicitudes pendientes
+              {t.no_requests}
             </div>
           ) : (
             <ul className="divide-y divide-surface-border">
@@ -234,7 +246,7 @@ export function PrivacyTab({ initialSettings, pendingRequests }: PrivacyTabProps
                         className="flex items-center gap-1 text-xs px-3 py-1.5 rounded-lg bg-brand-500/10 border border-brand-500/30 text-brand-400 hover:bg-brand-500/20 transition-colors font-medium disabled:opacity-50"
                       >
                         <CheckCircle2 className="w-3.5 h-3.5" />
-                        Aceptar
+                        {t.accept_button}
                       </button>
                       <button
                         onClick={() => handleRespond(req.id, 'reject')}
@@ -242,7 +254,7 @@ export function PrivacyTab({ initialSettings, pendingRequests }: PrivacyTabProps
                         className="flex items-center gap-1 text-xs px-3 py-1.5 rounded-lg bg-surface-2 border border-surface-border text-text-muted hover:border-red-500/50 hover:text-red-400 transition-colors font-medium disabled:opacity-50"
                       >
                         <UserX className="w-3.5 h-3.5" />
-                        Rechazar
+                        {t.reject_button}
                       </button>
                     </div>
                   </li>
@@ -261,7 +273,7 @@ export function PrivacyTab({ initialSettings, pendingRequests }: PrivacyTabProps
           className="btn-primary flex items-center gap-2 px-8"
         >
           <Shield className="w-4 h-4" />
-          {isPending ? 'Guardando...' : 'Guardar ajustes de privacidad'}
+          {isPending ? t.saving : t.save_button}
         </button>
       </div>
 

@@ -1,0 +1,288 @@
+{
+  "sidebar": {
+    "home": "Home",
+    "explore": "Esplora",
+    "clips": "Clip",
+    "notifications": "Notifiche",
+    "messages": "Messaggi",
+    "jobs": "Lavoro",
+    "bookmarks": "Salvati",
+    "profile": "Profilo",
+    "settings": "Impostazioni",
+    "new_post": "Nuovo Post",
+    "logout": "Esci",
+    "projects": "Progetti",
+    "groups": "Gruppi"
+  },
+  "post": {
+    "translate": "Traduci post",
+    "see_original": "Vedi originale",
+    "translating": "Traduzione in corso...",
+    "delete_confirm": "Sei sicuro di voler eliminare questo post? L'azione è irreversibile.",
+    "delete_button": "Elimina post",
+    "hide_code": "Nascondi codice",
+    "show_code": "Vedi codice",
+    "image_alt": "Immagine del post",
+    "toasts": {
+      "login_like": "Accedi per mettere like",
+      "login_save": "Accedi per salvare",
+      "saved": "Salvato",
+      "unsaved": "Rimosso dai salvati",
+      "link_copied": "Link copiato",
+      "deleted": "Post eliminato",
+      "delete_error": "Errore durante l'eliminazione",
+      "translate_error": "Errore durante la traduzione"
+    }
+  },
+  "settings": {
+    "tabs": {
+      "profile": "Profilo",
+      "security": "Account e Sicurezza",
+      "notifications": "Notifiche",
+      "appearance": "Aspetto",
+      "privacy": "Privacy"
+    },
+    "appearance": {
+      "title": "Aspetto",
+      "themeTitle": "Tema",
+      "themes": {
+        "light": "Chiaro",
+        "dark": "Scuro",
+        "system": "Sistema",
+        "selected": "Selezionato"
+      },
+      "sidebarTitle": "Stile barra laterale",
+      "sidebarStyles": {
+        "full": "Completa",
+        "compact": "Compatta",
+        "floating": "Fluttuante",
+        "active": "Attivo"
+      },
+      "languageTitle": "Lingua",
+      "toasts": {
+        "themeChanged": "Tema modificato",
+        "styleChanged": "Stile modificato",
+        "languageChanged": "Lingua cambiata in"
+      }
+    },
+    "profile_form": {
+      "avatar_title": "Foto del profilo",
+      "upload_rules": "JPG, PNG, WEBP o GIF · Max 5 MB",
+      "upload_file": "Carica file",
+      "external_url": "URL esterno",
+      "click_to_upload": "Clicca per selezionare un'immagine",
+      "upload_button": "Carica foto",
+      "url_placeholder": "https://...",
+      "save_button": "Salva",
+      "public_info": "Informazioni pubbliche",
+      "full_name": "Nome completo",
+      "bio": "Bio",
+      "city": "Città",
+      "country": "Paese",
+      "select_country": "Seleziona...",
+      "website": "Sito / Portfolio",
+      "saving": "Salvataggio...",
+      "save_changes": "Salva modifiche",
+      "uploading_image": "Caricamento immagine...",
+      "name_placeholder": "Il tuo nome",
+      "bio_placeholder": "Sviluppatore full-stack. Amante de React e PostgreSQL...",
+      "city_placeholder": "Roma",
+      "website_placeholder": "https://tuosito.it",
+      "new_tag": "NUOVO",
+      "countries_list": [
+        "Spagna", "Messico", "Argentina", "Colombia", "Cile", "Perù", "Venezuela",
+        "Stati Uniti", "Regno Unito", "Germania", "Francia", "Portogallo", "Brasile",
+        "Italia", "Paesi Bassi", "Svezia", "Polonia", "Ucraina", "India", "Canada",
+        "Australia", "Giappone", "Corea del Sud", "Altro"
+      ],
+      "toasts": {
+        "updated": "Profilo aggiornato",
+        "error": "Errore durante il salvataggio",
+        "invalid_format": "Formato non consentito",
+        "size_error": "Il file supera il limite di 5 MB",
+        "upload_success": "Foto del profilo aggiornata!",
+        "upload_error": "Errore durante il caricamento dell'immagine",
+        "invalid_url": "Inserisci un URL valido"
+      }
+    },
+    "compose": {
+      "title": "Nuovo post",
+      "placeholder": "Cosa stai costruendo? Condividi il tuo codice, idea o domanda...",
+      "add_code": "Aggiungi codice",
+      "hide_code": "Nascondi codice",
+      "add_image": "Aggiungi immagine",
+      "change_image": "Cambia immagine",
+      "uploading_image": "Caricamento immagine...",
+      "publishing": "Pubblicazione...",
+      "publish": "Pubblica",
+      "code_lang_placeholder": "Linguaggio (es: typescript, python...)",
+      "code_placeholder": "Incolla il tuo codice qui",
+      "tags_placeholder": "Cerca o digita un tag...",
+      "popular_tags": "Tag popolari",
+      "toasts": {
+        "success": "Post pubblicato 🚀",
+        "error": "Errore durante la pubblicazione",
+        "image_size": "L'immagine supera i 10 MB"
+      }
+    },
+    "auth": {
+      "login": {
+        "title": "Accedi",
+        "email_label": "Email",
+        "email_placeholder": "la-tua@email.com",
+        "password_label": "Password",
+        "password_placeholder": "••••••••",
+        "login_button": "Accedi",
+        "logging_in": "Accesso...",
+        "error": "Email o password non corretti"
+      },
+      "register": {
+        "title": "Crea un account",
+        "step1": "Account",
+        "step2": "Profilo",
+        "username_label": "Nome utente",
+        "username_placeholder": "johndoe",
+        "name_label": "Nome reale",
+        "name_placeholder": "John Doe",
+        "email_label": "Email",
+        "email_placeholder": "la-tua@email.com",
+        "password_label": "Password",
+        "password_placeholder": "Minimo 8 caratteri",
+        "next_button": "Avanti",
+        "optional_note": "Opzionale — puoi scriverlo dopo nelle Impostazioni",
+        "bio_label": "Bio",
+        "bio_placeholder": "Sviluppatore full-stack. Amante de React e PostgreSQL...",
+        "city_label": "Città",
+        "city_placeholder": "Roma",
+        "country_label": "Paese",
+        "select_country": "Seleziona...",
+        "website_label": "Sito / Portfolio",
+        "website_placeholder": "https://tuosito.it",
+        "back_button": "Indietro",
+        "create_button": "🚀 Crea il mio account",
+        "creating": "Creazione account...",
+        "success": "Account creato! Ora puoi accedere.",
+        "error": "Errore durante la registrazione"
+      }
+    },
+    "security": {
+      "password_title": "Cambia password",
+      "current_password": "Password attuale",
+      "new_password": "Nuova password",
+      "confirm_password": "Conferma",
+      "password_placeholder": "••••••••",
+      "new_password_hint": "Minimo 8 caratteri",
+      "confirm_placeholder": "Ripeti la password",
+      "update_button": "Aggiorna password",
+      "updating_password": "Salvataggio...",
+      "oauth_title": "Account OAuth",
+      "oauth_description": "Il tuo account è collegato a GitHub/Google. La password è gestita da quella piattaforma.",
+      "email_title": "Cambia email",
+      "current_email": "Email attuale",
+      "new_email": "Nuova email",
+      "new_email_placeholder": "nuova@email.com",
+      "confirm_email_password": "Password attuale (per confermare)",
+      "change_email_button": "Cambia email",
+      "updating_email": "Salvataggio...",
+      "oauth_email_description": "Gestisci la tua email dal tuo account GitHub/Google.",
+      "sessions_title": "Sessioni attive",
+      "sessions_description": "Chiudi la sessione su tutti i dispositivi dove hai effettuato l'accesso.",
+      "revoke_sessions_button": "Chiudi sessione su tutti i dispositivi",
+      "delete_account_title": "Elimina account",
+      "delete_account_description": "Questa azione è permanente e irreversibile. Verranno eliminati tutti i tuoi post, i commenti, i follower e i dati.",
+      "delete_account_button": "Elimina il mio account",
+      "delete_confirm_phrase": "Scrivi ELIMINA IL MIO ACCOUNT per confermare",
+      "delete_input_placeholder": "ELIMINA IL MIO ACCOUNT",
+      "cancel_button": "Annulla",
+      "confirm_delete_button": "Conferma eliminazione",
+      "deleting": "Eliminazione...",
+      "toasts": {
+        "password_updated": "Password aggiornata",
+        "email_updated": "Email aggiornata",
+        "sessions_revoked": "Sessioni chiuse",
+        "account_deleted": "Account eliminato",
+        "phrase_error": "Scrivi la frase di conferma"
+      }
+    },
+    "privacy": {
+      "title": "Impostazioni della Privacy",
+      "private_account_title": "Account privato",
+      "private_account_description": "Con l'account privato, le persone dovranno inviarti una richiesta per seguirti. Tu la accetti o la rifiuti.",
+      "activate_private_profile": "Attiva profilo privato",
+      "profile_private_status": "Il tuo profilo è privato — è richiesta approvazione per seguirti",
+      "profile_public_status": "Il tuo profilo è pubblico — chiunque può seguirti",
+      "visibility_lists_title": "Visibilità liste",
+      "visibility_lists_description": "Scegli chi può vedere le tue liste di follower e seguiti.",
+      "show_followers_label": "Chi può vedere i tuoi follower?",
+      "show_followers_description": "La lista delle persone che ti seguono",
+      "show_following_label": "Chi può vedere chi segui?",
+      "show_following_description": "La lista delle persone che segui",
+      "interactions_title": "Interazioni",
+      "interactions_description": "Controlla chi può interagire con te.",
+      "who_can_message_label": "Chi può inviarti messaggi?",
+      "who_can_message_description": "Messaggi diretti nella tua casella",
+      "who_can_comment_label": "Chi può commentare i tuoi post?",
+      "who_can_comment_description": "Commenti sulle tue pubblicazioni",
+      "follow_requests_title": "Richieste di follow",
+      "follow_requests_description": "Persone che hanno richiesto di seguirti e sono in attesa di risposta.",
+      "no_requests": "Non hai richieste pendenti",
+      "accept_button": "Accetta",
+      "reject_button": "Rifiuta",
+      "save_button": "Salva impostazioni privacy",
+      "saving": "Salvataggio...",
+      "toasts": {
+        "saved": "Impostazioni privacy salvate",
+        "request_accepted": "Richiesta accettata",
+        "request_rejected": "Richiesta rifiutata",
+        "error": "Errore durante il salvataggio"
+      },
+      "options": {
+        "everyone": "Tutti",
+        "followers": "Solo i miei follower",
+        "nobody": "Solo io"
+      }
+    },
+    "notifications_settings": {
+      "title": "Impostazioni Notifiche",
+      "description": "Controlla quali notifiche desideri ricevere.",
+      "save_button": "Salva preferenze",
+      "saving": "Salvataggio...",
+      "toasts": {
+        "saved": "Preferenze salvate",
+        "error": "Errore durante il salvataggio"
+      },
+      "prefs": {
+        "likes_label": "Mi piace",
+        "likes_desc": "Quando qualcuno mette mi piace al tuo post",
+        "comments_label": "Commenti",
+        "comments_desc": "Quando qualcuno commenta il tuo post",
+        "follows_label": "Nuovi follower",
+        "follows_desc": "Quando qualcuno inizia a seguirti",
+        "mentions_label": "Menzioni",
+        "mentions_desc": "Quando ti menzionano con @nomeutente",
+        "replies_label": "Risposte",
+        "replies_desc": "Quando qualcuno risponde a un tuo commento",
+        "reputation_label": "Reputazione",
+        "reputation_desc": "Quando guadagni o perdi punti reputazione"
+      }
+    }
+  },
+  "comments": {
+    "placeholder": "Cosa ne pensi?",
+    "reply_placeholder": "Rispondi a @{username}...",
+    "submit_comment": "Pubblica commento",
+    "submit_reply": "Pubblica risposta",
+    "reply_button": "Rispondi",
+    "delete_button": "Elimina commento",
+    "delete_confirm": "Eliminare questo commento?",
+    "empty_state": "Sii il primo a commentare...",
+    "toasts": {
+      "comment_published": "Commento pubblicato",
+      "reply_published": "Risposta pubblicata",
+      "deleted": "Commento eliminato",
+      "error_commenting": "Errore durante il commento",
+      "error_replying": "Errore durante la risposta",
+      "error_deleting": "Errore durante l'eliminazione"
+    }
+  }
+}

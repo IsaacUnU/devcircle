@@ -1,0 +1,288 @@
+{
+  "sidebar": {
+    "home": "Accueil",
+    "explore": "Explorer",
+    "clips": "Clips",
+    "notifications": "Notifications",
+    "messages": "Messages",
+    "jobs": "Emplois",
+    "bookmarks": "Enregistrés",
+    "profile": "Profil",
+    "settings": "Paramètres",
+    "new_post": "Nouveau Post",
+    "logout": "Se déconnecter",
+    "projects": "Projets",
+    "groups": "Groupes"
+  },
+  "post": {
+    "translate": "Traduire le post",
+    "see_original": "Voir l'original",
+    "translating": "Traduction...",
+    "delete_confirm": "Êtes-vous sûr de vouloir supprimer ce post ? Cette action est irréversible.",
+    "delete_button": "Supprimer le post",
+    "hide_code": "Masquer le code",
+    "show_code": "Voir le code",
+    "image_alt": "Image du post",
+    "toasts": {
+      "login_like": "Connectez-vous pour aimer",
+      "login_save": "Connectez-vous pour enregistrer",
+      "saved": "Enregistré",
+      "unsaved": "Supprimé des favoris",
+      "link_copied": "Lien copié",
+      "deleted": "Post supprimé",
+      "delete_error": "Erreur lors de la suppression",
+      "translate_error": "Erreur lors de la traduction"
+    }
+  },
+  "settings": {
+    "tabs": {
+      "profile": "Profil",
+      "security": "Compte et sécurité",
+      "notifications": "Notifications",
+      "appearance": "Apparence",
+      "privacy": "Confidentialité"
+    },
+    "appearance": {
+      "title": "Apparence",
+      "themeTitle": "Thème",
+      "themes": {
+        "light": "Clair",
+        "dark": "Sombre",
+        "system": "Système",
+        "selected": "Sélectionné"
+      },
+      "sidebarTitle": "Barre latérale",
+      "sidebarStyles": {
+        "full": "Complète",
+        "compact": "Compacte",
+        "floating": "Flottante",
+        "active": "Actif"
+      },
+      "languageTitle": "Langue",
+      "toasts": {
+        "themeChanged": "Thème modifié",
+        "styleChanged": "Style modifié",
+        "languageChanged": "Langue changée en"
+      }
+    },
+    "profile_form": {
+      "avatar_title": "Photo de profil",
+      "upload_rules": "JPG, PNG, WEBP ou GIF · Max 5 Mo",
+      "upload_file": "Télécharger un fichier",
+      "external_url": "URL externe",
+      "click_to_upload": "Cliquez pour sélectionner une image",
+      "upload_button": "Uploader la photo",
+      "url_placeholder": "https://...",
+      "save_button": "Enregistrer",
+      "public_info": "Informations publiques",
+      "full_name": "Nom complet",
+      "bio": "Bio",
+      "city": "Ville",
+      "country": "Pays",
+      "select_country": "Sélectionner...",
+      "website": "Site / Portfolio",
+      "saving": "Enregistrement...",
+      "save_changes": "Enregistrer les modifications",
+      "uploading_image": "Envoi de l'image...",
+      "name_placeholder": "Votre nom",
+      "bio_placeholder": "Dév full-stack. Amoureux de React et PostgreSQL...",
+      "city_placeholder": "Paris",
+      "website_placeholder": "https://votreportfolio.com",
+      "new_tag": "NOUVEAU",
+      "countries_list": [
+        "Espagne", "Mexique", "Argentine", "Colombie", "Chili", "Pérou", "Venezuela",
+        "États-Unis", "Royaume-Uni", "Allemagne", "France", "Portugal", "Brésil",
+        "Italie", "Pays-Bas", "Suède", "Pologne", "Ukraine", "Inde", "Canada",
+        "Australie", "Japon", "Corée du Sud", "Autre"
+      ],
+      "toasts": {
+        "updated": "Profil mis à jour",
+        "error": "Erreur lors de l'enregistrement",
+        "invalid_format": "Format non autorisé",
+        "size_error": "Le fichier dépasse la limite de 5 Mo",
+        "upload_success": "Photo de profil mise à jour !",
+        "upload_error": "Erreur lors du téléchargement de l'image",
+        "invalid_url": "Entrez une URL valide"
+      }
+    },
+    "compose": {
+      "title": "Nouveau post",
+      "placeholder": "Que construisez-vous ? Partagez votre code, votre idée ou votre question...",
+      "add_code": "Ajouter du code",
+      "hide_code": "Masquer le code",
+      "add_image": "Ajouter une image",
+      "change_image": "Changer l'image",
+      "uploading_image": "Chargement de l'image...",
+      "publishing": "Publication...",
+      "publish": "Publier",
+      "code_lang_placeholder": "Langage (ex : typescript, python...)",
+      "code_placeholder": "Collez votre code ici",
+      "tags_placeholder": "Cherchez ou tapez un tag...",
+      "popular_tags": "Tags populaires",
+      "toasts": {
+        "success": "Post publié 🚀",
+        "error": "Erreur lors de la publication",
+        "image_size": "L'image dépasse 10 Mo"
+      }
+    },
+    "auth": {
+      "login": {
+        "title": "Se connecter",
+        "email_label": "Email",
+        "email_placeholder": "votre@email.com",
+        "password_label": "Mot de passe",
+        "password_placeholder": "••••••••",
+        "login_button": "Se connecter",
+        "logging_in": "Connexion...",
+        "error": "Email ou mot de passe incorrect"
+      },
+      "register": {
+        "title": "Créer un compte",
+        "step1": "Compte",
+        "step2": "Profil",
+        "username_label": "Nom d'utilisateur",
+        "username_placeholder": "johndoe",
+        "name_label": "Nom réel",
+        "name_placeholder": "John Doe",
+        "email_label": "Email",
+        "email_placeholder": "votre@email.com",
+        "password_label": "Mot de passe",
+        "password_placeholder": "Minimum 8 caractères",
+        "next_button": "Suivant",
+        "optional_note": "Facultatif — vous pourrez le remplir plus tard dans les Paramètres",
+        "bio_label": "Bio",
+        "bio_placeholder": "Dév full-stack. Amoureux de React et PostgreSQL...",
+        "city_label": "Ville",
+        "city_placeholder": "Paris",
+        "country_label": "Pays",
+        "select_country": "Sélectionner...",
+        "website_label": "Site web / Portfolio",
+        "website_placeholder": "https://votreportfolio.com",
+        "back_button": "Retour",
+        "create_button": "🚀 Créer mon compte",
+        "creating": "Création du compte...",
+        "success": "Compte créé ! Vous pouvez maintenant vous connecter.",
+        "error": "Erreur lors de l'inscription"
+      }
+    },
+    "security": {
+      "password_title": "Changer le mot de passe",
+      "current_password": "Mot de passe actuel",
+      "new_password": "Nouveau mot de passe",
+      "confirm_password": "Confirmer",
+      "password_placeholder": "••••••••",
+      "new_password_hint": "Minimum 8 caractères",
+      "confirm_placeholder": "Répétez le mot de passe",
+      "update_button": "Mettre à jour le mot de passe",
+      "updating_password": "Enregistrement...",
+      "oauth_title": "Compte OAuth",
+      "oauth_description": "Votre compte est lié à GitHub/Google. Le mot de passe est géré depuis cette plateforme.",
+      "email_title": "Changer l'email",
+      "current_email": "Email actuel",
+      "new_email": "Nouvel email",
+      "new_email_placeholder": "nouvel@email.com",
+      "confirm_email_password": "Mot de passe actuel (pour confirmer)",
+      "change_email_button": "Changer l'email",
+      "updating_email": "Enregistrement...",
+      "oauth_email_description": "Gérez votre email depuis votre compte GitHub/Google.",
+      "sessions_title": "Sessions actives",
+      "sessions_description": "Déconnectez-vous de tous les appareils où vous êtes connecté.",
+      "revoke_sessions_button": "Se déconnecter de tous les appareils",
+      "delete_account_title": "Supprimer le compte",
+      "delete_account_description": "Cette action est permanente et irréversible. Tous vos posts, commentaires, abonnés et données seront supprimés.",
+      "delete_account_button": "Supprimer mon compte",
+      "delete_confirm_phrase": "Tapez SUPPRIMER MON COMPTE pour confirmer",
+      "delete_input_placeholder": "SUPPRIMER MON COMPTE",
+      "cancel_button": "Annuler",
+      "confirm_delete_button": "Confirmer la suppression",
+      "deleting": "Suppression...",
+      "toasts": {
+        "password_updated": "Mot de passe mis à jour",
+        "email_updated": "Email mis à jour",
+        "sessions_revoked": "Sessions révoquées",
+        "account_deleted": "Compte supprimé",
+        "phrase_error": "Tapez la phrase de confirmation"
+      }
+    },
+    "privacy": {
+      "title": "Paramètres de confidentialité",
+      "private_account_title": "Compte privé",
+      "private_account_description": "Avec un compte privé, les gens devront vous envoyer une demande pour vous suivre. Vous l'acceptez ou la refusez.",
+      "activate_private_profile": "Activer le profil privé",
+      "profile_private_status": "Votre profil est privé — approbation requise pour vous suivre",
+      "profile_public_status": "Votre profil est public — tout le monde peut vous suivre",
+      "visibility_lists_title": "Visibilité des listes",
+      "visibility_lists_description": "Choisissez qui peut voir vos listes d'abonnés et d'abonnements.",
+      "show_followers_label": "Qui peut voir vos abonnés ?",
+      "show_followers_description": "La liste des personnes qui vous suivent",
+      "show_following_label": "Qui peut voir vos abonnements ?",
+      "show_following_description": "La liste des personnes que vous suivez",
+      "interactions_title": "Interactions",
+      "interactions_description": "Contrôlez qui peut interagir avec vous.",
+      "who_can_message_label": "Qui peut vous envoyer des messages ?",
+      "who_can_message_description": "Messages directs dans votre boîte",
+      "who_can_comment_label": "Qui peut commenter vos posts ?",
+      "who_can_comment_description": "Commentaires sur vos publications",
+      "follow_requests_title": "Demandes d'abonnement",
+      "follow_requests_description": "Personnes qui ont demandé à vous suivre et attendent votre réponse.",
+      "no_requests": "Vous n'avez aucune demande en attente",
+      "accept_button": "Accepter",
+      "reject_button": "Refuser",
+      "save_button": "Enregistrer les paramètres de confidentialité",
+      "saving": "Enregistrement...",
+      "toasts": {
+        "saved": "Paramètres de confidentialité enregistrés",
+        "request_accepted": "Demande acceptée",
+        "request_rejected": "Demande refusée",
+        "error": "Erreur lors de l'enregistrement"
+      },
+      "options": {
+        "everyone": "Tout le monde",
+        "followers": "Abonnés uniquement",
+        "nobody": "Moi uniquement"
+      }
+    },
+    "notifications_settings": {
+      "title": "Paramètres de notification",
+      "description": "Contrôlez les notifications que vous souhaitez recevoir.",
+      "save_button": "Enregistrer les préférences",
+      "saving": "Enregistrement...",
+      "toasts": {
+        "saved": "Préférences enregistrées",
+        "error": "Erreur lors de l'enregistrement"
+      },
+      "prefs": {
+        "likes_label": "J'aime",
+        "likes_desc": "Quand quelqu'un aime votre post",
+        "comments_label": "Commentaires",
+        "comments_desc": "Quand quelqu'un commente votre post",
+        "follows_label": "Nouveaux abonnés",
+        "follows_desc": "Quand quelqu'un commence à vous suivre",
+        "mentions_label": "Mentions",
+        "mentions_desc": "Quand vous êtes mentionné avec @nomdutilisateur",
+        "replies_label": "Réponses",
+        "replies_desc": "Quand quelqu'un répond à votre commentaire",
+        "reputation_label": "Réputation",
+        "reputation_desc": "Quand vous gagnez ou perdez des points de réputation"
+      }
+    }
+  },
+  "comments": {
+    "placeholder": "Qu'en pensez-vous ?",
+    "reply_placeholder": "Répondre à @{username}...",
+    "submit_comment": "Publier le commentaire",
+    "submit_reply": "Publier la réponse",
+    "reply_button": "Répondre",
+    "delete_button": "Supprimer le commentaire",
+    "delete_confirm": "Supprimer ce commentaire ?",
+    "empty_state": "Soyez le premier à commenter...",
+    "toasts": {
+      "comment_published": "Commentaire publié",
+      "reply_published": "Réponse publiée",
+      "deleted": "Commentaire supprimé",
+      "error_commenting": "Erreur lors du commentaire",
+      "error_replying": "Erreur lors de la réponse",
+      "error_deleting": "Erreur lors de la suppression"
+    }
+  }
+}

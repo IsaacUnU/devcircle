@@ -1,0 +1,288 @@
+{
+  "sidebar": {
+    "home": "Главная",
+    "explore": "Обзор",
+    "clips": "Клипы",
+    "notifications": "Уведомления",
+    "messages": "Сообщения",
+    "jobs": "Работа",
+    "bookmarks": "Закладки",
+    "profile": "Профиль",
+    "settings": "Настройки",
+    "new_post": "Новый пост",
+    "logout": "Выйти",
+    "projects": "Проекты",
+    "groups": "Группы"
+  },
+  "post": {
+    "translate": "Перевести пост",
+    "see_original": "Оригинал",
+    "translating": "Перевод...",
+    "delete_confirm": "Вы уверены, что хотите удалить этот пост? Это действие нельзя отменить.",
+    "delete_button": "Удалить пост",
+    "hide_code": "Скрыть код",
+    "show_code": "Показать код",
+    "image_alt": "Изображение поста",
+    "toasts": {
+      "login_like": "Войдите, чтобы поставить лайк",
+      "login_save": "Войдите, чтобы сохранить",
+      "saved": "Сохранено",
+      "unsaved": "Удалено из закладок",
+      "link_copied": "Ссылка скопирована",
+      "deleted": "Пост удален",
+      "delete_error": "Ошибка при удалении",
+      "translate_error": "Ошибка перевода"
+    }
+  },
+  "settings": {
+    "tabs": {
+      "profile": "Профиль",
+      "security": "Аккаунт и безопасность",
+      "notifications": "Уведомления",
+      "appearance": "Внешний вид",
+      "privacy": "Конфиденциальность"
+    },
+    "appearance": {
+      "title": "Внешний вид",
+      "themeTitle": "Тема",
+      "themes": {
+        "light": "Светлая",
+        "dark": "Темная",
+        "system": "Системная",
+        "selected": "Выбрано"
+      },
+      "sidebarTitle": "Стиль боковой панели",
+      "sidebarStyles": {
+        "full": "Полная",
+        "compact": "Компактная",
+        "floating": "Плавающая",
+        "active": "Активно"
+      },
+      "languageTitle": "Язык",
+      "toasts": {
+        "themeChanged": "Тема изменена",
+        "styleChanged": "Стиль изменен",
+        "languageChanged": "Язык изменен на"
+      }
+    },
+    "profile_form": {
+      "avatar_title": "Фото профиля",
+      "upload_rules": "JPG, PNG, WEBP или GIF · Макс. 5 МБ",
+      "upload_file": "Загрузить файл",
+      "external_url": "Внешний URL",
+      "click_to_upload": "Нажмите, чтобы выбрать изображение",
+      "upload_button": "Загрузить фото",
+      "url_placeholder": "https://...",
+      "save_button": "Сохранить",
+      "public_info": "Публичная информация",
+      "full_name": "Полное имя",
+      "bio": "О себе",
+      "city": "Город",
+      "country": "Страна",
+      "select_country": "Выберите...",
+      "website": "Сайт / Портфолио",
+      "saving": "Сохранение...",
+      "save_changes": "Сохранить изменения",
+      "uploading_image": "Загрузка изображения...",
+      "name_placeholder": "Ваше имя",
+      "bio_placeholder": "Full-stack разработчик. Люблю React и PostgreSQL...",
+      "city_placeholder": "Москва",
+      "website_placeholder": "https://yourportfolio.ru",
+      "new_tag": "НОВЫЙ",
+      "countries_list": [
+        "Испания", "Мексика", "Аргентина", "Колумбия", "Чили", "Перу", "Венесуэла",
+        "США", "Великобритания", "Германия", "Франция", "Португалия", "Бразилия",
+        "Италия", "Нидерланды", "Швеция", "Польша", "Украина", "Индия", "Канада",
+        "Австралия", "Япония", "Южная Корея", "Другое"
+      ],
+      "toasts": {
+        "updated": "Профиль обновлен",
+        "error": "Ошибка при сохранении",
+        "invalid_format": "Формат не поддерживается",
+        "size_error": "Файл превышает лимит 5 МБ",
+        "upload_success": "Фото профиля обновлено!",
+        "upload_error": "Ошибка при загрузке изображения",
+        "invalid_url": "Введите корректный URL"
+      }
+    },
+    "compose": {
+      "title": "Новый пост",
+      "placeholder": "Что вы создаете? Поделитесь своим кодом, идеей или вопросом...",
+      "add_code": "Добавить код",
+      "hide_code": "Скрыть код",
+      "add_image": "Добавить фото",
+      "change_image": "Изменить фото",
+      "uploading_image": "Загрузка фото...",
+      "publishing": "Публикация...",
+      "publish": "Опубликовать",
+      "code_lang_placeholder": "Язык (напр. typescript, python...)",
+      "code_placeholder": "Вставьте ваш код здесь",
+      "tags_placeholder": "Поиск или ввод тега...",
+      "popular_tags": "Популярные теги",
+      "toasts": {
+        "success": "Пост опубликован 🚀",
+        "error": "Ошибка при публикации",
+        "image_size": "Фото превышает 10 МБ"
+      }
+    },
+    "auth": {
+      "login": {
+        "title": "Войти",
+        "email_label": "Эл. почта",
+        "email_placeholder": "your@email.com",
+        "password_label": "Пароль",
+        "password_placeholder": "••••••••",
+        "login_button": "Войти",
+        "logging_in": "Вход...",
+        "error": "Неверный email или пароль"
+      },
+      "register": {
+        "title": "Создать аккаунт",
+        "step1": "Аккаунт",
+        "step2": "Профиль",
+        "username_label": "Имя пользователя",
+        "username_placeholder": "johndoe",
+        "name_label": "Полное имя",
+        "name_placeholder": "Иван Иванов",
+        "email_label": "Эл. почта",
+        "email_placeholder": "your@email.com",
+        "password_label": "Пароль",
+        "password_placeholder": "Минимум 8 символов",
+        "next_button": "Далее",
+        "optional_note": "Необязательно — вы можете заполнить это позже в Настройках",
+        "bio_label": "О себе",
+        "bio_placeholder": "Full-stack разработчик. Люблю React и PostgreSQL...",
+        "city_label": "Город",
+        "city_placeholder": "Москва",
+        "country_label": "Страна",
+        "select_country": "Выберите...",
+        "website_label": "Сайт / Портфолио",
+        "website_placeholder": "https://yourportfolio.ru",
+        "back_button": "Назад",
+        "create_button": "🚀 Создать аккаунт",
+        "creating": "Создание аккаунта...",
+        "success": "Аккаунт создан! Теперь вы можете войти.",
+        "error": "Ошибка при регистрации"
+      }
+    },
+    "security": {
+      "password_title": "Изменить пароль",
+      "current_password": "Текущий пароль",
+      "new_password": "Новый пароль",
+      "confirm_password": "Подтверждение",
+      "password_placeholder": "••••••••",
+      "new_password_hint": "Минимум 8 символов",
+      "confirm_placeholder": "Повторите пароль",
+      "update_button": "Обновить пароль",
+      "updating_password": "Сохранение...",
+      "oauth_title": "OAuth аккаунт",
+      "oauth_description": "Ваш аккаунт связан с GitHub/Google. Пароль управляется через эту платформу.",
+      "email_title": "Изменить email",
+      "current_email": "Текущий email",
+      "new_email": "Новый email",
+      "new_email_placeholder": "new@email.ru",
+      "confirm_email_password": "Текущий пароль (для подтверждения)",
+      "change_email_button": "Изменить email",
+      "updating_email": "Сохранение...",
+      "oauth_email_description": "Управляйте своим email через аккаунт GitHub/Google.",
+      "sessions_title": "Активные сессии",
+      "sessions_description": "Выйти из аккаунта на всех устройствах.",
+      "revoke_sessions_button": "Выйти на всех устройствах",
+      "delete_account_title": "Удалить аккаунт",
+      "delete_account_description": "Это действие является окончательным и необратимым. Все ваши посты, комментарии, подписчики и данные будут удалены.",
+      "delete_account_button": "Удалить мой аккаунт",
+      "delete_confirm_phrase": "Введите УДАЛИТЬ МОЙ АККАУНТ для подтверждения",
+      "delete_input_placeholder": "УДАЛИТЬ МОЙ АККАУНТ",
+      "cancel_button": "Отмена",
+      "confirm_delete_button": "Подтвердить удаление",
+      "deleting": "Удаление...",
+      "toasts": {
+        "password_updated": "Пароль обновлен",
+        "email_updated": "Email обновлен",
+        "sessions_revoked": "Сессии завершены",
+        "account_deleted": "Аккаунт удален",
+        "phrase_error": "Введите фразу подтверждения"
+      }
+    },
+    "privacy": {
+      "title": "Настройки конфиденциальности",
+      "private_account_title": "Приватный аккаунт",
+      "private_account_description": "В приватном аккаунте люди должны отправить запрос, чтобы подписаться на вас. Вы можете принять или отклонить его.",
+      "activate_private_profile": "Активировать приватный профиль",
+      "profile_private_status": "Ваш профиль приватный — требуется одобрение подписки",
+      "profile_public_status": "Ваш профиль публичный — любой может подписаться",
+      "visibility_lists_title": "Видимость списков",
+      "visibility_lists_description": "Выберите, кто может видеть списки ваших подписчиков и подписок.",
+      "show_followers_label": "Кто может видеть ваших подписчиков?",
+      "show_followers_description": "Список людей, которые на вас подписаны",
+      "show_following_label": "Кто может видеть ваши подписки?",
+      "show_following_description": "Список людей, на которых вы подписаны",
+      "interactions_title": "Взаимодействие",
+      "interactions_description": "Управляйте тем, кто может взаимодействовать с вами.",
+      "who_can_message_label": "Кто может писать вам сообщения?",
+      "who_can_message_description": "Личные сообщения в вашем ящике",
+      "who_can_comment_label": "Кто может комментировать ваши посты?",
+      "who_can_comment_description": "Комментарии к вашим публикациям",
+      "follow_requests_title": "Запросы на подписку",
+      "follow_requests_description": "Люди, которые отправили запрос на подписку и ждут вашего ответа.",
+      "no_requests": "У вас нет ожидающих запросов",
+      "accept_button": "Принять",
+      "reject_button": "Отклонить",
+      "save_button": "Сохранить настройки",
+      "saving": "Сохранение...",
+      "toasts": {
+        "saved": "Настройки сохранены",
+        "request_accepted": "Запрос принят",
+        "request_rejected": "Запрос отклонен",
+        "error": "Ошибка при сохранении"
+      },
+      "options": {
+        "everyone": "Все",
+        "followers": "Только подписчики",
+        "nobody": "Только я"
+      }
+    },
+    "notifications_settings": {
+      "title": "Настройки уведомлений",
+      "description": "Управляйте тем, какие уведомления вы хотите получать.",
+      "save_button": "Сохранить предпочтения",
+      "saving": "Сохранение...",
+      "toasts": {
+        "saved": "Предпочтения сохранены",
+        "error": "Ошибка при сохранении"
+      },
+      "prefs": {
+        "likes_label": "Лайки",
+        "likes_desc": "Когда кто-то ставит лайк вашему посту",
+        "comments_label": "Комментарии",
+        "comments_desc": "Когда кто-то комментирует ваш пост",
+        "follows_label": "Новые подписчики",
+        "follows_desc": "Когда кто-то подписывается на вас",
+        "mentions_label": "Упоминания",
+        "mentions_desc": "Когда вас упоминают через @username",
+        "replies_label": "Ответы",
+        "replies_desc": "Когда кто-то отвечает на ваш комментарий",
+        "reputation_label": "Репутация",
+        "reputation_desc": "Когда вы получаете или теряете очки репутации"
+      }
+    }
+  },
+  "comments": {
+    "placeholder": "Что вы думаете?",
+    "reply_placeholder": "Ответить @{username}...",
+    "submit_comment": "Опубликовать комментарий",
+    "submit_reply": "Опубликовать ответ",
+    "reply_button": "Ответить",
+    "delete_button": "Удалить комментарий",
+    "delete_confirm": "Удалить этот комментарий?",
+    "empty_state": "Будьте первым, кто прокомментирует...",
+    "toasts": {
+      "comment_published": "Комментарий опубликован",
+      "reply_published": "Ответ опубликован",
+      "deleted": "Комментарий удален",
+      "error_commenting": "Ошибка при комментировании",
+      "error_replying": "Ошибка при ответе",
+      "error_deleting": "Ошибка при удалении"
+    }
+  }
+}

@@ -9,14 +9,8 @@ import { updateAvatar } from '@/lib/actions/settings'
 import { uploadFile, AVATARS_BUCKET } from '@/lib/supabase'
 import toast from 'react-hot-toast'
 import { cn, getAvatarUrl } from '@/lib/utils'
+import { useTranslation } from '@/lib/i18n'
 import { Save, User, MapPin, Globe, AlignLeft, Pin, Camera, Upload, Loader2, Link2, X } from 'lucide-react'
-
-const COUNTRIES = [
-  'España','México','Argentina','Colombia','Chile','Perú','Venezuela',
-  'Estados Unidos','Reino Unido','Alemania','Francia','Portugal','Brasil',
-  'Italia','Países Bajos','Suecia','Polonia','Ucrania','India','Canadá',
-  'Australia','Japón','Corea del Sur','Otro',
-]
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB
 const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif']
@@ -50,6 +44,8 @@ export function ProfileTab({ user }: ProfileTabProps) {
   const [preview, setPreview]           = useState<string | null>(null)
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const { dict } = useTranslation()
+  const t = (dict as any).settings.profile_form
   const { city, country } = parseLocation(user.location)
 
   const { register, handleSubmit, formState: { errors } } = useForm<UpdateProfile>({
@@ -67,9 +63,9 @@ export function ProfileTab({ user }: ProfileTabProps) {
     startTransition(async () => {
       try {
         await updateProfile(data)
-        toast.success('Perfil actualizado')
+        toast.success(t.toasts.updated)
       } catch (e: any) {
-        toast.error(e.message ?? 'Error al guardar')
+        toast.error(e.message ?? t.toasts.error)
       }
     })
   }
@@ -80,11 +76,11 @@ export function ProfileTab({ user }: ProfileTabProps) {
     if (!file) return
 
     if (!ALLOWED_TYPES.includes(file.type)) {
-      toast.error('Formato no permitido. Usa JPG, PNG, WEBP o GIF.')
+      toast.error(t.toasts.invalid_format)
       return
     }
     if (file.size > MAX_FILE_SIZE) {
-      toast.error('El archivo supera el límite de 5 MB.')
+      toast.error(t.toasts.size_error)
       return
     }
 
@@ -112,9 +108,9 @@ export function ProfileTab({ user }: ProfileTabProps) {
       await updateAvatar(freshUrl)
       setAvatarUrl(freshUrl)
       clearFile()
-      toast.success('¡Foto de perfil actualizada!')
+      toast.success(t.toasts.upload_success)
     } catch (e: any) {
-      toast.error(e.message ?? 'Error al subir la imagen')
+      toast.error(e.message ?? t.toasts.upload_error)
     } finally {
       setUploading(false)
     }
@@ -125,7 +121,7 @@ export function ProfileTab({ user }: ProfileTabProps) {
     const trimmed = avatarInput.trim()
     if (!trimmed) return
     if (!trimmed.startsWith('http')) {
-      toast.error('Introduce una URL válida (https://...)')
+      toast.error(t.toasts.invalid_url)
       return
     }
     setUploading(true)
@@ -133,7 +129,7 @@ export function ProfileTab({ user }: ProfileTabProps) {
       await updateAvatar(trimmed)
       setAvatarUrl(trimmed)
       setAvatarInput('')
-      toast.success('Foto de perfil actualizada')
+      toast.success(t.toasts.upload_success)
     } catch (e: any) {
       toast.error(e.message)
     } finally {
@@ -150,7 +146,7 @@ export function ProfileTab({ user }: ProfileTabProps) {
       <section className="card p-6">
         <h2 className="text-sm font-bold text-text-primary mb-5 flex items-center gap-2">
           <Camera className="w-4 h-4 text-brand-400" />
-          Foto de perfil
+          {t.avatar_title}
         </h2>
 
         {/* Preview del avatar */}
@@ -158,19 +154,19 @@ export function ProfileTab({ user }: ProfileTabProps) {
           <div className="relative shrink-0">
             <img
               src={currentAvatar}
-              alt="Avatar"
+              alt={t.avatar_title || 'Avatar'}
               className="w-20 h-20 rounded-full border-2 border-brand-500/30 object-cover shadow-lg"
               onError={e => { (e.target as HTMLImageElement).src = getAvatarUrl(user.username) }}
             />
             {preview && (
               <div className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-brand-500 flex items-center justify-center">
-                <span className="text-[9px] text-white font-bold">NEW</span>
+                <span className="text-[9px] text-white font-bold">{t.new_tag || 'NEW'}</span>
               </div>
             )}
           </div>
           <div>
             <p className="text-sm font-semibold text-text-primary">@{user.username}</p>
-            <p className="text-xs text-text-muted mt-0.5">JPG, PNG, WEBP o GIF · Máx. 5 MB</p>
+            <p className="text-xs text-text-muted mt-0.5">{t.upload_rules}</p>
           </div>
         </div>
 
@@ -187,7 +183,7 @@ export function ProfileTab({ user }: ProfileTabProps) {
             )}
           >
             <Upload className="w-3.5 h-3.5" />
-            Subir archivo
+            {t.upload_file}
           </button>
           <button
             type="button"
@@ -200,7 +196,7 @@ export function ProfileTab({ user }: ProfileTabProps) {
             )}
           >
             <Link2 className="w-3.5 h-3.5" />
-            URL externa
+            {t.external_url}
           </button>
         </div>
 
@@ -216,9 +212,9 @@ export function ProfileTab({ user }: ProfileTabProps) {
               >
                 <Upload className="w-8 h-8 mx-auto mb-2 text-text-muted group-hover:text-brand-400 transition-colors" />
                 <p className="text-sm font-medium text-text-secondary group-hover:text-text-primary transition-colors">
-                  Haz clic para seleccionar una imagen
+                  {t.click_to_upload}
                 </p>
-                <p className="text-xs text-text-muted mt-1">JPG, PNG, WEBP, GIF · Máx. 5 MB</p>
+                <p className="text-xs text-text-muted mt-1">{t.upload_rules}</p>
               </button>
             ) : (
               /* Archivo seleccionado — preview + confirmar */
@@ -256,8 +252,8 @@ export function ProfileTab({ user }: ProfileTabProps) {
                 className="btn-primary w-full flex items-center justify-center gap-2"
               >
                 {uploading
-                  ? <><Loader2 className="w-4 h-4 animate-spin" /> Subiendo...</>
-                  : <><Upload className="w-4 h-4" /> Subir foto</>
+                  ? <><Loader2 className="w-4 h-4 animate-spin" /> {t.uploading_image}</>
+                  : <><Upload className="w-4 h-4" /> {t.upload_button}</>
                 }
               </button>
             )}
@@ -271,7 +267,7 @@ export function ProfileTab({ user }: ProfileTabProps) {
               <input
                 value={avatarInput}
                 onChange={e => setAvatarInput(e.target.value)}
-                placeholder="https://avatars.githubusercontent.com/..."
+                placeholder={t.url_placeholder}
                 className="input pl-9 text-sm"
               />
               <Link2 className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
@@ -283,7 +279,7 @@ export function ProfileTab({ user }: ProfileTabProps) {
               className="btn-primary px-4 text-sm disabled:opacity-40 flex items-center gap-1.5"
             >
               {uploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
-              Guardar
+              {t.save_button}
             </button>
           </div>
         )}
@@ -293,20 +289,20 @@ export function ProfileTab({ user }: ProfileTabProps) {
       <section className="card p-6">
         <h2 className="text-sm font-bold text-text-primary mb-5 flex items-center gap-2">
           <User className="w-4 h-4 text-brand-400" />
-          Información pública
+          {t.public_info}
         </h2>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
 
           <div>
             <label className="block text-xs font-bold text-text-muted uppercase mb-1.5 ml-1">
-              Nombre completo
+              {t.full_name}
             </label>
             <div className="relative">
               <input
                 {...register('name')}
                 className={cn('input pl-10', errors.name && 'border-red-500/50')}
-                placeholder="Tu nombre"
+                placeholder={t.name_placeholder}
               />
               <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
             </div>
@@ -317,13 +313,13 @@ export function ProfileTab({ user }: ProfileTabProps) {
 
           <div>
             <label className="block text-xs font-bold text-text-muted uppercase mb-1.5 ml-1">
-              Bio
+              {t.bio}
             </label>
             <div className="relative">
               <textarea
                 {...register('bio')}
                 className="input pl-10 h-24 resize-none text-sm py-3"
-                placeholder="Full-stack dev. Amante de React y TypeScript..."
+                placeholder={t.bio_placeholder}
               />
               <AlignLeft className="absolute left-3.5 top-4 w-4 h-4 text-text-muted" />
             </div>
@@ -331,25 +327,25 @@ export function ProfileTab({ user }: ProfileTabProps) {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-bold text-text-muted uppercase mb-1.5 ml-1">Ciudad</label>
+              <label className="block text-xs font-bold text-text-muted uppercase mb-1.5 ml-1">{t.city}</label>
               <div className="relative">
                 <input
                   {...register('location')}
                   className="input pl-10 text-sm"
-                  placeholder="Alicante"
+                  placeholder={t.city_placeholder}
                 />
                 <MapPin className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
               </div>
             </div>
             <div>
-              <label className="block text-xs font-bold text-text-muted uppercase mb-1.5 ml-1">País</label>
+              <label className="block text-xs font-bold text-text-muted uppercase mb-1.5 ml-1">{t.country}</label>
               <div className="relative">
                 <select
                   {...register('country')}
                   className="input pl-10 text-sm bg-surface appearance-none"
                 >
-                  <option value="">Seleccionar...</option>
-                  {COUNTRIES.map(c => <option key={c} value={c}>{c}</option>)}
+                  <option value="">{t.select_country}</option>
+                  {(t.countries_list || []).map((c: string) => <option key={c} value={c}>{c}</option>)}
                 </select>
                 <Pin className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted pointer-events-none" />
               </div>
@@ -358,13 +354,13 @@ export function ProfileTab({ user }: ProfileTabProps) {
 
           <div>
             <label className="block text-xs font-bold text-text-muted uppercase mb-1.5 ml-1">
-              Website / Portfolio
+              {t.website}
             </label>
             <div className="relative">
               <input
                 {...register('website')}
                 className={cn('input pl-10 text-sm', errors.website && 'border-red-500/50')}
-                placeholder="https://tuportfolio.com"
+                placeholder={t.website_placeholder}
               />
               <Globe className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
             </div>
@@ -380,8 +376,8 @@ export function ProfileTab({ user }: ProfileTabProps) {
               className="btn-primary flex items-center gap-2 px-8"
             >
               {isPending
-                ? <><Loader2 className="w-4 h-4 animate-spin" /> Guardando...</>
-                : <><Save className="w-4 h-4" /> Guardar cambios</>
+                ? <><Loader2 className="w-4 h-4 animate-spin" /> {t.saving}</>
+                : <><Save className="w-4 h-4" /> {t.save_changes}</>
               }
             </button>
           </div>

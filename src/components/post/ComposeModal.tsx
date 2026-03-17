@@ -7,6 +7,7 @@ import { MentionTextarea } from '@/components/ui/MentionTextarea'
 import { uploadFile, POSTS_BUCKET } from '@/lib/supabase'
 import { createPost } from '@/lib/actions/posts'
 import { cn } from '@/lib/utils'
+import { useTranslation } from '@/lib/i18n'
 import toast from 'react-hot-toast'
 
 const MAX_CHARS = 500
@@ -26,6 +27,8 @@ export function ComposeModal() {
   const [showCode, setShowCode] = useState(false)
   const [isPending, startTransition] = useTransition()
   const firstRender = useRef(true)
+  const { dict } = useTranslation()
+  const t = (dict as any).settings.compose
   // — Imagen adjunta —
   const [imageFile, setImageFile]     = useState<File | null>(null)
   const [imagePreview, setImagePreview] = useState<string | null>(null)
@@ -134,7 +137,7 @@ export function ComposeModal() {
   function handleImageSelect(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0]
     if (!file) return
-    if (file.size > 10 * 1024 * 1024) { toast.error('La imagen supera los 10 MB'); return }
+    if (file.size > 10 * 1024 * 1024) { toast.error(t.toasts.image_size); return }
     setImageFile(file)
     setImagePreview(URL.createObjectURL(file))
   }
@@ -158,11 +161,11 @@ export function ComposeModal() {
           setUploadingImage(false)
         }
         await createPost({ content, codeSnip: showCode ? codeSnip : undefined, language: showCode ? language : undefined, tags, image: imageUrl })
-        toast.success('Post publicado 🚀')
+        toast.success(t.toasts.success)
         closeCompose()
       } catch (err: any) {
         setUploadingImage(false)
-        toast.error(err.message ?? 'Error al publicar')
+        toast.error(err.message ?? t.toasts.error)
       }
     })
   }
@@ -176,7 +179,7 @@ export function ComposeModal() {
           <div className="w-12 h-1.5 bg-surface-border rounded-full mx-auto mb-6 sm:hidden shrink-0" />
           {/* Header */}
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-lg font-bold text-text-primary">Nuevo post</h2>
+            <h2 className="text-lg font-bold text-text-primary">{t.title}</h2>
             <button onClick={closeCompose} className="btn-ghost p-2 -mr-2">
               <X className="w-5 h-5" />
             </button>
@@ -186,7 +189,7 @@ export function ComposeModal() {
           <MentionTextarea
             value={content}
             onChange={setContent}
-            placeholder="¿Qué estás construyendo? Comparte tu código, idea o pregunta..."
+            placeholder={t.placeholder}
             className="input resize-none h-28 text-sm"
             autoFocus={isComposeOpen}
           />
@@ -209,7 +212,7 @@ export function ComposeModal() {
               )}
             >
               <Code className="w-3.5 h-3.5" />
-              Añadir código
+              {showCode ? t.hide_code : t.add_code}
             </button>
             <button
               type="button"
@@ -221,7 +224,7 @@ export function ComposeModal() {
               )}
             >
               <ImageIcon className="w-3.5 h-3.5" />
-              {imagePreview ? 'Cambiar imagen' : 'Añadir imagen'}
+              {imagePreview ? t.change_image : t.add_image}
             </button>
             <input
               ref={imageInputRef}
@@ -252,13 +255,13 @@ export function ComposeModal() {
               <input
                 value={language}
                 onChange={e => setLanguage(e.target.value)}
-                placeholder="Lenguaje (ej: typescript, python...)"
+                placeholder={t.code_lang_placeholder}
                 className="input text-sm py-1.5"
               />
               <textarea
                 value={codeSnip}
                 onChange={e => setCodeSnip(e.target.value)}
-                placeholder="// Pega tu código aquí"
+                placeholder={t.code_placeholder}
                 className="input font-mono text-xs h-32 resize-none"
               />
             </div>
@@ -289,7 +292,7 @@ export function ComposeModal() {
                     onKeyDown={handleTagKeyDown}
                     onFocus={handleTagInputChange as any}
                     onBlur={() => setTimeout(() => setShowSuggestions(false), 150)}
-                    placeholder="Busca o escribe un tag..."
+                    placeholder={t.tags_placeholder}
                     className="input py-1.5 text-sm"
                     autoComplete="off"
                   />
@@ -301,7 +304,7 @@ export function ComposeModal() {
                     <div className="px-3 py-1.5 border-b border-surface-border flex items-center gap-1.5">
                       <TrendingUp className="w-3 h-3 text-brand-400" />
                       <span className="text-[10px] text-text-muted font-medium uppercase tracking-wide">
-                        Tags populares
+                        {t.popular_tags}
                       </span>
                     </div>
                     {suggestions.map((sug, i) => (
@@ -337,10 +340,10 @@ export function ComposeModal() {
               className="btn-primary flex items-center gap-2"
             >
               {uploadingImage
-                ? <><Loader2 className="w-3.5 h-3.5 animate-spin" /> Subiendo imagen...</>
+                ? <><Loader2 className="w-3.5 h-3.5 animate-spin" /> {t.uploading_image}</>
                 : isPending
-                  ? <><Loader2 className="w-3.5 h-3.5 animate-spin" /> Publicando...</>
-                  : <><Send className="w-3.5 h-3.5" /> Publicar</>
+                  ? <><Loader2 className="w-3.5 h-3.5 animate-spin" /> {t.publishing}</>
+                  : <><Send className="w-3.5 h-3.5" /> {t.publish}</>
               }
             </button>
           </div>

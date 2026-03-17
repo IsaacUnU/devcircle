@@ -1,0 +1,288 @@
+{
+  "sidebar": {
+    "home": "ホーム",
+    "explore": "見つける",
+    "clips": "クリップ",
+    "notifications": "通知",
+    "messages": "メッセージ",
+    "jobs": "求人",
+    "bookmarks": "ブックマーク",
+    "profile": "プロフィール",
+    "settings": "設定",
+    "new_post": "投稿する",
+    "logout": "ログアウト",
+    "projects": "プロジェクト",
+    "groups": "グループ"
+  },
+  "post": {
+    "translate": "翻訳する",
+    "see_original": "原文を表示",
+    "translating": "翻訳中...",
+    "delete_confirm": "この投稿を本当に削除しますか？この操作は取り消せません。",
+    "delete_button": "投稿を削除",
+    "hide_code": "コードを非表示",
+    "show_code": "コードを表示",
+    "image_alt": "投稿画像",
+    "toasts": {
+      "login_like": "いいねするにはログインしてください",
+      "login_save": "保存するにはログインしてください",
+      "saved": "保存しました",
+      "unsaved": "ブックマークから解除しました",
+      "link_copied": "リンクをコピーしました",
+      "deleted": "投稿を削除しました",
+      "delete_error": "削除中にエラーが発生しました",
+      "translate_error": "翻訳中にエラーが発生しました"
+    }
+  },
+  "settings": {
+    "tabs": {
+      "profile": "プロフィール",
+      "security": "アカウントとセキュリティ",
+      "notifications": "通知",
+      "appearance": "外観",
+      "privacy": "プライバシー"
+    },
+    "appearance": {
+      "title": "外観",
+      "themeTitle": "テーマ",
+      "themes": {
+        "light": "ライト",
+        "dark": "ダーク",
+        "system": "システム",
+        "selected": "選択済み"
+      },
+      "sidebarTitle": "サイドバーのスタイル",
+      "sidebarStyles": {
+        "full": "通常",
+        "compact": "コンパクト",
+        "floating": "フローティング",
+        "active": "有効"
+      },
+      "languageTitle": "言語",
+      "toasts": {
+        "themeChanged": "テーマを変更しました",
+        "styleChanged": "スタイルを変更しました",
+        "languageChanged": "言語を次に変更しました："
+      }
+    },
+    "profile_form": {
+      "avatar_title": "プロフィール画像",
+      "upload_rules": "JPG, PNG, WEBP, GIF · 最大 5 MB",
+      "upload_file": "ファイルをアップロード",
+      "external_url": "外部URL",
+      "click_to_upload": "クリックして画像を選択",
+      "upload_button": "写真をアップロード",
+      "url_placeholder": "https://...",
+      "save_button": "保存",
+      "public_info": "公開情報",
+      "full_name": "氏名",
+      "bio": "自己紹介",
+      "city": "市区町村",
+      "country": "国",
+      "select_country": "選択してください...",
+      "website": "ウェブサイト / ポートフォリオ",
+      "saving": "保存中...",
+      "save_changes": "変更を保存",
+      "uploading_image": "画像をアップロード中...",
+      "name_placeholder": "名前",
+      "bio_placeholder": "フルスタックデベロッパー。ReactとPostgreSQLが好きです...",
+      "city_placeholder": "東京",
+      "website_placeholder": "https://yourportfolio.jp",
+      "new_tag": "新規",
+      "countries_list": [
+        "スペイン", "メキシコ", "アルゼンチン", "コロン比亚", "チリ", "ペルー", "ベネズエラ",
+        "アメリカ", "イギリス", "ドイツ", "フランス", "ポルトガル", "ブラジル",
+        "イタリア", "オランダ", "スウェーデン", "ポーランド", "ウクライナ", "インド", "カナダ",
+        "オーストラリア", "日本", "韓国", "その他"
+      ],
+      "toasts": {
+        "updated": "プロフィールを更新しました",
+        "error": "保存中にエラーが発生しました",
+        "invalid_format": "許可されていない形式です",
+        "size_error": "ファイルサイズが5MBを超えています",
+        "upload_success": "プロフィール画像を更新しました！",
+        "upload_error": "画像のアップロード中にエラーが発生しました",
+        "invalid_url": "有効なURLを入力してください"
+      }
+    },
+    "compose": {
+      "title": "新規投稿",
+      "placeholder": "何を開発していますか？コード、アイデア、質問などを共有しましょう...",
+      "add_code": "コードを追加",
+      "hide_code": "コードを非表示",
+      "add_image": "画像を追加",
+      "change_image": "画像を変更",
+      "uploading_image": "画像をアップロード中...",
+      "publishing": "投稿中...",
+      "publish": "投稿する",
+      "code_lang_placeholder": "言語 (例: typescript, python...)",
+      "code_placeholder": "ここにコードを貼り付けてください",
+      "tags_placeholder": "タグを検索または入力...",
+      "popular_tags": "人気のタグ",
+      "toasts": {
+        "success": "投稿しました 🚀",
+        "error": "投稿中にエラーが発生しました",
+        "image_size": "画像サイズが10MBを超えています"
+      }
+    },
+    "auth": {
+      "login": {
+        "title": "ログイン",
+        "email_label": "メールアドレス",
+        "email_placeholder": "your@email.com",
+        "password_label": "パスワード",
+        "password_placeholder": "••••••••",
+        "login_button": "ログイン",
+        "logging_in": "ログイン中...",
+        "error": "メールアドレスまたはパスワードが正しくありません"
+      },
+      "register": {
+        "title": "アカウント作成",
+        "step1": "アカウント",
+        "step2": "プロフィール",
+        "username_label": "ユーザー名",
+        "username_placeholder": "johndoe",
+        "name_label": "氏名",
+        "name_placeholder": "山田 太郎",
+        "email_label": "メールアドレス",
+        "email_placeholder": "your@email.com",
+        "password_label": "パスワード",
+        "password_placeholder": "8文字以上",
+        "next_button": "次へ",
+        "optional_note": "任意 — 後で「設定」から入力できます",
+        "bio_label": "自己紹介",
+        "bio_placeholder": "フルスタックデベロッパー。ReactとPostgreSQLが好きです...",
+        "city_label": "市区町村",
+        "city_placeholder": "東京",
+        "country_label": "国",
+        "select_country": "選択してください...",
+        "website_label": "ウェブサイト / ポートフォリオ",
+        "website_placeholder": "https://yourportfolio.jp",
+        "back_button": "戻る",
+        "create_button": "🚀 アカウントを作成",
+        "creating": "アカウント作成中...",
+        "success": "アカウントを作成しました！ログインしてください。",
+        "error": "登録中にエラーが発生しました"
+      }
+    },
+    "security": {
+      "password_title": "パスワードの変更",
+      "current_password": "現在のパスワード",
+      "new_password": "新しいパスワード",
+      "confirm_password": "確認用",
+      "password_placeholder": "••••••••",
+      "new_password_hint": "8文字以上",
+      "confirm_placeholder": "パスワードを再入力",
+      "update_button": "パスワードを更新",
+      "updating_password": "保存中...",
+      "oauth_title": "OAuth アカウント",
+      "oauth_description": "あなたのアカウントは GitHub/Google と連携されています。パスワードはそのプラットフォームで管理されます。",
+      "email_title": "メールアドレスの変更",
+      "current_email": "現在のメールアドレス",
+      "new_email": "新しいメールアドレス",
+      "new_email_placeholder": "new@email.jp",
+      "confirm_email_password": "現在のパスワード (確認用)",
+      "change_email_button": "メールアドレスを変更",
+      "updating_email": "保存中...",
+      "oauth_email_description": "メールアドレスは GitHub/Google アカウントから管理してください。",
+      "sessions_title": "アクティブなセッション",
+      "sessions_description": "ログイン中のすべてのデバイスからログアウトします。",
+      "revoke_sessions_button": "すべてのデバイスからログアウト",
+      "delete_account_title": "アカウントの削除",
+      "delete_account_description": "この操作は取り消せません。投稿、コメント、フォロワー、その他のデータはすべて完全に削除されます。",
+      "delete_account_button": "アカウントを削除する",
+      "delete_confirm_phrase": "確認のため「アカウントを削除する」と入力してください",
+      "delete_input_placeholder": "アカウントを削除する",
+      "cancel_button": "キャンセル",
+      "confirm_delete_button": "削除を確定する",
+      "deleting": "削除中...",
+      "toasts": {
+        "password_updated": "パスワードを更新しました",
+        "email_updated": "メールアドレスを更新しました",
+        "sessions_revoked": "セッションを終了しました",
+        "account_deleted": "アカウントを削除しました",
+        "phrase_error": "確認用フレーズを入力してください"
+      }
+    },
+    "privacy": {
+      "title": "プライバシー設定",
+      "private_account_title": "非公開アカウント",
+      "private_account_description": "有効にすると、ユーザーがあなたをフォローするにはリクエストを送信し、あなたが承認する必要があります。",
+      "activate_private_profile": "非公開プロフィールを有効にする",
+      "profile_private_status": "プロフィールは非公開です — フォローには承認が必要です",
+      "profile_public_status": "プロフィールは公開されています — 誰でもフォローできます",
+      "visibility_lists_title": "リストの公開範囲",
+      "visibility_lists_description": "フォロワーおよびフォロー中リストを表示できるユーザーを選択します。",
+      "show_followers_label": "フォロワーリストを表示できるユーザー",
+      "show_followers_description": "あなたをフォローしているユーザーのリスト",
+      "show_following_label": "フォロー中リストを表示できるユーザー",
+      "show_following_description": "あなたがフォローしているユーザーのリスト",
+      "interactions_title": "インタラクション",
+      "interactions_description": "あなたとコンタクトできるユーザーを制御します。",
+      "who_can_message_label": "あなたにメッセージを送れるユーザー",
+      "who_can_message_description": "ダイレクトメッセージの受信範囲",
+      "who_can_comment_label": "あなたの投稿にコメントできるユーザー",
+      "who_can_comment_description": "投稿への返信範囲",
+      "follow_requests_title": "フォローリクエスト",
+      "follow_requests_description": "あなたへのフォローをリクエストし、承認待ちのユーザーです。",
+      "no_requests": "現在リクエストはありません",
+      "accept_button": "承認",
+      "reject_button": "拒否",
+      "save_button": "プライバシー設定を保存",
+      "saving": "保存中...",
+      "toasts": {
+        "saved": "プライバシー設定を保存しました",
+        "request_accepted": "リクエストを承認しました",
+        "request_rejected": "リクエストを拒否しました",
+        "error": "保存中にエラーが発生しました"
+      },
+      "options": {
+        "everyone": "全員",
+        "followers": "フォロワーのみ",
+        "nobody": "自分のみ"
+      }
+    },
+    "notifications_settings": {
+      "title": "通知の設定",
+      "description": "受け取りたい通知の種類を選択してください。",
+      "save_button": "設定を保存",
+      "saving": "保存中...",
+      "toasts": {
+        "saved": "設定を保存しました",
+        "error": "保存中にエラーが発生しました"
+      },
+      "prefs": {
+        "likes_label": "いいね",
+        "likes_desc": "あなたの投稿に「いいね」がついたとき",
+        "comments_label": "コメント",
+        "comments_desc": "あなたの投稿にコメントがついたとき",
+        "follows_label": "新しいフォロワー",
+        "follows_desc": "誰かにフォローされたとき",
+        "mentions_label": "メンション",
+        "mentions_desc": "あなたが @ユーザー名 でメンションされたとき",
+        "replies_label": "返信",
+        "replies_desc": "あなたのコメントに返信がついたとき",
+        "reputation_label": "評判",
+        "reputation_desc": "評判ポイント（Reputation）が増減したとき"
+      }
+    }
+  },
+  "comments": {
+    "placeholder": "どう思いますか？",
+    "reply_placeholder": "@{username} に返信する...",
+    "submit_comment": "コメントを投稿",
+    "submit_reply": "返信を投稿",
+    "reply_button": "返信する",
+    "delete_button": "コメントを削除",
+    "delete_confirm": "このコメントを削除しますか？",
+    "empty_state": "最初のコメントを書きませんか？",
+    "toasts": {
+      "comment_published": "コメントを投稿しました",
+      "reply_published": "返信を投稿しました",
+      "deleted": "コメントを削除しました",
+      "error_commenting": "コメント投稿中にエラーが発生しました",
+      "error_replying": "返信投稿中にエラーが発生しました",
+      "error_deleting": "削除中にエラーが発生しました"
+    }
+  }
+}

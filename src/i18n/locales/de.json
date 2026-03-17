@@ -1,0 +1,288 @@
+{
+  "sidebar": {
+    "home": "Home",
+    "explore": "Entdecken",
+    "clips": "Clips",
+    "notifications": "Benachrichtigungen",
+    "messages": "Nachrichten",
+    "jobs": "Jobs",
+    "bookmarks": "Lesezeichen",
+    "profile": "Profil",
+    "settings": "Einstellungen",
+    "new_post": "Neuer Post",
+    "logout": "Abmelden",
+    "projects": "Projekte",
+    "groups": "Gruppen"
+  },
+  "post": {
+    "translate": "Post übersetzen",
+    "see_original": "Original anzeigen",
+    "translating": "Übersetzung...",
+    "delete_confirm": "Sind Sie sicher, dass Sie diesen Post löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.",
+    "delete_button": "Post löschen",
+    "hide_code": "Code ausblenden",
+    "show_code": "Code anzeigen",
+    "image_alt": "Post-Bild",
+    "toasts": {
+      "login_like": "Anmelden zum Liken",
+      "login_save": "Anmelden zum Speichern",
+      "saved": "Gespeichert",
+      "unsaved": "Aus Lesezeichen entfernt",
+      "link_copied": "Link kopiert",
+      "deleted": "Post gelöscht",
+      "delete_error": "Fehler beim Löschen",
+      "translate_error": "Fehler bei der Übersetzung"
+    }
+  },
+  "settings": {
+    "tabs": {
+      "profile": "Profil",
+      "security": "Konto & Sicherheit",
+      "notifications": "Benachrichtigungen",
+      "appearance": "Erscheinungsbild",
+      "privacy": "Datenschutz"
+    },
+    "appearance": {
+      "title": "Erscheinungsbild",
+      "themeTitle": "Design",
+      "themes": {
+        "light": "Hell",
+        "dark": "Dunkel",
+        "system": "System",
+        "selected": "Ausgewählt"
+      },
+      "sidebarTitle": "Seitenleisten-Stil",
+      "sidebarStyles": {
+        "full": "Vollständig",
+        "compact": "Kompakt",
+        "floating": "Schwebend",
+        "active": "Aktiv"
+      },
+      "languageTitle": "Sprache",
+      "toasts": {
+        "themeChanged": "Design geändert",
+        "styleChanged": "Stil geändert",
+        "languageChanged": "Sprache geändert auf"
+      }
+    },
+    "profile_form": {
+      "avatar_title": "Profilbild",
+      "upload_rules": "JPG, PNG, WEBP oder GIF · Max. 5 MB",
+      "upload_file": "Datei hochladen",
+      "external_url": "Externe URL",
+      "click_to_upload": "Klicken Sie hier, um ein Bild auszuwählen",
+      "upload_button": "Foto hochladen",
+      "url_placeholder": "https://...",
+      "save_button": "Speichern",
+      "public_info": "Öffentliche Informationen",
+      "full_name": "Vollständiger Name",
+      "bio": "Bio",
+      "city": "Stadt",
+      "country": "Land",
+      "select_country": "Auswählen...",
+      "website": "Website / Portfolio",
+      "saving": "Speichern...",
+      "save_changes": "Änderungen speichern",
+      "uploading_image": "Bild wird hochgeladen...",
+      "name_placeholder": "Dein Name",
+      "bio_placeholder": "Full-stack dev. React und PostgreSQL Liebhaber...",
+      "city_placeholder": "Berlin",
+      "website_placeholder": "https://deinportfolio.de",
+      "new_tag": "NEU",
+      "countries_list": [
+        "Spanien", "Mexiko", "Argentinien", "Kolumbien", "Chile", "Peru", "Venezuela",
+        "Vereinigte Staaten", "Vereinigtes Königreich", "Deutschland", "Frankreich", "Portugal", "Brasilien",
+        "Italien", "Niederlande", "Schweden", "Polen", "Ukraine", "Indien", "Kanada",
+        "Australien", "Japan", "Südkorea", "Andere"
+      ],
+      "toasts": {
+        "updated": "Profil aktualisiert",
+        "error": "Fehler beim Speichern",
+        "invalid_format": "Format nicht erlaubt",
+        "size_error": "Datei überschreitet das Limit von 5 MB",
+        "upload_success": "Profilbild aktualisiert!",
+        "upload_error": "Fehler beim Hochladen des Bildes",
+        "invalid_url": "Geben Sie eine gültige URL ein"
+      }
+    },
+    "compose": {
+      "title": "Neuer Beitrag",
+      "placeholder": "Was baust du gerade? Teile deinen Code, deine Idee oder deine Frage...",
+      "add_code": "Code hinzufügen",
+      "hide_code": "Code ausblenden",
+      "add_image": "Bild hinzufügen",
+      "change_image": "Bild ändern",
+      "uploading_image": "Bild wird hochgeladen...",
+      "publishing": "Veröffentlichung...",
+      "publish": "Veröffentlichen",
+      "code_lang_placeholder": "Sprache (z. B. TypeScript, Python...)",
+      "code_placeholder": "Füge deinen Code hier ein",
+      "tags_placeholder": "Suchen oder einen Tag eingeben...",
+      "popular_tags": "Beliebte Tags",
+      "toasts": {
+        "success": "Beitrag veröffentlicht 🚀",
+        "error": "Fehler beim Veröffentlichen",
+        "image_size": "Bild überschreitet 10 MB"
+      }
+    },
+    "auth": {
+      "login": {
+        "title": "Anmelden",
+        "email_label": "E-Mail",
+        "email_placeholder": "deine@email.com",
+        "password_label": "Passwort",
+        "password_placeholder": "••••••••",
+        "login_button": "Anmelden",
+        "logging_in": "Anmeldung...",
+        "error": "Ungültige E-Mail-Adresse oder Passwort"
+      },
+      "register": {
+        "title": "Konto erstellen",
+        "step1": "Konto",
+        "step2": "Profil",
+        "username_label": "Benutzername",
+        "username_placeholder": "johndoe",
+        "name_label": "Vollständiger Name",
+        "name_placeholder": "John Doe",
+        "email_label": "E-Mail",
+        "email_placeholder": "deine@email.com",
+        "password_label": "Passwort",
+        "password_placeholder": "Mindestens 8 Zeichen",
+        "next_button": "Weiter",
+        "optional_note": "Optional — du kannst dies später in den Einstellungen ausfüllen",
+        "bio_label": "Bio",
+        "bio_placeholder": "Full-stack dev. React und PostgreSQL Liebhaber...",
+        "city_label": "Stadt",
+        "city_placeholder": "Berlin",
+        "country_label": "Land",
+        "select_country": "Auswählen...",
+        "website_label": "Website / Portfolio",
+        "website_placeholder": "https://deinportfolio.de",
+        "back_button": "Zurück",
+        "create_button": "🚀 Konto erstellen",
+        "creating": "Konto wird erstellt...",
+        "success": "Konto erstellt! Du kannst dich jetzt anmelden.",
+        "error": "Fehler bei der Registrierung"
+      }
+    },
+    "security": {
+      "password_title": "Passwort ändern",
+      "current_password": "Aktuelles Passwort",
+      "new_password": "Neues Passwort",
+      "confirm_password": "Bestätigen",
+      "password_placeholder": "••••••••",
+      "new_password_hint": "Mindestens 8 Zeichen",
+      "confirm_placeholder": "Passwort wiederholen",
+      "update_button": "Passwort aktualisieren",
+      "updating_password": "Wird gespeichert...",
+      "oauth_title": "OAuth-Konto",
+      "oauth_description": "Dein Konto ist mit GitHub/Google verknüpft. Das Passwort wird über diese Plattform verwaltet.",
+      "email_title": "E-Mail ändern",
+      "current_email": "Aktuelle E-Mail",
+      "new_email": "Neue E-Mail",
+      "new_email_placeholder": "neu@email.com",
+      "confirm_email_password": "Aktuelles Passwort (zur Bestätigung)",
+      "change_email_button": "E-Mail ändern",
+      "updating_email": "Wird gespeichert...",
+      "oauth_email_description": "Verwalte deine E-Mail über dein GitHub/Google-Konto.",
+      "sessions_title": "Aktive Sitzungen",
+      "sessions_description": "Melde dich von allen Geräten ab, auf denen du angemeldet bist.",
+      "revoke_sessions_button": "Von allen Geräten abmelden",
+      "delete_account_title": "Konto löschen",
+      "delete_account_description": "Diese Aktion ist dauerhaft und unwiderruflich. Alle deine Beiträge, Kommentare, Follower und Daten werden gelöscht.",
+      "delete_account_button": "Mein Konto löschen",
+      "delete_confirm_phrase": "Gib MEIN KONTO LÖSCHEN ein, um zu bestätigen",
+      "delete_input_placeholder": "MEIN KONTO LÖSCHEN",
+      "cancel_button": "Abbrechen",
+      "confirm_delete_button": "Löschung bestätigen",
+      "deleting": "Wird gelöscht...",
+      "toasts": {
+        "password_updated": "Passwort aktualisiert",
+        "email_updated": "E-Mail aktualisiert",
+        "sessions_revoked": "Sitzungen beendet",
+        "account_deleted": "Konto gelöscht",
+        "phrase_error": "Gib die Bestätigungsphrase ein"
+      }
+    },
+    "privacy": {
+      "title": "Datenschutzeinstellungen",
+      "private_account_title": "Privates Konto",
+      "private_account_description": "Bei einem privaten Konto müssen Personen dir eine Anfrage senden, um dir zu folgen. Du nimmst sie an oder lehnst sie ab.",
+      "activate_private_profile": "Privates Profil aktivieren",
+      "profile_private_status": "Dein Profil ist privat — Genehmigung zum Folgen erforderlich",
+      "profile_public_status": "Dein Profil ist öffentlich — jeder kann dir folgen",
+      "visibility_lists_title": "Sichtbarkeit von Listen",
+      "visibility_lists_description": "Wähle aus, wer deine Follower- und Folgt-Listen sehen kann.",
+      "show_followers_label": "Wer kann deine Follower sehen?",
+      "show_followers_description": "Die Liste der Personen, die dir folgen",
+      "show_following_label": "Wer kann sehen, wem du folgst?",
+      "show_following_description": "Die Liste der Personen, denen du folgst",
+      "interactions_title": "Interaktionen",
+      "interactions_description": "Kontrolliere, wer mit dir interagieren kann.",
+      "who_can_message_label": "Wer kann dir Nachrichten senden?",
+      "who_can_message_description": "Direktnachrichten in deinem Posteingang",
+      "who_can_comment_label": "Wer kann deine Beiträge kommentieren?",
+      "who_can_comment_description": "Kommentare zu deinen Veröffentlichungen",
+      "follow_requests_title": "Follower-Anfragen",
+      "follow_requests_description": "Personen, die angefragt haben, dir zu folgen, und auf deine Antwort warten.",
+      "no_requests": "Du hast keine ausstehenden Anfragen",
+      "accept_button": "Annehmen",
+      "reject_button": "Ablehnen",
+      "save_button": "Datenschutzeinstellungen speichern",
+      "saving": "Wird gespeichert...",
+      "toasts": {
+        "saved": "Datenschutzeinstellungen gespeichert",
+        "request_accepted": "Anfrage angenommen",
+        "request_rejected": "Anfrage abgelehnt",
+        "error": "Fehler beim Speichern"
+      },
+      "options": {
+        "everyone": "Jeder",
+        "followers": "Nur Follower",
+        "nobody": "Nur ich"
+      }
+    },
+    "notifications_settings": {
+      "title": "Benachrichtigungseinstellungen",
+      "description": "Kontrolliere, welche Benachrichtigungen du erhalten möchtest.",
+      "save_button": "Präferenzen speichern",
+      "saving": "Wird gespeichert...",
+      "toasts": {
+        "saved": "Präferenzen gespeichert",
+        "error": "Fehler beim Speichern"
+      },
+      "prefs": {
+        "likes_label": "Gefällt mir",
+        "likes_desc": "Wenn jemandem dein Beitrag gefällt",
+        "comments_label": "Kommentare",
+        "comments_desc": "Wenn jemand deinen Beitrag kommentiert",
+        "follows_label": "Neue Follower",
+        "follows_desc": "Wenn dir jemand zu folgen beginnt",
+        "mentions_label": "Erwähnungen",
+        "mentions_desc": "Wenn du mit @benutzername erwähnt wirst",
+        "replies_label": "Antworten",
+        "replies_desc": "Wenn jemand auf deinen Kommentar antwortet",
+        "reputation_label": "Reputation",
+        "reputation_desc": "Wenn du Reputationspunkte gewinnst oder verlierst"
+      }
+    }
+  },
+  "comments": {
+    "placeholder": "Was denkst du?",
+    "reply_placeholder": "Antworten auf @{username}...",
+    "submit_comment": "Kommentar posten",
+    "submit_reply": "Antwort posten",
+    "reply_button": "Antworten",
+    "delete_button": "Kommentar löschen",
+    "delete_confirm": "Diesen Kommentar löschen?",
+    "empty_state": "Schreibe den ersten Kommentar...",
+    "toasts": {
+      "comment_published": "Kommentar veröffentlicht",
+      "reply_published": "Antwort veröffentlicht",
+      "deleted": "Kommentar gelöscht",
+      "error_commenting": "Fehler beim Kommentieren",
+      "error_replying": "Fehler beim Antworten",
+      "error_deleting": "Fehler beim Löschen"
+    }
+  }
+}

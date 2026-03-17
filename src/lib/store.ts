@@ -36,6 +36,10 @@ interface UIState {
   // Sidebar Style
   sidebarStyle: 'full' | 'compact' | 'floating'
   setSidebarStyle: (style: 'full' | 'compact' | 'floating') => void
+
+  // Language
+  language: string
+  setLanguage: (lang: string) => void
 }
 
 export const useUIStore = create<UIState>()(
@@ -70,11 +74,19 @@ export const useUIStore = create<UIState>()(
 
       sidebarStyle: 'full',
       setSidebarStyle: (style) => set({ sidebarStyle: style }),
+
+      language: 'es',
+      setLanguage: (lang) => {
+        if (typeof document !== 'undefined') {
+          document.cookie = `NEXT_LOCALE=${lang}; path=/; max-age=31536000`
+        }
+        set({ language: lang })
+      },
     }),
     {
       name: 'devcircle-ui-storage',
-      // Solo persistimos lo que tiene sentido guardar (el estilo de la sidebar)
-      partialize: (state) => ({ sidebarStyle: state.sidebarStyle }),
+      // Solo persistimos lo que tiene sentido guardar (el estilo de la sidebar y el idioma)
+      partialize: (state) => ({ sidebarStyle: state.sidebarStyle, language: state.language }),
     }
   )
 )

@@ -7,22 +7,19 @@ import { useState } from 'react'
 import { Eye, EyeOff, Loader2, User, Mail, Lock, MapPin, Globe, ArrowRight, ArrowLeft, AlignLeft, CheckCircle2 } from 'lucide-react'
 import { registerSchema, type RegisterInput } from '@/lib/validations'
 import { register as registerUser } from '@/lib/actions/auth'
+import { useTranslation } from '@/lib/i18n'
 import toast from 'react-hot-toast'
 import { cn } from '@/lib/utils'
 
-// Lista de países más comunes para devs
-const COUNTRIES = [
-  'España', 'México', 'Argentina', 'Colombia', 'Chile', 'Perú', 'Venezuela',
-  'Estados Unidos', 'Reino Unido', 'Alemania', 'Francia', 'Portugal', 'Brasil',
-  'Italia', 'Países Bajos', 'Suecia', 'Polonia', 'Ucrania', 'India', 'Canadá',
-  'Australia', 'Japón', 'Corea del Sur', 'Otro',
-]
 
 export function RegisterForm() {
   const router = useRouter()
   const [step, setStep] = useState<1 | 2>(1)
   const [showPass, setShowPass] = useState(false)
   const [loading, setLoading] = useState(false)
+  const { dict } = useTranslation()
+  const t = (dict as any).settings.auth.register
+  const profileT = (dict as any).settings.profile_form
 
   const { register, handleSubmit, trigger, watch, setValue, formState: { errors } } = useForm<RegisterInput>({
     resolver: zodResolver(registerSchema),
@@ -39,10 +36,10 @@ export function RegisterForm() {
     setLoading(true)
     try {
       await registerUser(data)
-      toast.success('¡Cuenta creada! Ya puedes iniciar sesión.')
+      toast.success(t.success)
       router.push('/auth/login')
     } catch (err: any) {
-      toast.error(err.message || 'Error al registrarse')
+      toast.error(err.message || t.error)
       setStep(1)
     } finally {
       setLoading(false)
@@ -65,7 +62,7 @@ export function RegisterForm() {
               {step > s ? <CheckCircle2 className="w-4 h-4" /> : s}
             </div>
             <span className={cn('text-xs font-medium', step === s ? 'text-text-primary' : 'text-text-muted')}>
-              {s === 1 ? 'Cuenta' : 'Perfil'}
+              {s === 1 ? t.step1 : t.step2}
             </span>
             {s < 2 && <div className={cn('flex-1 h-px', step > s ? 'bg-brand-500' : 'bg-white/10')} />}
           </div>
@@ -78,11 +75,11 @@ export function RegisterForm() {
           {/* Username + Nombre real */}
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="text-xs font-bold text-text-muted uppercase mb-1.5 block ml-1">Usuario</label>
+              <label className="text-xs font-bold text-text-muted uppercase mb-1.5 block ml-1">{t.username_label}</label>
               <div className="relative">
                 <input
                   {...register('username')}
-                  placeholder="johndoe"
+                  placeholder={t.username_placeholder}
                   autoComplete="off"
                   autoCorrect="off"
                   autoCapitalize="none"
@@ -102,9 +99,9 @@ export function RegisterForm() {
               {errors.username && <p className="text-[10px] text-red-400 mt-1 ml-1">{errors.username.message}</p>}
             </div>
             <div>
-              <label className="text-xs font-bold text-text-muted uppercase mb-1.5 block ml-1">Nombre real</label>
+              <label className="text-xs font-bold text-text-muted uppercase mb-1.5 block ml-1">{t.name_label}</label>
               <div className="relative">
-                <input {...register('name')} placeholder="John Doe" className={cn('input pl-9', errors.name && 'border-red-500/50')} disabled={loading} />
+                <input {...register('name')} placeholder={t.name_placeholder} className={cn('input pl-9', errors.name && 'border-red-500/50')} disabled={loading} />
                 <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
               </div>
               {errors.name && <p className="text-[10px] text-red-400 mt-1 ml-1">{errors.name.message}</p>}
@@ -113,9 +110,9 @@ export function RegisterForm() {
 
           {/* Email */}
           <div>
-            <label className="text-xs font-bold text-text-muted uppercase mb-1.5 block ml-1">Email</label>
+            <label className="text-xs font-bold text-text-muted uppercase mb-1.5 block ml-1">{t.email_label}</label>
             <div className="relative">
-              <input {...register('email')} type="email" placeholder="tu@email.com" className={cn('input pl-9', errors.email && 'border-red-500/50')} disabled={loading} />
+              <input {...register('email')} type="email" placeholder={t.email_placeholder} className={cn('input pl-9', errors.email && 'border-red-500/50')} disabled={loading} />
               <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
             </div>
             {errors.email && <p className="text-[10px] text-red-400 mt-1 ml-1">{errors.email.message}</p>}
@@ -123,9 +120,9 @@ export function RegisterForm() {
 
           {/* Contraseña */}
           <div>
-            <label className="text-xs font-bold text-text-muted uppercase mb-1.5 block ml-1">Contraseña</label>
+            <label className="text-xs font-bold text-text-muted uppercase mb-1.5 block ml-1">{t.password_label}</label>
             <div className="relative">
-              <input {...register('password')} type={showPass ? 'text' : 'password'} placeholder="Mínimo 8 caracteres" className={cn('input pl-9 pr-10', errors.password && 'border-red-500/50')} disabled={loading} />
+              <input {...register('password')} type={showPass ? 'text' : 'password'} placeholder={t.password_placeholder} className={cn('input pl-9 pr-10', errors.password && 'border-red-500/50')} disabled={loading} />
               <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
               <button type="button" onClick={() => setShowPass(p => !p)} className="absolute right-3 top-1/2 -translate-y-1/2 text-text-muted hover:text-text-secondary">
                 {showPass ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -135,7 +132,7 @@ export function RegisterForm() {
           </div>
 
           <button type="button" onClick={goToStep2} className="btn-primary w-full py-4 font-bold flex items-center justify-center gap-2 mt-2">
-            Siguiente <ArrowRight className="w-4 h-4" />
+            {t.next_button} <ArrowRight className="w-4 h-4" />
           </button>
         </div>
       )}
@@ -144,14 +141,14 @@ export function RegisterForm() {
       {step === 2 && (
         <div className="space-y-4">
           <p className="text-xs text-text-muted text-center -mt-1 mb-2">
-            Opcional — puedes rellenarlo después en Ajustes
+            {t.optional_note}
           </p>
 
           {/* Bio */}
           <div>
-            <label className="text-xs font-bold text-text-muted uppercase mb-1.5 block ml-1">Bio</label>
+            <label className="text-xs font-bold text-text-muted uppercase mb-1.5 block ml-1">{t.bio_label}</label>
             <div className="relative">
-              <textarea {...register('bio')} placeholder="Full-stack dev. Amante de React y PostgreSQL..." className="input pl-9 h-24 resize-none text-sm py-3" disabled={loading} />
+              <textarea {...register('bio')} placeholder={t.bio_placeholder} className="input pl-9 h-24 resize-none text-sm py-3" disabled={loading} />
               <AlignLeft className="absolute left-3 top-3.5 w-4 h-4 text-text-muted" />
             </div>
             {errors.bio && <p className="text-[10px] text-red-400 mt-1 ml-1">{errors.bio.message}</p>}
@@ -160,26 +157,26 @@ export function RegisterForm() {
           {/* Ciudad + País */}
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="text-xs font-bold text-text-muted uppercase mb-1.5 block ml-1">Ciudad</label>
+              <label className="text-xs font-bold text-text-muted uppercase mb-1.5 block ml-1">{t.city_label}</label>
               <div className="relative">
-                <input {...register('location')} placeholder="Alicante" className="input pl-9 text-sm" disabled={loading} />
+                <input {...register('location')} placeholder={t.city_placeholder} className="input pl-9 text-sm" disabled={loading} />
                 <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
               </div>
             </div>
             <div>
-              <label className="text-xs font-bold text-text-muted uppercase mb-1.5 block ml-1">País</label>
+              <label className="text-xs font-bold text-text-muted uppercase mb-1.5 block ml-1">{t.country_label}</label>
               <select {...register('country')} className="input text-sm bg-surface" disabled={loading}>
-                <option value="">Seleccionar...</option>
-                {COUNTRIES.map(c => <option key={c} value={c}>{c}</option>)}
+                <option value="">{t.select_country}</option>
+                {(profileT.countries_list || []).map((c: string) => <option key={c} value={c}>{c}</option>)}
               </select>
             </div>
           </div>
 
           {/* Website */}
           <div>
-            <label className="text-xs font-bold text-text-muted uppercase mb-1.5 block ml-1">Sitio web / Portfolio</label>
+            <label className="text-xs font-bold text-text-muted uppercase mb-1.5 block ml-1">{t.website_label}</label>
             <div className="relative">
-              <input {...register('website')} placeholder="https://tuportfolio.com" className={cn('input pl-9 text-sm', errors.website && 'border-red-500/50')} disabled={loading} />
+              <input {...register('website')} placeholder={t.website_placeholder} className={cn('input pl-9 text-sm', errors.website && 'border-red-500/50')} disabled={loading} />
               <Globe className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
             </div>
             {errors.website && <p className="text-[10px] text-red-400 mt-1 ml-1">{errors.website.message}</p>}
@@ -188,10 +185,10 @@ export function RegisterForm() {
           {/* Botones */}
           <div className="flex gap-3 mt-2">
             <button type="button" onClick={() => setStep(1)} className="btn-secondary flex items-center gap-2 px-5 py-4 font-bold">
-              <ArrowLeft className="w-4 h-4" /> Atrás
+              <ArrowLeft className="w-4 h-4" /> {t.back_button}
             </button>
             <button type="submit" disabled={loading} className="btn-primary flex-1 py-4 font-bold flex items-center justify-center gap-2">
-              {loading ? <><Loader2 className="w-4 h-4 animate-spin" /> Creando cuenta...</> : '🚀 Crear mi cuenta'}
+              {loading ? <><Loader2 className="w-4 h-4 animate-spin" /> {t.creating}</> : t.create_button}
             </button>
           </div>
         </div>

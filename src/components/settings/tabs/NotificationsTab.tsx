@@ -5,23 +5,26 @@ import { Bell, Heart, MessageCircle, UserPlus, AtSign, Zap, Save } from 'lucide-
 import { updateNotificationPrefs } from '@/lib/actions/settings'
 import toast from 'react-hot-toast'
 import { cn } from '@/lib/utils'
+import { useTranslation } from '@/lib/i18n'
 
 interface NotifPref { key: string; label: string; description: string; icon: any; defaultOn: boolean }
-
-const NOTIF_PREFS: NotifPref[] = [
-  { key: 'likes',     label: 'Me gusta',     description: 'Cuando alguien le da like a tu post',      icon: Heart,          defaultOn: true },
-  { key: 'comments',  label: 'Comentarios',  description: 'Cuando alguien comenta tu post',             icon: MessageCircle,  defaultOn: true },
-  { key: 'follows',   label: 'Nuevos seguidores', description: 'Cuando alguien empieza a seguirte',    icon: UserPlus,       defaultOn: true },
-  { key: 'mentions',  label: 'Menciones',    description: 'Cuando te mencionan con @usuario',           icon: AtSign,         defaultOn: true },
-  { key: 'replies',   label: 'Respuestas',   description: 'Cuando alguien responde a tu comentario',   icon: MessageCircle,  defaultOn: true },
-  { key: 'reputation',label: 'Reputación',   description: 'Cuando ganas o pierdes puntos de reputación', icon: Zap,           defaultOn: false },
-]
 
 interface NotificationsTabProps {
   initialPrefs: Record<string, boolean>
 }
 
 export function NotificationsTab({ initialPrefs }: NotificationsTabProps) {
+  const { dict } = useTranslation()
+  const t = (dict as any).settings.notifications_settings
+
+  const NOTIF_PREFS: NotifPref[] = [
+    { key: 'likes',     label: t.prefs.likes_label,     description: t.prefs.likes_desc,      icon: Heart,          defaultOn: true },
+    { key: 'comments',  label: t.prefs.comments_label,  description: t.prefs.comments_desc,             icon: MessageCircle,  defaultOn: true },
+    { key: 'follows',   label: t.prefs.follows_label,   description: t.prefs.follows_desc,    icon: UserPlus,       defaultOn: true },
+    { key: 'mentions',  label: t.prefs.mentions_label,  description: t.prefs.mentions_desc,           icon: AtSign,         defaultOn: true },
+    { key: 'replies',   label: t.prefs.replies_label,   description: t.prefs.replies_desc,   icon: MessageCircle,  defaultOn: true },
+    { key: 'reputation',label: t.prefs.reputation_label,description: t.prefs.reputation_desc, icon: Zap,           defaultOn: false },
+  ]
   const [prefs, setPrefs] = useState<Record<string, boolean>>(() => {
     const defaults: Record<string, boolean> = {}
     NOTIF_PREFS.forEach(p => { defaults[p.key] = initialPrefs[p.key] ?? p.defaultOn })
@@ -33,8 +36,8 @@ export function NotificationsTab({ initialPrefs }: NotificationsTabProps) {
 
   const save = () => {
     startTransition(async () => {
-      try { await updateNotificationPrefs(prefs); toast.success('Preferencias guardadas') }
-      catch (e: any) { toast.error(e.message) }
+      try { await updateNotificationPrefs(prefs); toast.success(t.toasts.saved) }
+      catch (e: any) { toast.error(e.message ?? t.toasts.error) }
     })
   }
 
@@ -42,7 +45,7 @@ export function NotificationsTab({ initialPrefs }: NotificationsTabProps) {
     <div className="space-y-6">
       <section className="card p-6">
         <h2 className="text-sm font-bold text-text-primary mb-5 flex items-center gap-2">
-          <Bell className="w-4 h-4 text-brand-400" /> Notificaciones
+          <Bell className="w-4 h-4 text-brand-400" /> {t.title}
         </h2>
         <div className="space-y-2">
           {NOTIF_PREFS.map(pref => (
@@ -75,7 +78,7 @@ export function NotificationsTab({ initialPrefs }: NotificationsTabProps) {
         <div className="pt-5 border-t border-surface-border mt-4 flex justify-end">
           <button onClick={save} disabled={isPending} className="btn-primary flex items-center gap-2 px-8">
             <Save className="w-4 h-4" />
-            {isPending ? 'Guardando...' : 'Guardar preferencias'}
+            {isPending ? t.saving : t.save_button}
           </button>
         </div>
       </section>

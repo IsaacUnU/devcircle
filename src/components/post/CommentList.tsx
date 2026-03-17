@@ -10,6 +10,7 @@ import { addComment, deleteComment } from '@/lib/actions/posts'
 import toast from 'react-hot-toast'
 import { MentionTextarea } from '@/components/ui/MentionTextarea'
 import { RichText } from '@/components/ui/RichText'
+import { useTranslation } from '@/lib/i18n'
 
 // ── Tipos ─────────────────────────────────────────────────────────────────────
 interface Author {
@@ -38,6 +39,8 @@ function InlineReplyForm({
   onSuccess: (newReply: CommentData) => void
   onCancel: () => void
 }) {
+  const { dict } = useTranslation()
+  const t = (dict as any).comments
   const { data: session } = useSession()
   const [content, setContent] = useState('')
   const [loading, setLoading] = useState(false)
@@ -74,7 +77,7 @@ function InlineReplyForm({
         replies: [],
       })
     } catch (err: any) {
-      toast.error(err.message ?? 'Error al responder')
+      toast.error(err.message ?? t.toasts.error_replying)
     } finally {
       setLoading(false)
     }
@@ -88,7 +91,7 @@ function InlineReplyForm({
         <MentionTextarea
           value={content}
           onChange={setContent}
-          placeholder={`Responder a @${replyingTo}...`}
+          placeholder={(t.reply_placeholder || 'Responder a @{username}...').replace('{username}', replyingTo)}
           autoFocus
           className="input w-full resize-none text-sm py-2 px-3 pr-10 min-h-[36px] h-[36px] focus:h-20 transition-all custom-scrollbar"
           action={
@@ -122,6 +125,8 @@ function CommentItem({
   onReplyAdded?: (parentId: string, reply: CommentData) => void
   onDeleted?: (commentId: string, parentId?: string | null) => void
 }) {
+  const { dict } = useTranslation()
+  const t = (dict as any).comments
   const { data: session } = useSession()
   const [replying, setReplying] = useState(false)
   const [deleting, setDeleting] = useState(false)
@@ -136,14 +141,14 @@ function CommentItem({
   }
 
   const handleDelete = async () => {
-    if (!confirm('¿Eliminar este comentario?')) return
+    if (!confirm(t.delete_confirm)) return
     setDeleting(true)
     try {
       await deleteComment(comment.id)
-      toast.success('Comentario eliminado')
+      toast.success(t.toasts.deleted)
       onDeleted?.(comment.id, comment.parentId)
     } catch (err: any) {
-      toast.error(err.message ?? 'Error al eliminar')
+      toast.error(err.message ?? t.toasts.error_deleting)
       setDeleting(false)
     }
   }
@@ -182,15 +187,15 @@ function CommentItem({
           <span className="text-text-muted text-xs">{timeAgo(comment.createdAt)}</span>
 
           {/* Botón eliminar — solo owner, aparece en hover */}
-          {isOwner && (
-            <button
-              onClick={handleDelete}
-              title="Eliminar comentario"
-              className="ml-auto opacity-0 group-hover:opacity-100 p-1 rounded text-text-muted hover:text-red-400 hover:bg-red-400/10 transition-all"
-            >
-              <Trash2 className="w-3.5 h-3.5" />
-            </button>
-          )}
+            {isOwner && (
+              <button
+                onClick={handleDelete}
+                title={t.delete_button}
+                className="ml-auto opacity-0 group-hover:opacity-100 p-1 rounded text-text-muted hover:text-red-400 hover:bg-red-400/10 transition-all"
+              >
+                <Trash2 className="w-3.5 h-3.5" />
+              </button>
+            )}
         </div>
 
         {/* Texto */}
@@ -210,7 +215,7 @@ function CommentItem({
             )}
           >
             <Reply className="w-3.5 h-3.5" />
-            Responder
+            {t.reply_button}
           </button>
         )}
 
@@ -251,6 +256,8 @@ interface CommentListProps {
 }
 
 export function CommentList({ comments: initialComments, postId }: CommentListProps) {
+  const { dict } = useTranslation()
+  const t = (dict as any).comments
   const [threads, setThreads] = useState<CommentData[]>(() => {
     const roots = initialComments.filter(c => !c.parentId)
     const repliesMap: Record<string, CommentData[]> = {}
@@ -293,7 +300,7 @@ export function CommentList({ comments: initialComments, postId }: CommentListPr
     return (
       <div className="py-12 text-center border-t border-surface-border">
         <MessageCircle className="w-10 h-10 text-text-muted mx-auto mb-3 opacity-20" />
-        <p className="text-text-muted text-sm italic">Sé el primero en comentar...</p>
+        <p className="text-text-muted text-sm italic">{t.empty_state}</p>
       </div>
     )
   }

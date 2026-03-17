@@ -7,6 +7,7 @@ import { getAvatarUrl } from '@/lib/utils'
 import { cn } from '@/lib/utils'
 import toast from 'react-hot-toast'
 import { MentionTextarea } from '@/components/ui/MentionTextarea'
+import { useTranslation } from '@/lib/i18n'
 
 interface CommentFormProps {
   postId: string
@@ -21,6 +22,8 @@ interface CommentFormProps {
 export function CommentForm({
   postId, userImage, username, parentId, placeholder, onSuccess, compact
 }: CommentFormProps) {
+  const { dict } = useTranslation()
+  const t = (dict as any).comments
   const [content, setContent] = useState('')
   const [isPending, startTransition] = useTransition()
 
@@ -33,10 +36,10 @@ export function CommentForm({
       try {
         await addComment({ content: content.trim(), postId, parentId })
         setContent('')
-        toast.success(parentId ? 'Respuesta publicada' : 'Comentario publicado')
+        toast.success(parentId ? t.toasts.reply_published : t.toasts.comment_published)
         onSuccess?.()
       } catch (err: any) {
-        toast.error(err.message ?? 'Error al comentar')
+        toast.error(err.message ?? (parentId ? t.toasts.error_replying : t.toasts.error_commenting))
       }
     })
   }
@@ -52,7 +55,7 @@ export function CommentForm({
       <MentionTextarea
         value={content}
         onChange={setContent}
-        placeholder={placeholder ?? '¿Qué piensas?'}
+        placeholder={placeholder ?? t.placeholder}
         className={cn(
           'input resize-none text-sm transition-all pr-10 custom-scrollbar w-full',
           compact

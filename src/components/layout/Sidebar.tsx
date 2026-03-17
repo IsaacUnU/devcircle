@@ -14,17 +14,18 @@ import { cn } from '@/lib/utils'
 import { useUIStore } from '@/lib/store'
 import { signOut } from 'next-auth/react'
 import { getAvatarUrl } from '@/lib/utils'
+import { useTranslation, Locale } from '@/lib/i18n'
 
-const navItems = [
-  { href: '/feed', label: 'Feed', icon: Home },
-  { href: '/search', label: 'Explorar', icon: Search },
-  { href: '/projects', label: 'Proyectos', icon: Code2 },
-  { href: '/jobs', label: 'Empleos', icon: Briefcase },
-  { href: '/groups', label: 'Grupos', icon: Users },
-  { href: '/notifications', label: 'Notificaciones', icon: Bell },
-  { href: '/messages', label: 'Mensajes', icon: MessageSquare },
-  { href: '/bookmarks', label: 'Guardados', icon: Bookmark },
-  { href: '/settings', label: 'Ajustes', icon: Settings },
+const getNavItems = (t: Record<string, string>) => [
+  { href: '/feed', label: t.home, icon: Home },
+  { href: '/search', label: t.explore, icon: Search },
+  { href: '/projects', label: t.projects || 'Projects', icon: Code2 },
+  { href: '/jobs', label: t.jobs, icon: Briefcase },
+  { href: '/groups', label: t.groups || 'Groups', icon: Users },
+  { href: '/notifications', label: t.notifications, icon: Bell },
+  { href: '/messages', label: t.messages, icon: MessageSquare },
+  { href: '/bookmarks', label: t.bookmarks, icon: Bookmark },
+  { href: '/settings', label: t.settings, icon: Settings },
 ]
 
 export function Sidebar() {
@@ -32,6 +33,10 @@ export function Sidebar() {
   const pathname = usePathname()
   const { data: session } = useSession()
   const { openCompose, unreadCount, sidebarStyle, isMobileSidebarOpen, setMobileSidebarOpen } = useUIStore()
+  const { dict } = useTranslation()
+  const t = dict.sidebar
+  const navItems = getNavItems(t as Record<string, string>)
+
   // Imagen fresca desde BD (el JWT puede estar desactualizado tras cambiar avatar)
   const [freshAvatar, setFreshAvatar] = useState<string | null>(null)
   const [isMobile, setIsMobile] = useState(false)
@@ -163,10 +168,10 @@ export function Sidebar() {
             "flex items-center justify-center bg-gradient-to-br from-brand-500 to-brand-600 hover:brightness-110 text-white rounded-xl font-bold text-sm transition-all duration-200 shadow-xl shadow-brand-500/20 mb-6 group active:scale-95",
             isCompact ? "p-3 w-12 h-12 mx-auto" : "gap-2 w-full py-3.5 px-4"
           )}
-          title={isCompact ? "Nuevo Post" : undefined}
+          title={isCompact ? t.new_post : undefined}
         >
           <PlusCircle className={cn("transition-transform duration-300 group-hover:rotate-90", isCompact ? "w-6 h-6" : "w-5 h-5")} />
-          {!isCompact && "Nuevo Post"}
+          {!isCompact && t.new_post}
         </button>
 
         {/* User */}
@@ -199,7 +204,7 @@ export function Sidebar() {
               <button
                 onClick={() => signOut({ callbackUrl: '/auth/login' })}
                 className="p-2 text-text-muted hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-all shrink-0"
-                title="Cerrar sesión"
+                title={t.logout}
               >
                 <LogOut className="w-4 h-4" />
               </button>

@@ -1,0 +1,121 @@
+{
+  "sidebar": {
+    "home": "Anasayfa",
+    "explore": "Keşfet",
+    "clips": "Klipler",
+    "notifications": "Bildirimler",
+    "messages": "Mesajlar",
+    "jobs": "İş İlanları",
+    "bookmarks": "Yer İşaretleri",
+    "profile": "Profil",
+    "settings": "Ayarlar",
+    "new_post": "Yeni Gönderi",
+    "logout": "Çıkış Yap",
+    "projects": "Projeler",
+    "groups": "Gruplar"
+  },
+  "post": {
+    "translate": "Gönderiyi çevir",
+    "see_original": "Orijinali gör",
+    "translating": "Çevriliyor..."
+  },
+  "settings": {
+    "tabs": {
+      "profile": "Profil",
+      "security": "Hesap ve Güvenlik",
+      "notifications": "Bildirimler",
+      "appearance": "Görünüm",
+      "privacy": "Gizlilik"
+    },
+    "appearance": {
+      "title": "Görünüm",
+      "themeTitle": "Tema",
+      "themes": {
+        "light": "Açık",
+        "dark": "Koyu",
+        "system": "Sistem",
+        "selected": "Seçildi"
+      },
+      "sidebarTitle": "Kenar Çubuğu Stili",
+      "sidebarStyles": {
+        "full": "Tam",
+        "compact": "Kompakt",
+        "floating": "Yüzen",
+        "active": "Aktif"
+      },
+      "languageTitle": "Dil",
+      "toasts": {
+        "themeChanged": "Tema değiştirildi",
+        "styleChanged": "Stil değiştirildi",
+        "languageChanged": "Dil değiştirildi:"
+      }
+    },
+    "profile_form": {
+      "avatar_title": "Profil resmi",
+      "upload_rules": "JPG, PNG, WEBP veya GIF · Maks. 5 MB",
+      "upload_file": "Dosya yükle",
+      "external_url": "Harici URL",
+      "click_to_upload": "Resim seçmek için tıkla",
+      "upload_button": "Fotoğraf yükle",
+      "url_placeholder": "https://...",
+      "save_button": "Kaydet",
+      "public_info": "Genel bilgiler",
+      "full_name": "Tam sim",
+      "bio": "Hakkında",
+      "city": "Şehir",
+      "country": "Ülke",
+      "select_country": "Seçiniz...",
+      "website": "Web sitesi / Portfolyo",
+      "saving": "Kaydediliyor...",
+      "save_changes": "Değişiklikleri kaydet",
+      "toasts": {
+        "updated": "Profil güncellendi",
+        "error": "Kaydederken hata oluştu",
+        "invalid_format": "İzin verilmeyen format",
+        "size_error": "Dosya 5 MB sınırını aşıyor",
+        "upload_success": "Profil fotoğrafı güncellendi!",
+        "upload_error": "Resim yüklenirken hata oluştu",
+        "invalid_url": "Geçerli bir URL girin"
+      },
+      "new_tag": "YENİ"
+    },
+    "compose": {
+      "title": "Yeni gönderi",
+      "placeholder": "Ne inşa ediyorsun? Kodunu, fikrini veya sorunu paylaş...",
+      "add_code": "Kod ekle",
+      "hide_code": "Kodu gizle",
+      "add_image": "Resim ekle",
+      "change_image": "Resmi değiştir",
+      "uploading_image": "Resim yükleniyor...",
+      "publishing": "Paylaşılıyor...",
+      "publish": "Paylaş",
+      "code_lang_placeholder": "Dil (örn: typescript, python...)",
+      "code_placeholder": "Kodunu buraya yapıştır",
+      "tags_placeholder": "Etiket ara veya yaz...",
+      "popular_tags": "Popüler etiketler",
+      "toasts": {
+        "success": "Gönderi paylaşıldı 🚀",
+        "error": "Paylaşırken hata oluştu",
+        "image_size": "Resim 10 MB sınırını aşıyor"
+      }
+    }
+  },
+  "comments": {
+    "placeholder": "Ne düşünüyorsun?",
+    "reply_placeholder": "@{username} kullanıcısına yanıt ver...",
+    "submit_comment": "Yorumu gönder",
+    "submit_reply": "Yanıtı gönder",
+    "reply_button": "Yanıtla",
+    "delete_button": "Yorumu sil",
+    "delete_confirm": "Bu yorumu silmek istiyor musunuz?",
+    "empty_state": "İlk yorum yapan siz olun...",
+    "toasts": {
+      "comment_published": "Yorum yayınlandı",
+      "reply_published": "Yanıt yayınlandı",
+      "deleted": "Yorum silindi",
+      "error_commenting": "Yorum yaparken hata oluştu",
+      "error_replying": "Yanıt verirken hata oluştu",
+      "error_deleting": "Silerken hata oluştu"
+    }
+  }
+}

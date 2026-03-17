@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { User, Shield, Bell, Palette, Lock } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { useTranslation } from '@/lib/i18n'
 import { ProfileTab }       from './tabs/ProfileTab'
 import { SecurityTab }      from './tabs/SecurityTab'
 import { NotificationsTab } from './tabs/NotificationsTab'
@@ -12,13 +13,6 @@ import type { PrivacySettings } from '@/lib/privacy'
 
 type Tab = 'profile' | 'security' | 'notifications' | 'appearance' | 'privacy'
 
-const TABS = [
-  { id: 'profile'       as Tab, label: 'Perfil',            icon: User    },
-  { id: 'security'      as Tab, label: 'Cuenta y Seguridad', icon: Shield  },
-  { id: 'notifications' as Tab, label: 'Notificaciones',    icon: Bell    },
-  { id: 'appearance'    as Tab, label: 'Apariencia',        icon: Palette },
-  { id: 'privacy'       as Tab, label: 'Privacidad',        icon: Lock    },
-]
 
 interface SettingsLayoutProps {
   user: {
@@ -43,6 +37,16 @@ interface SettingsLayoutProps {
 
 export function SettingsLayout({ user, pendingRequests }: SettingsLayoutProps) {
   const [activeTab, setActiveTab] = useState<Tab>('profile')
+  const { dict } = useTranslation()
+  const t = dict.settings.tabs
+
+  const TABS = [
+    { id: 'profile'       as Tab, label: t.profile,            icon: User    },
+    { id: 'security'      as Tab, label: t.security,           icon: Shield  },
+    { id: 'notifications' as Tab, label: t.notifications,      icon: Bell    },
+    { id: 'appearance'    as Tab, label: t.appearance,         icon: Palette },
+    { id: 'privacy'       as Tab, label: t.privacy,            icon: Lock    },
+  ]
 
   return (
     <div className="flex flex-col md:grid md:grid-cols-3 gap-4 md:gap-6">

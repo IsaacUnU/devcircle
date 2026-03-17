@@ -3,11 +3,13 @@
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useState, useTransition, useRef, useEffect } from 'react'
-import { Heart, MessageCircle, Bookmark, Share2, Code, MoreHorizontal, Trash2 } from 'lucide-react'
+import { Heart, MessageCircle, Bookmark, Share2, Code, MoreHorizontal, Trash2, Globe2 } from 'lucide-react'
 import { formatCount, timeAgo, cn, getAvatarUrl } from '@/lib/utils'
 import { toggleLike, toggleBookmark, deletePost } from '@/lib/actions/posts'
 import type { PostWithMeta } from '@/types'
 import { RichText } from '@/components/ui/RichText'
+import { translateText } from '@/lib/actions/translate'
+import { useTranslation } from '@/lib/i18n'
 import toast from 'react-hot-toast'
 
 interface PostCardProps {
@@ -24,7 +26,11 @@ export function PostCard({ post, currentUserId }: PostCardProps) {
   const [showCode, setShowCode] = useState(false)
   const [showMenu, setShowMenu] = useState(false)
   const [deleted, setDeleted] = useState(false)
+  const [translatedText, setTranslatedText] = useState<string | null>(null)
+  const [isTranslating, setIsTranslating] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
+  const { dict, language: uiLanguage } = useTranslation()
+  const tPost = (dict as any).post
 
   const isOwner = currentUserId === post.author.id
   const authorImage = post.author.image ?? getAvatarUrl(post.author.username)
@@ -41,7 +47,7 @@ export function PostCard({ post, currentUserId }: PostCardProps) {
   }, [showMenu])
 
   function handleLike() {
-    if (!currentUserId) { toast.error('Inicia sesión para dar like'); return }
+    if (!currentUserId) { toast.error(tPost.toasts.login_like); return }
     const wasLiked = liked
     setLiked(!wasLiked)
     setLikeCount(prev => wasLiked ? prev - 1 : prev + 1)
@@ -56,12 +62,12 @@ export function PostCard({ post, currentUserId }: PostCardProps) {
   }
 
   function handleBookmark() {
-    if (!currentUserId) { toast.error('Inicia sesión para guardar'); return }
+    if (!currentUserId) { toast.error(tPost.toasts.login_save); return }
     setBookmarked(prev => !prev)
     startTransition(async () => {
       try {
         await toggleBookmark(post.id)
-        toast.success(bookmarked ? 'Eliminado de guardados' : 'Guardado')
+        toast.success(bookmarked ? tPost.toasts.unsaved : tPost.toasts.saved)
       } catch {
         setBookmarked(prev => !prev)
       }
@@ -70,21 +76,41 @@ export function PostCard({ post, currentUserId }: PostCardProps) {
 
   function handleShare() {
     navigator.clipboard.writeText(`${window.location.origin}/post/${post.id}`)
-    toast.success('Enlace copiado')
+    toast.success(tPost.toasts.link_copied)
   }
 
   function handleDelete() {
-    if (!confirm('¿Seguro que quieres eliminar este post? Esta acción no se puede deshacer.')) return
+    if (!confirm(tPost.delete_confirm)) return
     setShowMenu(false)
     startTransition(async () => {
       try {
         await deletePost(post.id)
         setDeleted(true)
-        toast.success('Post eliminado')
+        toast.success(tPost.toasts.deleted)
       } catch (err: any) {
-        toast.error(err.message ?? 'Error al eliminar')
+        toast.error(err.message ?? tPost.toasts.delete_error)
       }
     })
+  }
+  
+  async function handleTranslate(e: React.MouseEvent) {
+    e.preventDefault()
+    e.stopPropagation()
+
+    if (translatedText) {
+      setTranslatedText(null)
+      return
+    }
+
+    setIsTranslating(true)
+    try {
+      const res = await translateText(post.content, uiLanguage)
+      setTranslatedText(res)
+    } catch (err) {
+      toast.error(tPost.toasts.translate_error)
+    } finally {
+      setIsTranslating(false)
+    }
   }
 
   if (deleted) return null
@@ -131,7 +157,7 @@ export function PostCard({ post, currentUserId }: PostCardProps) {
                   className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-red-400 hover:bg-red-500/10 transition-colors"
                 >
                   <Trash2 className="w-4 h-4" />
-                  Eliminar post
+                  {tPost.delete_button}
                 </button>
               </div>
             )}
@@ -141,17 +167,27 @@ export function PostCard({ post, currentUserId }: PostCardProps) {
 
       {/* Content */}
       <Link href={`/post/${post.id}`} className="block group/content">
-        <p className="text-text-primary text-[15px] leading-relaxed mb-4 whitespace-pre-line group-hover/content:text-text-primary/90 transition-colors">
-          <RichText text={post.content} />
-        </p>
+        <div className="text-text-primary text-[15px] leading-relaxed mb-1 whitespace-pre-line group-hover/content:text-text-primary/90 transition-colors">
+          <RichText text={translatedText ?? post.content} />
+        </div>
       </Link>
+      
+      {/* Botón de traducir */}
+      <button
+        onClick={handleTranslate}
+        disabled={isTranslating}
+        className="text-[11px] font-bold text-brand-400 hover:text-brand-300 transition-colors mb-4 flex items-center gap-1 group/translate"
+      >
+        <Globe2 className="w-3 h-3 group-hover/translate:rotate-12 transition-transform" />
+        {isTranslating ? tPost.translating : (translatedText ? tPost.see_original : tPost.translate)}
+      </button>
 
       {/* Imagen del post */}
       {post.image && (
         <Link href={`/post/${post.id}`} className="block mb-3">
           <img
             src={post.image}
-            alt="Imagen del post"
+            alt={tPost.image_alt}
             className="w-full rounded-xl object-cover max-h-80 border border-surface-border hover:opacity-95 transition-opacity"
           />
         </Link>
@@ -165,7 +201,7 @@ export function PostCard({ post, currentUserId }: PostCardProps) {
             className="flex items-center gap-1.5 text-xs text-brand-400 hover:text-brand-300 transition-colors mb-2"
           >
             <Code className="w-3.5 h-3.5" />
-            {showCode ? 'Ocultar código' : `Ver código ${post.language ? `(${post.language})` : ''}`}
+            {showCode ? tPost.hide_code : `${tPost.show_code} ${post.language ? `(${post.language})` : ''}`}
           </button>
           {showCode && (
             <pre className="text-xs animate-slide-up">

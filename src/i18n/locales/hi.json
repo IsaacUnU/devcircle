@@ -1,0 +1,121 @@
+{
+  "sidebar": {
+    "home": "होम",
+    "explore": "एक्सप्लोर करें",
+    "clips": "क्लिप्स",
+    "notifications": "सूचनाएं",
+    "messages": "संदेश",
+    "jobs": "नौकरियां",
+    "bookmarks": "बुकमार्क",
+    "profile": "प्रोफ़ाइल",
+    "settings": "सेटिंग्स",
+    "new_post": "नई पोस्ट",
+    "logout": "लॉग आउट",
+    "projects": "परियोजनाएं",
+    "groups": "समूह"
+  },
+  "post": {
+    "translate": "अनुवाद करें",
+    "see_original": "मूल देखें",
+    "translating": "अनुवाद हो रहा है..."
+  },
+  "settings": {
+    "tabs": {
+      "profile": "प्रोफ़ाइल",
+      "security": "अकाउंट और सुरक्षा",
+      "notifications": "सूचनाएं",
+      "appearance": "दिखावट",
+      "privacy": "गोपनीयता"
+    },
+    "appearance": {
+      "title": "दिखावट",
+      "themeTitle": "थीम",
+      "themes": {
+        "light": "लाइट",
+        "dark": "डार्क",
+        "system": "सिस्टम",
+        "selected": "चुना गया"
+      },
+      "sidebarTitle": "साइडबार स्टाइल",
+      "sidebarStyles": {
+        "full": "पूर्ण",
+        "compact": "कॉम्पैक्ट",
+        "floating": "फ्लोटिंग",
+        "active": "सक्रिय"
+      },
+      "languageTitle": "भाषा",
+      "toasts": {
+        "themeChanged": "थीम बदल दी गई",
+        "styleChanged": "स्टाइल बदल दी गई",
+        "languageChanged": "भाषा बदल दी गई:"
+      }
+    },
+    "profile_form": {
+      "avatar_title": "प्रोफ़ाइल तस्वीर",
+      "upload_rules": "JPG, PNG, WEBP या GIF · अधिकतम 5 MB",
+      "upload_file": "फ़ाइल अपलोड करें",
+      "external_url": "बाहरी URL",
+      "click_to_upload": "छवि चुनने के लिए क्लिक करें",
+      "upload_button": "फोटो अपलोड करें",
+      "url_placeholder": "https://...",
+      "save_button": "सहेजें",
+      "public_info": "सार्वजनिक जानकारी",
+      "full_name": "पूरा नाम",
+      "bio": "बायो",
+      "city": "शहर",
+      "country": "देश",
+      "select_country": "चुनें...",
+      "website": "वेबसाइट / पोर्टफोलियो",
+      "saving": "सहेजा जा रहा है...",
+      "save_changes": "परिवर्तन सहेजें",
+      "toasts": {
+        "updated": "प्रोफ़ाइल अपडेट की गई",
+        "error": "सहेजने में त्रुटि",
+        "invalid_format": "प्रारूप की अनुमति नहीं है",
+        "size_error": "फ़ाइल 5 MB की सीमा से अधिक है",
+        "upload_success": "प्रोफ़ाइल फोटो अपडेट की गई!",
+        "upload_error": "छवि अपलोड करने में त्रुटि",
+        "invalid_url": "एक वैध URL दर्ज करें"
+      },
+      "new_tag": "नया"
+    },
+    "compose": {
+      "title": "नई पोस्ट",
+      "placeholder": "आप क्या बना रहे हैं? अपना कोड, विचार या प्रश्न साझा करें...",
+      "add_code": "कोड जोड़ें",
+      "hide_code": "कोड छिपाएं",
+      "add_image": "छवि जोड़ें",
+      "change_image": "छवि बदलें",
+      "uploading_image": "छवि अपलोड हो रही है...",
+      "publishing": "प्रकाशित हो रहा है...",
+      "publish": "प्रकाशित करें",
+      "code_lang_placeholder": "भाषा (जैसे: typescript, python...)",
+      "code_placeholder": "अपना कोड यहाँ पेस्ट करें",
+      "tags_placeholder": "टैग खोजें या टाइप करें...",
+      "popular_tags": "लोकप्रिय टैग",
+      "toasts": {
+        "success": "पोस्ट प्रकाशित हुई 🚀",
+        "error": "प्रकाशित करने में त्रुटि",
+        "image_size": "छवि 10 MB की सीमा से अधिक है"
+      }
+    }
+  },
+  "comments": {
+    "placeholder": "आप क्या सोचते हैं?",
+    "reply_placeholder": "@{username} को उत्तर दें...",
+    "submit_comment": "कमेंट पोस्ट करें",
+    "submit_reply": "उत्तर पोस्ट करें",
+    "reply_button": "उत्तर",
+    "delete_button": "कमेंट हटाएं",
+    "delete_confirm": "क्या आप यह कमेंट हटाना चाहते हैं?",
+    "empty_state": "कमेंट करने वाले पहले व्यक्ति बनें...",
+    "toasts": {
+      "comment_published": "कमेंट प्रकाशित हुआ",
+      "reply_published": "उत्तर प्रकाशित हुआ",
+      "deleted": "कमेंट हटा दिया गया",
+      "error_commenting": "कमेंट करने में त्रुटि",
+      "error_replying": "उत्तर देने में त्रुटि",
+      "error_deleting": "हटाने में त्रुटि"
+    }
+  }
+}

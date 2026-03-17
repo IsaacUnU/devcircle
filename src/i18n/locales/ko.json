@@ -1,0 +1,288 @@
+{
+  "sidebar": {
+    "home": "홈",
+    "explore": "탐색",
+    "clips": "클립",
+    "notifications": "알림",
+    "messages": "메시지",
+    "jobs": "채용",
+    "bookmarks": "북마크",
+    "profile": "프로필",
+    "settings": "설정",
+    "new_post": "게시물 작성",
+    "logout": "로그아웃",
+    "projects": "프로젝트",
+    "groups": "그룹"
+  },
+  "post": {
+    "translate": "번역하기",
+    "see_original": "원본 보기",
+    "translating": "번역 중...",
+    "delete_confirm": "이 게시물을 정말로 삭제하시겠습니까? 이 작업은 취소할 수 없습니다.",
+    "delete_button": "게시물 삭제",
+    "hide_code": "코드 숨기기",
+    "show_code": "코드 보기",
+    "image_alt": "게시물 이미지",
+    "toasts": {
+      "login_like": "좋아요를 누르려면 로그인하세요",
+      "login_save": "저장하려면 로그인하세요",
+      "saved": "저장됨",
+      "unsaved": "북마크에서 삭제됨",
+      "link_copied": "링크가 복사되었습니다",
+      "deleted": "게시물이 삭제되었습니다",
+      "delete_error": "삭제 중 오류 발생",
+      "translate_error": "번역 중 오류 발생"
+    }
+  },
+  "settings": {
+    "tabs": {
+      "profile": "프로필",
+      "security": "계정 및 보안",
+      "notifications": "알림",
+      "appearance": "외형",
+      "privacy": "개인정보 보호"
+    },
+    "appearance": {
+      "title": "외형",
+      "themeTitle": "테마",
+      "themes": {
+        "light": "라이트",
+        "dark": "다크",
+        "system": "시스템 설정",
+        "selected": "선택됨"
+      },
+      "sidebarTitle": "사이드바 스타일",
+      "sidebarStyles": {
+        "full": "기본",
+        "compact": "컴팩트",
+        "floating": "플로팅",
+        "active": "활성"
+      },
+      "languageTitle": "언어",
+      "toasts": {
+        "themeChanged": "테마가 변경되었습니다",
+        "styleChanged": "스타일이 변경되었습니다",
+        "languageChanged": "언어가 다음으로 변경되었습니다: "
+      }
+    },
+    "profile_form": {
+      "avatar_title": "프로필 사진",
+      "upload_rules": "JPG, PNG, WEBP, GIF · 최대 5 MB",
+      "upload_file": "파일 업로드",
+      "external_url": "외부 URL",
+      "click_to_upload": "클릭하여 이미지 선택",
+      "upload_button": "사진 업로드",
+      "url_placeholder": "https://...",
+      "save_button": "저장",
+      "public_info": "공개 정보",
+      "full_name": "성명",
+      "bio": "소개",
+      "city": "도시",
+      "country": "국가",
+      "select_country": "선택...",
+      "website": "웹사이트 / 포트폴리오",
+      "saving": "저장 중...",
+      "save_changes": "변경 사항 저장",
+      "uploading_image": "이미지 업로드 중...",
+      "name_placeholder": "이름",
+      "bio_placeholder": "풀스택 개발자. React와 PostgreSQL을 좋아합니다...",
+      "city_placeholder": "서울",
+      "website_placeholder": "https://yourportfolio.kr",
+      "new_tag": "새소식",
+      "countries_list": [
+        "스페인", "멕시코", "아르헨티나", "콜롬비아", "칠레", "페루", "베네수엘라",
+        "미국", "영국", "독일", "프랑스", "포르투갈", "브라질",
+        "이탈리아", "네덜란드", "스웨덴", "폴란드", "우크라이나", "인도", "캐나다",
+        "호주", "일본", "한국", "기타"
+      ],
+      "toasts": {
+        "updated": "프로필이 업데이트되었습니다",
+        "error": "저장 중 오류 발생",
+        "invalid_format": "허용되지 않는 형식입니다",
+        "size_error": "파일 크기가 5MB를 초과했습니다",
+        "upload_success": "프로필 사진이 업데이트되었습니다!",
+        "upload_error": "이미지 업로드 중 오류 발생",
+        "invalid_url": "유효한 URL을 입력하세요"
+      }
+    },
+    "compose": {
+      "title": "새 게시물",
+      "placeholder": "무엇을 만들고 있나요? 코드, 아이디어 또는 질문을 공유하세요...",
+      "add_code": "코드 추가",
+      "hide_code": "코드 숨기기",
+      "add_image": "이미지 추가",
+      "change_image": "이미지 변경",
+      "uploading_image": "이미지 업로드 중...",
+      "publishing": "게시 중...",
+      "publish": "게시하기",
+      "code_lang_placeholder": "언어 (예: typescript, python...)",
+      "code_placeholder": "여기에 코드를 붙여넣으세요",
+      "tags_placeholder": "태그 검색 또는 입력...",
+      "popular_tags": "인기 태그",
+      "toasts": {
+        "success": "게시되었습니다 🚀",
+        "error": "게시 중 오류 발생",
+        "image_size": "이미지 크기가 10MB를 초과했습니다"
+      }
+    },
+    "auth": {
+      "login": {
+        "title": "로그인",
+        "email_label": "이메일",
+        "email_placeholder": "your@email.com",
+        "password_label": "비밀번호",
+        "password_placeholder": "••••••••",
+        "login_button": "로그인",
+        "logging_in": "로그인 중...",
+        "error": "이메일 또는 비밀번호가 올바르지 않습니다"
+      },
+      "register": {
+        "title": "계정 생성",
+        "step1": "계정",
+        "step2": "프로필",
+        "username_label": "사용자 이름",
+        "username_placeholder": "johndoe",
+        "name_label": "성명",
+        "name_placeholder": "홍길동",
+        "email_label": "이메일",
+        "email_placeholder": "your@email.com",
+        "password_label": "비밀번호",
+        "password_placeholder": "최소 8자",
+        "next_button": "다음",
+        "optional_note": "선택 사항 — 나중에 '설정'에서 입력할 수 있습니다",
+        "bio_label": "소개",
+        "bio_placeholder": "풀스택 개발자. React와 PostgreSQL을 좋아합니다...",
+        "city_label": "도시",
+        "city_placeholder": "서울",
+        "country_label": "국가",
+        "select_country": "선택...",
+        "website_label": "웹사이트 / 포트폴리오",
+        "website_placeholder": "https://yourportfolio.kr",
+        "back_button": "뒤로",
+        "create_button": "🚀 계정 생성하기",
+        "creating": "계정 생성 중...",
+        "success": "계정이 생성되었습니다! 로그인해 주세요.",
+        "error": "가입 중 오류 발생"
+      }
+    },
+    "security": {
+      "password_title": "비밀번호 변경",
+      "current_password": "현재 비밀번호",
+      "new_password": "새 비밀번호",
+      "confirm_password": "확인",
+      "password_placeholder": "••••••••",
+      "new_password_hint": "최소 8자",
+      "confirm_placeholder": "비밀번호 재입력",
+      "update_button": "비밀번호 업데이트",
+      "updating_password": "저장 중...",
+      "oauth_title": "OAuth 계정",
+      "oauth_description": "계정이 GitHub/Google과 연결되어 있습니다. 비밀번호는 해당 플랫폼에서 관리됩니다.",
+      "email_title": "이메일 변경",
+      "current_email": "현재 이메일",
+      "new_email": "새 이메일",
+      "new_email_placeholder": "new@email.com",
+      "confirm_email_password": "현재 비밀번호 (확인용)",
+      "change_email_button": "이메일 변경",
+      "updating_email": "저장 중...",
+      "oauth_email_description": "GitHub/Google 계정에서 이메일을 관리해 주세요.",
+      "sessions_title": "활성 세션",
+      "sessions_description": "로그인된 모든 기기에서 로그아웃합니다.",
+      "revoke_sessions_button": "모든 기기에서 로그아웃",
+      "delete_account_title": "계정 삭제",
+      "delete_account_description": "이 작업은 영구적이며 되돌릴 수 없습니다. 모든 게시물, 댓글, 팔로워 및 데이터가 삭제됩니다.",
+      "delete_account_button": "내 계정 삭제",
+      "delete_confirm_phrase": "확인을 위해 '내 계정 삭제'를 입력하세요",
+      "delete_input_placeholder": "내 계정 삭제",
+      "cancel_button": "취소",
+      "confirm_delete_button": "삭제 확인",
+      "deleting": "삭제 중...",
+      "toasts": {
+        "password_updated": "비밀번호가 업데이트되었습니다",
+        "email_updated": "이메일이 업데이트되었습니다",
+        "sessions_revoked": "세션이 종료되었습니다",
+        "account_deleted": "계정이 삭제되었습니다",
+        "phrase_error": "확인 문구를 입력하세요"
+      }
+    },
+    "privacy": {
+      "title": "개인정보 설정",
+      "private_account_title": "비공개 계정",
+      "private_account_description": "비공개 계정으로 설정하면 팔로우 요청을 승인한 사람만 나를 팔로우할 수 있습니다.",
+      "activate_private_profile": "비공개 프로필 활성화",
+      "profile_private_status": "프로필이 비공개 상태입니다 — 팔로우 시 승인이 필요합니다",
+      "profile_public_status": "프로필이 공개 상태입니다 — 누구나 팔로우할 수 있습니다",
+      "visibility_lists_title": "리스트 공개 범위",
+      "visibility_lists_description": "팔로워 및 팔로잉 리스트를 볼 수 있는 사람을 선택합니다.",
+      "show_followers_label": "팔로워를 볼 수 있는 사람",
+      "show_followers_description": "나를 팔로우하는 사람들의 리스트",
+      "show_following_label": "팔로잉을 볼 수 있는 사람",
+      "show_following_description": "내가 팔로우하는 사람들의 리스트",
+      "interactions_title": "상호작용",
+      "interactions_description": "나와 소통할 수 있는 사람을 제어합니다.",
+      "who_can_message_label": "메시지를 보낼 수 있는 사람",
+      "who_can_message_description": "DM(다이렉트 메시지) 수신 범위",
+      "who_can_comment_label": "댓글을 달 수 있는 사람",
+      "who_can_comment_description": "게시물에 댓글을 달 수 있는 범위",
+      "follow_requests_title": "팔로우 요청",
+      "follow_requests_description": "팔로우를 요청하고 대기 중인 사람들입니다.",
+      "no_requests": "대기 중인 요청이 없습니다",
+      "accept_button": "수락",
+      "reject_button": "거절",
+      "save_button": "개인정보 설정 저장",
+      "saving": "저장 중...",
+      "toasts": {
+        "saved": "개인정보 설정이 저장되었습니다",
+        "request_accepted": "요청을 수락했습니다",
+        "request_rejected": "요청을 거절했습니다",
+        "error": "저장 중 오류 발생"
+      },
+      "options": {
+        "everyone": "모두",
+        "followers": "팔로워만",
+        "nobody": "나만"
+      }
+    },
+    "notifications_settings": {
+      "title": "알림 설정",
+      "description": "받고 싶은 알림을 제어합니다.",
+      "save_button": "환경설정 저장",
+      "saving": "저장 중...",
+      "toasts": {
+        "saved": "환경설정이 저장되었습니다",
+        "error": "저장 중 오류 발생"
+      },
+      "prefs": {
+        "likes_label": "좋아요",
+        "likes_desc": "누군가 내 게시물을 좋아할 때",
+        "comments_label": "댓글",
+        "comments_desc": "누군가 내 게시물에 댓글을 달 때",
+        "follows_label": "새 팔로워",
+        "follows_desc": "누군가 나를 팔로우하기 시작할 때",
+        "mentions_label": "언급",
+        "mentions_desc": "누군가 @사용자이름으로 나를 언급할 때",
+        "replies_label": "답글",
+        "replies_desc": "누군가 내 댓글에 답글을 달 때",
+        "reputation_label": "평판",
+        "reputation_desc": "평판 점수가 오르거나 내릴 때"
+      }
+    }
+  },
+  "comments": {
+    "placeholder": "어떻게 생각하시나요?",
+    "reply_placeholder": "@{username}님에게 답글...",
+    "submit_comment": "댓글 게시",
+    "submit_reply": "답글 게시",
+    "reply_button": "답글",
+    "delete_button": "댓글 삭제",
+    "delete_confirm": "이 댓글을 삭제하시겠습니까?",
+    "empty_state": "가장 먼저 댓글을 남겨보세요...",
+    "toasts": {
+      "comment_published": "댓글이 게시되었습니다",
+      "reply_published": "답글이 게시되었습니다",
+      "deleted": "댓글이 삭제되었습니다",
+      "error_commenting": "댓글 게시 중 오류 발생",
+      "error_replying": "답글 게시 중 오류 발생",
+      "error_deleting": "삭제 중 오류 발생"
+    }
+  }
+}
