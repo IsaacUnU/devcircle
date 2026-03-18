@@ -6,7 +6,7 @@ import { PostCard } from '@/components/post/PostCard'
 import { FollowButton } from '@/components/profile/FollowButton'
 import { MessageButton } from '@/components/profile/MessageButton'
 import { ProfileStats } from '@/components/profile/ProfileStats'
-import { MapPin, LinkIcon, Calendar, Sparkles, Lock } from 'lucide-react'
+import { MapPin, LinkIcon, Calendar, Sparkles, Lock, BadgeCheck } from 'lucide-react'
 import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
 import { getAvatarUrl } from '@/lib/utils'
@@ -82,7 +82,14 @@ export default async function ProfilePage({ params }: Props) {
             )}
           </div>
 
-          <h1 className="text-xl font-bold text-text-primary">{user.name ?? user.username}</h1>
+          <h1 className="text-xl font-bold text-text-primary flex items-center gap-2">
+            {user.name ?? user.username}
+            {user.role === 'DEVELOPER' && (
+              <span className="text-brand-500" title="Developer Verificado">
+                <BadgeCheck className="w-5 h-5 fill-brand-500 text-surface" />
+              </span>
+            )}
+          </h1>
           <div className="flex items-center gap-2 mb-3">
             <p className="text-text-muted text-sm">@{user.username}</p>
             {privacy.isPrivate && (

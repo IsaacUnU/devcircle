@@ -82,7 +82,7 @@ export default async function ProjectsPage() {
                                     <img
                                         src={featured.owner.image ?? `https://api.dicebear.com/8.x/initials/svg?seed=${featured.owner.username}`}
                                         alt=""
-                                        className="w-9 h-9 rounded-full border-2 border-surface-border group-hover/owner:border-brand-500/50 transition-all shrink-0"
+                                        className="w-9 h-9 object-cover rounded-full border-2 border-surface-border group-hover/owner:border-brand-500/50 transition-all shrink-0"
                                     />
                                     <div className="min-w-0">
                                         <p className="text-sm font-semibold text-text-primary truncate group-hover/owner:text-brand-400 transition-colors">

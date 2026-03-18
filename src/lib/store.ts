@@ -19,6 +19,10 @@ interface UIState {
   openGroupModal: () => void
   closeGroupModal: () => void
 
+  isEventModalOpen: boolean
+  openEventModal: () => void
+  closeEventModal: () => void
+
   // Notifications
   unreadCount: number
   setUnreadCount: (count: number) => void
@@ -60,6 +64,10 @@ export const useUIStore = create<UIState>()(
       isGroupModalOpen: false,
       openGroupModal: () => set({ isGroupModalOpen: true }),
       closeGroupModal: () => set({ isGroupModalOpen: false }),
+
+      isEventModalOpen: false,
+      openEventModal: () => set({ isEventModalOpen: true }),
+      closeEventModal: () => set({ isEventModalOpen: false }),
 
       unreadCount: 0,
       setUnreadCount: (count: number) => set({ unreadCount: count }),

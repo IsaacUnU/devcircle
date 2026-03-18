@@ -5,6 +5,7 @@ import { NotificationPoller } from '@/components/providers/NotificationPoller'
 import { ProjectModal } from '@/components/projects/ProjectModal'
 import { JobModal } from '@/components/jobs/JobModal'
 import { GroupModal } from '@/components/groups/GroupModal'
+import { EventModal } from '@/components/events/EventModal'
 import { PageTransition } from '@/components/ui/PageTransition'
 
 export default function MainLayout({ children }: { children: React.ReactNode }) {
@@ -17,6 +18,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
                 <ProjectModal />
                 <JobModal />
                 <GroupModal />
+                <EventModal />
                 <PageTransition>
                     {children}
                 </PageTransition>

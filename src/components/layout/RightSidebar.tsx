@@ -102,7 +102,9 @@ export function RightSidebar({ suggestedUsers, trendingTags, topDevs }: RightSid
             <section className="space-y-4">
                 <div className="flex items-center gap-2 px-1">
                     <Calendar className="w-5 h-5 text-brand-400" />
-                    <h2 className="font-bold text-text-primary text-sm uppercase tracking-wider">Eventos Próximos</h2>
+                    <Link href={`/events`}>
+                        <h2 className="font-bold text-text-primary text-sm uppercase tracking-wider cursor-pointer hover:text-brand-400 transition-colors">Eventos Próximos</h2>
+                    </Link>
                 </div>
                 <EventsPanel />
             </section>

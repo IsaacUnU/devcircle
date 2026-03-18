@@ -168,7 +168,7 @@ export function ProjectCard({ project, currentUserId, onDeleted, onUpdated }: Pr
                             <img
                                 src={project.owner.image ?? getAvatarUrl(project.owner.username)}
                                 alt=""
-                                className="w-6 h-6 rounded-full border border-white/10"
+                                className="w-6 h-6 rounded-full object-cover border border-white/10"
                             />
                             <span className="text-xs font-medium text-text-secondary group-hover/owner:text-text-primary transition-colors">
                                 {project.owner.name ?? project.owner.username}

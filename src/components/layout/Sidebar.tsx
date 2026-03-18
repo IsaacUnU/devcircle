@@ -8,7 +8,7 @@ import { useTheme } from 'next-themes'
 import {
   Home, Search, Bell, Bookmark, Settings,
   PlusCircle, Code2, LogOut, MessageSquare,
-  Users, Briefcase, X
+  Users, Briefcase, X, Calendar
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useUIStore } from '@/lib/store'
@@ -22,6 +22,7 @@ const getNavItems = (t: Record<string, string>) => [
   { href: '/projects', label: t.projects || 'Projects', icon: Code2 },
   { href: '/jobs', label: t.jobs, icon: Briefcase },
   { href: '/groups', label: t.groups || 'Groups', icon: Users },
+  { href: '/events', label: t.events || 'Eventos', icon: Calendar },
   { href: '/notifications', label: t.notifications, icon: Bell },
   { href: '/messages', label: t.messages, icon: MessageSquare },
   { href: '/bookmarks', label: t.bookmarks, icon: Bookmark },

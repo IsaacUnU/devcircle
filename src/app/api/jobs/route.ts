@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { db } from '@/lib/db'
 
+export const dynamic = 'force-dynamic'
+
 // GET /api/jobs — lista con búsqueda y filtros
 export async function GET(req: NextRequest) {
     try {

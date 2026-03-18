@@ -1,9 +1,9 @@
 import type { Metadata } from 'next'
 import { Suspense } from 'react'
 import { auth } from '@/lib/auth'
-import { getFeed, getSuggestedUsers, getTrendingTags, getTopContributors } from '@/lib/queries'
+import { getFeed } from '@/lib/queries'
 import { PostCard } from '@/components/post/PostCard'
-import { RightSidebar } from '@/components/layout/RightSidebar'
+import { RightSidebarServer } from '@/components/layout/RightSidebarServer'
 import { Sparkles } from 'lucide-react'
 import { FeedList } from '@/components/feed/FeedList'
 
@@ -13,12 +13,9 @@ export const metadata: Metadata = {
 }
 
 export default async function FeedPage() {
-  const [session, { posts, hasMore }, suggested, trending, topDevs] = await Promise.all([
+  const [session, { posts, hasMore }] = await Promise.all([
     auth(),
     getFeed(),
-    getSuggestedUsers(),
-    getTrendingTags(),
-    getTopContributors(),
   ])
 
   return (
@@ -43,11 +40,9 @@ export default async function FeedPage() {
       </main>
 
       {/* Right sidebar */}
-      <RightSidebar
-        suggestedUsers={suggested}
-        trendingTags={trending}
-        topDevs={topDevs}
-      />
+      <Suspense fallback={<div className="w-[350px] hidden xl:block p-8" />}>
+          <RightSidebarServer />
+      </Suspense>
     </div>
   )
 }

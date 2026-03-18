@@ -114,6 +114,8 @@ export async function getUserProfile(username: string) {
       location: true,
       createdAt: true,
       reputation: true,
+      role: true,
+      verified: true,
       privacySettings: true,
       _count: {
         select: { posts: true, followers: true, following: true },
@@ -473,6 +475,26 @@ export async function getExploreEvents(limit = 5) {
     include: {
       author: {
         select: { id: true, username: true, name: true, image: true },
+      },
+    },
+  })
+}
+
+// ── Events Page ──────────────────────────────────────────────────────────────
+export async function getEvents(page = 1, limit = 10) {
+  const skip = (page - 1) * limit
+
+  return db.event.findMany({
+    skip,
+    take: limit,
+    orderBy: { startsAt: 'asc' },
+    where: {
+      startsAt: { gte: new Date() },
+    },
+    include: {
+      author: {
+        select: { id: true, username: true, name: true, image: true, role: true, verified: true },
+        // select: { id: true, username: true, name: true, image: true, role: true, verified: true }
       },
     },
   })
