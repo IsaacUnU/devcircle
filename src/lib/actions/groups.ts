@@ -25,9 +25,21 @@ export async function createGroup(data: z.infer<typeof groupSchema>) {
   const exists = await db.group.findUnique({ where: { name: parsed.data.name } })
   if (exists) throw new Error('Ya existe un grupo con ese nombre')
 
+  // Verificar antigüedad de cuenta (min 30 días)
+  const user = await db.user.findUnique({ where: { id: session.user.id } })
+  if (!user) throw new Error('Usuario no encontrado')
+
+  const daysSinceCreation = (Date.now() - user.createdAt.getTime()) / (1000 * 60 * 60 * 24)
+  if (daysSinceCreation < 30) {
+    throw new Error(`Debes tener al menos 30 días de antigüedad para crear un grupo (tienes ${Math.floor(daysSinceCreation)} días)`)
+  }
+
+  const isVerifiedGroup = user.role === 'DEVELOPER' || user.role === 'ADMIN'
+
   const group = await db.group.create({
     data: {
       ...parsed.data,
+      isVerified: isVerifiedGroup,
       creatorId: session.user.id,
       members: {
         create: { userId: session.user.id, role: 'ADMIN' },

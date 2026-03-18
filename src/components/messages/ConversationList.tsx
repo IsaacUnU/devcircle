@@ -26,6 +26,7 @@ interface ConversationItemData {
     read: boolean
     senderId: string
   }>
+  status: string
 }
 
 interface Props {
@@ -38,7 +39,10 @@ export function ConversationList({ conversations, currentUserId, activeId }: Pro
   const [filter, setFilter] = useState('')
   const [showNewMessage, setShowNewMessage] = useState(false)
 
+  const [activeTab, setActiveTab] = useState<'ACTIVE' | 'REQUEST' | 'SPAM'>('ACTIVE')
+
   const filtered = conversations.filter(c => {
+    if (c.status !== activeTab) return false
     const other = c.userAId === currentUserId ? c.userB : c.userA
     const q = filter.toLowerCase()
     return (
@@ -66,6 +70,43 @@ export function ConversationList({ conversations, currentUserId, activeId }: Pro
           className="w-9 h-9 rounded-xl bg-brand-500/10 hover:bg-brand-500/20 flex items-center justify-center text-brand-400 transition-colors"
         >
           <Edit className="w-4 h-4" />
+        </button>
+      </div>
+
+      {/* Tabs */}
+      <div className="flex px-4 py-2 gap-4 border-b border-surface-border text-sm font-medium">
+        <button
+          onClick={() => setActiveTab('ACTIVE')}
+          className={cn(
+            'pb-2 transition-colors border-b-2',
+            activeTab === 'ACTIVE' 
+              ? 'text-brand-500 border-brand-500' 
+              : 'text-text-muted border-transparent hover:text-text-primary'
+          )}
+        >
+          Mensajes
+        </button>
+        <button
+          onClick={() => setActiveTab('REQUEST')}
+          className={cn(
+            'pb-2 transition-colors border-b-2',
+            activeTab === 'REQUEST' 
+              ? 'text-brand-500 border-brand-500' 
+              : 'text-text-muted border-transparent hover:text-text-primary'
+          )}
+        >
+          Solicitudes
+        </button>
+        <button
+          onClick={() => setActiveTab('SPAM')}
+          className={cn(
+            'pb-2 transition-colors border-b-2',
+            activeTab === 'SPAM' 
+              ? 'text-brand-500 border-brand-500' 
+              : 'text-text-muted border-transparent hover:text-text-primary'
+          )}
+        >
+          Spam
         </button>
       </div>
 

@@ -324,6 +324,16 @@ export async function getProjects() {
   })
 }
 
+// ── Featured Project (dinámico) ──────────────────────────────────────────────
+export async function getFeaturedProject() {
+  return db.project.findFirst({
+    include: {
+      owner: { select: { id: true, username: true, name: true, image: true } },
+    },
+    orderBy: { createdAt: 'desc' },
+  })
+}
+
 // ── Jobs ───────────────────────────────────────────────────────────────────
 export async function getJobs() {
   return db.job.findMany({

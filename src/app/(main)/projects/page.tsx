@@ -1,9 +1,10 @@
 import { auth } from '@/lib/auth'
-import { getProjects, getSuggestedUsers, getTrendingTags, getTopContributors } from '@/lib/queries'
+import { getProjects, getFeaturedProject, getSuggestedUsers, getTrendingTags, getTopContributors } from '@/lib/queries'
 import { ProjectCard } from '@/components/projects/ProjectCard'
 import { RightSidebar } from '@/components/layout/RightSidebar'
 import { ProjectHeader } from '@/components/projects/ProjectHeader'
-import { Sparkles, Code2 } from 'lucide-react'
+import { Sparkles, Code2, ExternalLink, Github } from 'lucide-react'
+import Link from 'next/link'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
@@ -12,9 +13,10 @@ export const metadata: Metadata = {
 }
 
 export default async function ProjectsPage() {
-    const [session, projects, suggested, trending, topDevs] = await Promise.all([
+    const [session, projects, featured, suggested, trending, topDevs] = await Promise.all([
         auth(),
         getProjects(),
+        getFeaturedProject(),
         getSuggestedUsers(),
         getTrendingTags(),
         getTopContributors(),
@@ -25,34 +27,107 @@ export default async function ProjectsPage() {
             <main className="flex-1 px-4 sm:px-6 py-4 sm:py-8 border-x border-surface-border min-h-screen">
                 <ProjectHeader />
 
-                {/* Featured Section placeholder */}
-                <section className="mb-8 p-4 sm:p-6 rounded-2xl sm:rounded-3xl bg-gradient-to-br from-brand-600/20 to-surface border border-brand-500/20 relative overflow-hidden group">
-                    <div className="relative z-10 flex flex-col md:flex-row items-center gap-8">
-                        <div className="flex-1">
-                            <div className="flex items-center gap-2 text-brand-400 text-xs font-bold uppercase tracking-widest mb-3">
-                                <Sparkles className="w-4 h-4" />
-                                Destacado de la semana
+                {/* Featured Section — Dynamic */}
+                {featured && (
+                    <section className="mb-8 rounded-2xl sm:rounded-3xl bg-surface border border-brand-500/15 relative overflow-hidden group animate-fade-in">
+                        {/* Image — full width top */}
+                        <div className="relative w-full aspect-[21/9] bg-black/60 overflow-hidden">
+                            {featured.image ? (
+                                <img
+                                    src={featured.image}
+                                    alt={featured.title}
+                                    className="w-full h-full object-cover opacity-90 group-hover:scale-[1.02] transition-transform duration-700 ease-out"
+                                />
+                            ) : (
+                                <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-brand-600/20 to-purple-600/10">
+                                    <Code2 className="w-20 h-20 text-brand-500/15" />
+                                </div>
+                            )}
+                            {/* Badge overlay */}
+                            <div className="absolute top-4 left-4 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black/50 backdrop-blur-md border border-white/10 text-brand-400 text-[11px] font-bold uppercase tracking-widest">
+                                <Sparkles className="w-3.5 h-3.5" />
+                                Destacado
                             </div>
-                            <h2 className="text-xl sm:text-3xl font-black text-white mb-3 sm:mb-4 leading-tight">Devora v2: La Red Social para Developers</h2>
-                            <p className="text-text-secondary mb-6 leading-relaxed">
-                                Explora el código fuente detrás de esta increíble plataforma. Construida con Next.js 14, Prisma, PostgreSQL y un diseño UI/UX de otro nivel.
-                            </p>
-                            <div className="flex gap-3">
-                                <button className="px-6 py-2.5 bg-brand-500 text-white rounded-xl font-bold text-sm hover:brightness-110 transition-all">Ver Más</button>
-                                <button className="px-6 py-2.5 bg-white/5 text-white rounded-xl font-bold text-sm hover:bg-white/10 border border-white/5 transition-all">Visitar Repo</button>
+                            {/* Gradient overlay bottom */}
+                            <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-surface to-transparent" />
+                        </div>
+
+                        {/* Content */}
+                        <div className="relative z-10 px-5 sm:px-7 pb-6 -mt-6">
+                            <h2 className="text-lg sm:text-2xl font-black text-text-primary mb-2 leading-tight">
+                                {featured.title}
+                            </h2>
+                            {featured.description && (
+                                <p className="text-sm text-text-secondary mb-4 leading-relaxed line-clamp-2 max-w-lg">
+                                    {featured.description}
+                                </p>
+                            )}
+
+                            {/* Tech Stack */}
+                            {featured.techStack.length > 0 && (
+                                <div className="flex flex-wrap gap-1.5 mb-5">
+                                    {featured.techStack.slice(0, 6).map(tech => (
+                                        <span key={tech} className="tag text-[10px]">{tech}</span>
+                                    ))}
+                                </div>
+                            )}
+
+                            {/* Divider */}
+                            <div className="border-t border-surface-border pt-4 flex items-center justify-between gap-3">
+                                {/* Creator */}
+                                <Link
+                                    href={`/profile/${featured.owner.username}`}
+                                    className="flex items-center gap-2.5 group/owner min-w-0"
+                                >
+                                    <img
+                                        src={featured.owner.image ?? `https://api.dicebear.com/8.x/initials/svg?seed=${featured.owner.username}`}
+                                        alt=""
+                                        className="w-9 h-9 rounded-full border-2 border-surface-border group-hover/owner:border-brand-500/50 transition-all shrink-0"
+                                    />
+                                    <div className="min-w-0">
+                                        <p className="text-sm font-semibold text-text-primary truncate group-hover/owner:text-brand-400 transition-colors">
+                                            {featured.owner.name ?? featured.owner.username}
+                                        </p>
+                                        <p className="text-[11px] text-text-muted truncate">@{featured.owner.username}</p>
+                                    </div>
+                                </Link>
+
+                                {/* Action Buttons — compact pills */}
+                                <div className="flex items-center gap-2 shrink-0">
+                                    {featured.repoUrl && (
+                                        <a
+                                            href={featured.repoUrl}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 text-text-secondary text-xs font-medium hover:bg-white/10 border border-white/5 transition-all"
+                                        >
+                                            <Github className="w-3.5 h-3.5" />
+                                            Repo
+                                        </a>
+                                    )}
+                                    {featured.url && (
+                                        <a
+                                            href={featured.url}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-brand-500 text-white text-xs font-semibold hover:brightness-110 transition-all"
+                                        >
+                                            <ExternalLink className="w-3 h-3" />
+                                            Ver
+                                        </a>
+                                    )}
+                                </div>
                             </div>
                         </div>
-                        <div className="w-full md:w-64 aspect-video rounded-2xl bg-black/40 border border-white/5 backdrop-blur-xl flex items-center justify-center">
-                            <Code2 className="w-16 h-16 text-brand-500/20" />
-                        </div>
-                    </div>
-                    {/* Decoration */}
-                    <div className="absolute -top-10 -right-10 w-40 h-40 bg-brand-500/20 rounded-full blur-[80px]" />
-                    <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-purple-500/10 rounded-full blur-[80px]" />
-                </section>
+
+                        {/* Decoration glows */}
+                        <div className="absolute -top-16 -right-16 w-48 h-48 bg-brand-500/10 rounded-full blur-[100px] pointer-events-none" />
+                        <div className="absolute -bottom-16 -left-16 w-48 h-48 bg-purple-500/8 rounded-full blur-[100px] pointer-events-none" />
+                    </section>
+                )}
 
                 {/* Projects Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 stagger-children">
                     {projects.length > 0 ? (
                         projects.map((project: any) => (
                             <ProjectCard

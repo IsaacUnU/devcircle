@@ -113,6 +113,7 @@ model User {
 
 enum Role {
   USER
+  DEVELOPER
   ADMIN
 }
 
@@ -337,6 +338,7 @@ model Conversation {
   id        String   @id @default(cuid())
   userAId   String
   userBId   String
+  status    String   @default("ACTIVE") // ACTIVE, REQUEST, SPAM
   lastMsgAt DateTime @default(now())
   createdAt DateTime @default(now())
 
@@ -357,6 +359,10 @@ model DirectMessage {
   receiverId     String
   conversationId String
   read           Boolean  @default(false)
+  isRequest      Boolean  @default(false)
+  isSpam         Boolean  @default(false)
+  mediaUrl       String?
+  mediaType      String?  // "image", "audio"
   createdAt      DateTime @default(now())
 
   sender       User         @relation("MessageSender", fields: [senderId], references: [id], onDelete: Cascade)
@@ -421,6 +427,10 @@ model Group {
   members GroupMember[]
   posts   GroupPost[]
   invites GroupInvite[]
+
+  lastActivityAt DateTime @default(now())
+  isVerified  Boolean  @default(false)
+  autoDeleteAt DateTime?
 
   @@index([creatorId])
   @@map("groups")

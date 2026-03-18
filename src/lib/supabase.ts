@@ -9,6 +9,7 @@ export const supabase = createClient(supabaseUrl, supabaseAnon)
 // Helpers de Storage
 export const AVATARS_BUCKET = 'avatars'
 export const POSTS_BUCKET   = 'posts'
+export const MESSAGES_BUCKET = 'messages-media'
 
 /**
  * Sube un archivo al bucket indicado y devuelve la URL pública.

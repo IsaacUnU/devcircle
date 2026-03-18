@@ -3,6 +3,7 @@
 import { auth } from '@/lib/auth'
 import { db } from '@/lib/db'
 import { revalidatePath } from 'next/cache'
+import { isSpam } from '@/lib/content-moderation'
 
 export async function createOrGetConversation(otherUserId: string): Promise<string> {
   const session = await auth()
@@ -22,11 +23,17 @@ export async function createOrGetConversation(otherUserId: string): Promise<stri
 
   if (existing) return existing.id
 
+  // Determine status: if otherUser follows current user, it's ACTIVE. Else REQUEST.
+  const follows = await db.follow.findUnique({
+    where: { followerId_followingId: { followerId: otherUserId, followingId: userId } }
+  })
+
   // Create new conversation
   const conv = await db.conversation.create({
     data: {
       userAId: userId,
       userBId: otherUserId,
+      status: follows ? 'ACTIVE' : 'REQUEST',
     },
   })
 
@@ -36,16 +43,20 @@ export async function createOrGetConversation(otherUserId: string): Promise<stri
 export async function sendMessage({
   conversationId,
   receiverId,
-  content,
+  content = '',
+  mediaUrl,
+  mediaType
 }: {
   conversationId: string
   receiverId: string
-  content: string
+  content?: string
+  mediaUrl?: string
+  mediaType?: 'image' | 'audio'
 }) {
   const session = await auth()
   if (!session?.user?.id) throw new Error('No autenticado')
 
-  if (!content.trim()) throw new Error('Mensaje vacío')
+  if (!content.trim() && !mediaUrl) throw new Error('Mensaje vacío')
 
   // Verify user belongs to this conversation
   const conversation = await db.conversation.findFirst({
@@ -56,9 +67,28 @@ export async function sendMessage({
         { userBId: session.user.id },
       ],
     },
+    include: {
+      messages: { orderBy: { createdAt: 'asc' }, take: 1 } // first message to determine initiator
+    }
   })
 
   if (!conversation) throw new Error('Conversación no encontrada')
+
+  let newStatus = conversation.status
+  let isMessageSpam = false
+
+  if (isSpam(content)) {
+    newStatus = 'SPAM'
+    isMessageSpam = true
+  } else if (conversation.status === 'REQUEST' && conversation.messages.length > 0) {
+     const initiator = conversation.messages[0].senderId
+     if (session.user.id !== initiator) {
+       // Si el receptor responde al request, se vuelve ACTIVE
+       newStatus = 'ACTIVE'
+     }
+  }
+
+  const isRequest = newStatus === 'REQUEST'
 
   const [message] = await Promise.all([
     db.directMessage.create({
@@ -67,11 +97,18 @@ export async function sendMessage({
         senderId: session.user.id,
         receiverId,
         conversationId,
+        isRequest,
+        isSpam: isMessageSpam,
+        mediaUrl,
+        mediaType
       },
     }),
     db.conversation.update({
       where: { id: conversationId },
-      data: { lastMsgAt: new Date() },
+      data: { 
+        lastMsgAt: new Date(),
+        status: newStatus
+      },
     }),
   ])
 
@@ -103,7 +140,7 @@ export async function getConversationMessages(conversationId: string) {
     where: { conversationId },
     orderBy: { createdAt: 'asc' },
     include: {
-      sender: { select: { id: true, username: true, name: true, image: true } },
+      sender: { select: { id: true, username: true, name: true, image: true } }, // Rechequeo forzado TS
     },
   })
 }
