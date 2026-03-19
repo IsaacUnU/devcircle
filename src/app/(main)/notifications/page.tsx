@@ -19,7 +19,7 @@ export default async function NotificationsPage() {
 
   return (
     <div className="flex w-full justify-center xl:justify-start">
-      <main className="flex-1 max-w-2xl px-4 sm:px-6 py-4 sm:py-6 border-x border-surface-border min-h-screen">
+      <main className="flex-1 max-w-2xl lg:max-w-3xl xl:max-w-2xl px-4 sm:px-6 py-4 sm:py-6 border-x border-surface-border min-h-screen">
         <NotificationsClient />
       </main>
       <RightSidebar

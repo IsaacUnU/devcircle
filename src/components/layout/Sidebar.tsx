@@ -83,12 +83,12 @@ export function Sidebar() {
         onClick={() => setMobileSidebarOpen(false)}
       />
 
-      {/* Layout Spacer for Desktop: Keeps content from shifting */}
-      <div className={cn("hidden lg:flex flex-col items-end shrink-0 transition-all duration-300 w-64")}>
+      {/* Wrapper: w-0 en móvil, w-64 fijo en desktop — items-end pega el aside al borde derecho */}
+      <div className="shrink-0 w-0 lg:w-64 lg:flex lg:flex-col lg:items-end">
         <aside className={cn(
-          "fixed lg:sticky top-0 h-[100dvh] lg:h-screen flex flex-col border-r border-surface-border bg-surface z-[80] lg:z-40 glass transition-all duration-300 shadow-2xl lg:shadow-none",
+          "fixed top-0 left-0 h-[100dvh] lg:sticky lg:left-auto lg:h-screen flex flex-col border-r border-surface-border bg-surface z-[80] lg:z-40 glass transition-all duration-300 shadow-2xl lg:shadow-none",
           isMobileSidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0",
-          isMobile ? "pb-24" : "", // Espacio aumentado para que el bottom nav no tape el perfil
+          isMobile ? "pb-24" : "",
           !isCompact && "w-64 px-4 py-8",
           isCompact && "w-20 px-2 py-8"
         )}>

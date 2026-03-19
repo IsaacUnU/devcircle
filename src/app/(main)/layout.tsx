@@ -12,7 +12,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
     return (
         <div className="flex min-h-screen justify-center bg-surface">
             <NotificationPoller />
-            <div className="flex w-full max-w-[1300px]">
+            <div className="flex w-full max-w-[1300px] pb-16 lg:pb-0">
                 <Sidebar />
                 <ComposeModal />
                 <ProjectModal />

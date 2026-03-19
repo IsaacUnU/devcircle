@@ -90,7 +90,7 @@ export function SearchClient({ trendingTags, explorePosts, exploreMultimedia, ex
   ]
 
   return (
-    <main className="flex-1 max-w-2xl px-4 sm:px-6 py-4 sm:py-6 border-x border-surface-border min-h-screen bg-surface">
+    <main className="flex-1 max-w-2xl lg:max-w-3xl xl:max-w-2xl px-4 sm:px-6 py-4 sm:py-6 border-x border-surface-border min-h-screen bg-surface">
       {/* Search bar - Refined aesthetic (Frontend Design Skill) */}
       <div className={cn(
         'relative flex items-center gap-3 px-4 py-3 rounded-2xl border transition-all duration-300 backdrop-blur-md',
@@ -137,7 +137,7 @@ export function SearchClient({ trendingTags, explorePosts, exploreMultimedia, ex
                 )}
               >
                 <t.icon className={cn("w-4 h-4", dTab === t.id ? "text-brand-400" : "text-text-muted")} />
-                <span className="hidden xs:inline">{t.label}</span>
+                <span className="hidden sm:inline">{t.label}</span>
               </button>
             ))}
           </div>
@@ -267,7 +267,7 @@ export function SearchClient({ trendingTags, explorePosts, exploreMultimedia, ex
                 )}
               >
                 <t.icon className={cn("w-4 h-4", tab === t.id ? "text-brand-400" : "text-text-muted")} />
-                <span className="hidden xs:inline">{t.label}</span>
+                <span className="hidden sm:inline">{t.label}</span>
               </button>
             ))}
           </div>

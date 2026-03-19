@@ -489,8 +489,8 @@ function EditGroupModal({ group, onClose, onDelete, isPending, onUpdate, onGener
   })
 
   return (
-    <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4" onClick={onClose}>
-      <div className="card w-full max-w-lg overflow-hidden" onClick={e => e.stopPropagation()}>
+    <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center p-0 sm:p-4" onClick={onClose}>
+      <div className="card w-full max-w-lg overflow-hidden rounded-t-2xl sm:rounded-2xl max-h-[85vh] sm:max-h-none overflow-y-auto" onClick={e => e.stopPropagation()}>
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-surface-border">
           <h2 className="text-base font-bold text-text-primary flex items-center gap-2">

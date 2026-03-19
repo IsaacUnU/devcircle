@@ -45,7 +45,7 @@ export default async function PostDetailPage({ params }: Props) {
   if (!post) notFound()
 
   return (
-    <main className="flex-1 max-w-2xl px-4 sm:px-6 py-6 border-x border-surface-border min-h-screen">
+    <main className="flex-1 max-w-2xl lg:max-w-3xl xl:max-w-2xl px-4 sm:px-6 py-6 border-x border-surface-border min-h-screen">
       {/* Cabecera */}
       <div className="flex items-center gap-2 mb-6">
         <Link href="/feed" className="btn-ghost p-1.5 -ml-2">

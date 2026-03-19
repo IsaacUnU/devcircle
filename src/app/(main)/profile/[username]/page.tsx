@@ -58,7 +58,7 @@ export default async function ProfilePage({ params }: Props) {
     <div className="flex w-full justify-center xl:justify-start">
 
       {/* ── Columna central: header + posts ── */}
-      <main className="flex-1 max-w-2xl px-4 sm:px-6 py-4 sm:py-6 border-x border-surface-border min-h-screen">
+      <main className="flex-1 max-w-2xl lg:max-w-3xl xl:max-w-2xl px-4 sm:px-6 py-4 sm:py-6 border-x border-surface-border min-h-screen">
 
         {/* Profile header */}
         <div className="card p-4 sm:p-6 mb-6">
@@ -148,6 +148,18 @@ export default async function ProfilePage({ params }: Props) {
             canSeeFollowing={canSeeFollowing}
           />
         </div>
+
+        {/* Badges — visible only on mobile/tablet (xl has the aside) */}
+        {!isPrivate && (
+          <div className="xl:hidden card p-4 mb-6">
+            <div className="flex items-center gap-2 mb-3">
+              <Trophy className="w-4 h-4 text-brand-400" />
+              <span className="text-sm font-semibold text-text-primary">Medallas</span>
+              <span className="text-xs text-text-muted ml-auto">{earnedSlugs.length}/{BADGE_DEFS.length}</span>
+            </div>
+            <BadgeGrid earnedSlugs={earnedSlugs} compact />
+          </div>
+        )}
 
         {/* Posts */}
         {isPrivate ? (

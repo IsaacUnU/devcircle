@@ -104,13 +104,13 @@ export function VideoUploadModal({ isOpen, onClose }: VideoUploadModalProps) {
                 onClick={() => !isUploading && onClose()}
             />
 
-            <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-4xl z-[101] animate-slide-up px-4">
-                <div className="card p-0 shadow-2xl glass border-brand-500/20 overflow-hidden flex flex-col md:flex-row h-[85vh] md:h-auto max-h-[90vh]">
+            <div className="fixed inset-0 md:inset-auto md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 w-full md:max-w-4xl z-[101] animate-slide-up md:px-4">
+                <div className="card p-0 shadow-2xl glass border-brand-500/20 overflow-hidden flex flex-col md:flex-row h-full md:h-auto md:max-h-[90vh] rounded-none md:rounded-2xl">
 
                     {/* Left: Preview Area */}
-                    <div className="w-full md:w-[350px] bg-black/40 flex flex-col items-center justify-center p-6 border-b md:border-b-0 md:border-r border-white/5 relative">
+                    <div className="w-full md:w-[350px] bg-black/40 flex flex-col items-center justify-center p-4 md:p-6 border-b md:border-b-0 md:border-r border-white/5 relative">
                         {previewUrl ? (
-                            <div className="relative w-full aspect-[9/16] rounded-2xl overflow-hidden bg-black shadow-2xl group border border-white/10">
+                            <div className="relative w-full aspect-[9/16] max-h-[35vh] md:max-h-none rounded-2xl overflow-hidden bg-black shadow-2xl group border border-white/10">
                                 <video src={previewUrl} className="w-full h-full object-cover" autoPlay loop muted />
                                 <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                                     <button onClick={() => fileInputRef.current?.click()} className="btn-secondary rounded-full p-3 bg-white/10 backdrop-blur-md border-white/20">
@@ -142,7 +142,7 @@ export function VideoUploadModal({ isOpen, onClose }: VideoUploadModalProps) {
                     </div>
 
                     {/* Right: Info Area */}
-                    <div className="flex-1 p-8 flex flex-col justify-between">
+                    <div className="flex-1 p-4 sm:p-6 md:p-8 flex flex-col justify-between">
                         <div>
                             <div className="flex items-center justify-between mb-8">
                                 <div className="flex items-center gap-3">

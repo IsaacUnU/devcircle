@@ -55,7 +55,7 @@ export function GroupsList({ groups }: GroupsListProps) {
           )}
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {filtered.length > 0 ? (
             filtered.map((group: any) => (
               <GroupCard key={group.id} group={group} />

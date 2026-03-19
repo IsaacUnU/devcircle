@@ -21,7 +21,7 @@ export default async function JobsPage() {
 
     return (
         <div className="flex w-full justify-center xl:justify-start">
-            <main className="flex-1 max-w-2xl px-4 sm:px-6 py-4 sm:py-8 border-x border-white/5 min-h-screen">
+            <main className="flex-1 max-w-2xl lg:max-w-3xl xl:max-w-2xl px-4 sm:px-6 py-4 sm:py-8 border-x border-white/5 min-h-screen">
                 <JobHeader />
                 <JobsList initialJobs={jobs as any} currentUserId={session?.user?.id} />
             </main>

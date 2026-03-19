@@ -159,6 +159,30 @@ export function ProjectCard({ project, currentUserId, onDeleted, onUpdated }: Pr
                         ))}
                     </div>
 
+                    {/* Mobile links — visible only on touch devices (hover overlay not reachable) */}
+                    <div className="sm:hidden flex gap-2 mb-4">
+                        {project.url && (
+                            <a
+                                href={project.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-lg bg-brand-500/10 text-brand-400 border border-brand-500/20"
+                            >
+                                <Globe className="w-3.5 h-3.5" /> Demo
+                            </a>
+                        )}
+                        {project.repoUrl && (
+                            <a
+                                href={project.repoUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-lg bg-surface-hover text-text-secondary border border-surface-border"
+                            >
+                                <Github className="w-3.5 h-3.5" /> Repo
+                            </a>
+                        )}
+                    </div>
+
                     {/* Footer / Owner */}
                     <div className="pt-4 border-t border-white/5 flex items-center justify-between">
                         <Link

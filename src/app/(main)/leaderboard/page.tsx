@@ -118,7 +118,7 @@ export default async function LeaderboardPage() {
   ]
 
   return (
-    <main className="flex-1 max-w-2xl px-4 sm:px-6 py-4 sm:py-6 border-x border-surface-border min-h-screen">
+    <main className="flex-1 max-w-2xl lg:max-w-3xl xl:max-w-2xl px-4 sm:px-6 py-4 sm:py-6 border-x border-surface-border min-h-screen">
       {/* Header */}
       <div className="flex items-center gap-3 mb-2">
         <Trophy className="w-7 h-7 text-amber-400" />

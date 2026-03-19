@@ -204,10 +204,10 @@ export function ChatView({ conversationId, currentUserId, otherUser, initialMess
                                 )}
                             >
                                 {msg.mediaUrl && msg.mediaType === 'image' && (
-                                    <img src={msg.mediaUrl} alt="Imagen ajustada" className="rounded-xl max-w-[220px] mb-2 object-cover" />
+                                    <img src={msg.mediaUrl} alt="Imagen ajustada" className="rounded-xl max-w-[70%] sm:max-w-[220px] mb-2 object-cover" />
                                 )}
                                 {msg.mediaUrl && msg.mediaType === 'audio' && (
-                                    <audio src={msg.mediaUrl} controls className="max-w-[220px] mb-2 h-8" />
+                                    <audio src={msg.mediaUrl} controls className="max-w-[70%] sm:max-w-[220px] mb-2 h-8" />
                                 )}
                                 {msg.content && <p className="break-words max-w-full">{msg.content}</p>}
                             </div>

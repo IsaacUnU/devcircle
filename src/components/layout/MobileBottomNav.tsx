@@ -83,8 +83,6 @@ export function MobileBottomNav() {
         <PlusCircle className="w-6 h-6" />
       </button>
 
-      {/* Spacer para que el contenido no quede tapado por la barra */}
-      <div className="h-16 lg:hidden" />
     </>
   )
 }
