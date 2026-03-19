@@ -6,13 +6,13 @@ import { PostCard } from '@/components/post/PostCard'
 import { FollowButton } from '@/components/profile/FollowButton'
 import { MessageButton } from '@/components/profile/MessageButton'
 import { ProfileStats } from '@/components/profile/ProfileStats'
-import { MapPin, LinkIcon, Calendar, Sparkles, Lock, BadgeCheck } from 'lucide-react'
+import { MapPin, LinkIcon, Calendar, Sparkles, Lock, BadgeCheck, Award, Trophy } from 'lucide-react'
+import { BadgeGrid, BADGE_DEFS } from '@/components/badges/BadgeCard'
 import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
 import { getAvatarUrl } from '@/lib/utils'
 import { DEFAULT_PRIVACY, type PrivacySettings } from '@/lib/privacy'
 
-// Siempre leer datos frescos — el avatar puede cambiar en cualquier momento
 export const dynamic = 'force-dynamic'
 
 interface Props { params: { username: string } }
@@ -35,14 +35,12 @@ export default async function ProfilePage({ params }: Props) {
 
   if (!user) notFound()
 
-  const isOwn      = session?.user?.id === user.id
-  // followers array sólo contiene el follow del usuario actual (filtrado en getUserProfile)
+  const isOwn       = session?.user?.id === user.id
   const isFollowing = session?.user?.id ? (user.followers?.length ?? 0) > 0 : false
-  const avatar     = user.image ?? getAvatarUrl(user.username)
+  const avatar      = user.image ?? getAvatarUrl(user.username)
   const privacy: PrivacySettings = { ...DEFAULT_PRIVACY, ...((user.privacySettings as any) ?? {}) }
-  const isPrivate  = privacy.isPrivate && !isOwn && !isFollowing
+  const isPrivate   = privacy.isPrivate && !isOwn && !isFollowing
 
-  // Visibilidad de listas según privacidad
   const canSeeFollowers = isOwn
     || privacy.showFollowers === 'everyone'
     || (privacy.showFollowers === 'followers' && isFollowing)
@@ -51,9 +49,17 @@ export default async function ProfilePage({ params }: Props) {
     || privacy.showFollowing === 'everyone'
     || (privacy.showFollowing === 'followers' && isFollowing)
 
+  const earnedSlugs: string[] = !isPrivate && Array.isArray((user as any).earnedBadges)
+    ? (user as any).earnedBadges as string[]
+    : []
+
   return (
+    /* Layout de 3 columnas: sidebar (fijo) | feed | panel derecho de badges */
     <div className="flex w-full justify-center xl:justify-start">
+
+      {/* ── Columna central: header + posts ── */}
       <main className="flex-1 max-w-2xl px-4 sm:px-6 py-4 sm:py-6 border-x border-surface-border min-h-screen">
+
         {/* Profile header */}
         <div className="card p-4 sm:p-6 mb-6">
           <div className="flex items-start justify-between mb-4">
@@ -65,6 +71,7 @@ export default async function ProfilePage({ params }: Props) {
                 </span>
               )}
             </div>
+
             {!isOwn && session && (
               <div className="flex items-center gap-2">
                 <MessageButton targetUserId={user.id} />
@@ -82,6 +89,7 @@ export default async function ProfilePage({ params }: Props) {
             )}
           </div>
 
+          {/* Nombre + verificado */}
           <h1 className="text-xl font-bold text-text-primary flex items-center gap-2">
             {user.name ?? user.username}
             {user.role === 'DEVELOPER' && (
@@ -90,7 +98,9 @@ export default async function ProfilePage({ params }: Props) {
               </span>
             )}
           </h1>
-          <div className="flex items-center gap-2 mb-3">
+
+          {/* @username + privado + REP */}
+          <div className="flex items-center flex-wrap gap-2 mb-3">
             <p className="text-text-muted text-sm">@{user.username}</p>
             {privacy.isPrivate && (
               <span className="flex items-center gap-1 text-[10px] text-text-muted border border-surface-border rounded-full px-2 py-0.5">
@@ -103,13 +113,17 @@ export default async function ProfilePage({ params }: Props) {
             </div>
           </div>
 
+          {/* Bio */}
           {(!isPrivate || isOwn) && user.bio && (
             <p className="text-text-secondary text-sm mb-3 leading-relaxed">{user.bio}</p>
           )}
 
+          {/* Meta: ubicación, web, fecha */}
           <div className="flex flex-wrap gap-3 text-xs text-text-muted mb-4">
             {user.location && (
-              <span className="flex items-center gap-1"><MapPin className="w-3.5 h-3.5" /> {user.location}</span>
+              <span className="flex items-center gap-1">
+                <MapPin className="w-3.5 h-3.5" /> {user.location}
+              </span>
             )}
             {user.website && !isPrivate && (
               <a href={user.website} target="_blank" rel="noopener noreferrer"
@@ -123,6 +137,7 @@ export default async function ProfilePage({ params }: Props) {
             </span>
           </div>
 
+          {/* Stats: posts / seguidores / siguiendo */}
           <ProfileStats
             username={user.username}
             postsCount={user._count.posts}
@@ -134,7 +149,7 @@ export default async function ProfilePage({ params }: Props) {
           />
         </div>
 
-        {/* Posts — ocultos si privado y no sigues */}
+        {/* Posts */}
         {isPrivate ? (
           <div className="card p-12 text-center space-y-3">
             <Lock className="w-10 h-10 mx-auto text-text-muted opacity-30" />
@@ -153,6 +168,46 @@ export default async function ProfilePage({ params }: Props) {
           </div>
         )}
       </main>
+
+      {/* ── Columna derecha: Medallas ── */}
+      <aside className="hidden xl:flex flex-col w-80 px-4 py-4 sm:py-6 gap-4 shrink-0">
+        <div className="card p-4 sticky top-6">
+          {/* Header de la sección */}
+          <div className="flex items-center gap-2 mb-4">
+            <div className="w-7 h-7 rounded-lg bg-brand-500/10 border border-brand-500/20 flex items-center justify-center">
+              <Trophy className="w-3.5 h-3.5 text-brand-400" />
+            </div>
+            <div>
+              <h2 className="text-sm font-semibold text-text-primary leading-none">Medallas</h2>
+              <p className="text-[11px] text-text-muted mt-0.5">
+                {earnedSlugs.length} / {BADGE_DEFS.length} obtenidas
+              </p>
+            </div>
+          </div>
+
+          {/* Barra de progreso */}
+          <div className="mb-4">
+            <div className="w-full h-1.5 bg-surface-hover rounded-full overflow-hidden">
+              <div
+                className="h-full bg-gradient-to-r from-brand-600 to-brand-400 rounded-full transition-all duration-500"
+                style={{ width: `${Math.round((earnedSlugs.length / BADGE_DEFS.length) * 100)}%` }}
+              />
+            </div>
+            <p className="text-[10px] text-text-muted mt-1 text-right">
+              {Math.round((earnedSlugs.length / BADGE_DEFS.length) * 100)}% completado
+            </p>
+          </div>
+
+          {isPrivate ? (
+            <p className="text-xs text-text-muted text-center py-4 opacity-60">
+              Cuenta privada
+            </p>
+          ) : (
+            <BadgeGrid earnedSlugs={earnedSlugs} compact />
+          )}
+        </div>
+      </aside>
+
     </div>
   )
 }

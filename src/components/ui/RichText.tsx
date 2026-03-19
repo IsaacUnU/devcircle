@@ -1,13 +1,14 @@
 'use client'
 
 import Link from 'next/link'
+import { memo } from 'react'
 
 /**
  * Parsea un texto y convierte @menciones y #hashtags en links clicables.
  * @menciones → /profile/:username
  * #hashtags  → /explorer?q=%23:tag
  */
-export function RichText({
+export const RichText = memo(function RichText({
   text,
   className,
 }: {
@@ -49,4 +50,4 @@ export function RichText({
       })}
     </span>
   )
-}
+})

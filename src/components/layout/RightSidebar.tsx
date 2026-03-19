@@ -29,7 +29,7 @@ export function RightSidebar({ suggestedUsers, trendingTags, topDevs }: RightSid
     const { data: session } = useSession()
 
     return (
-        <aside className="w-[350px] sticky top-0 h-screen overflow-y-auto px-6 py-8 hidden xl:flex flex-col gap-8 custom-scrollbar">
+        <aside className="w-[350px] sticky top-0 h-screen overflow-y-auto px-6 py-8 hidden xl:flex flex-col gap-8 custom-scrollbar relative z-10 pointer-events-auto">
             {/* 1. Dynamic Rankings */}
             <section className="space-y-4">
                 <div className="flex items-center gap-2 px-1">

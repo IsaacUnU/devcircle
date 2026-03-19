@@ -2,27 +2,38 @@
 
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { useState, useTransition, useRef, useEffect } from 'react'
-import { Heart, MessageCircle, Bookmark, Share2, Code, MoreHorizontal, Trash2, Globe2 } from 'lucide-react'
+import { useState, useTransition, useRef, useEffect, memo } from 'react'
+import { MessageCircle, Bookmark, Share2, Code, MoreHorizontal, Trash2, Globe2 } from 'lucide-react'
 import { formatCount, timeAgo, cn, getAvatarUrl } from '@/lib/utils'
-import { toggleLike, toggleBookmark, deletePost } from '@/lib/actions/posts'
+import { toggleBookmark, deletePost } from '@/lib/actions/posts'
 import type { PostWithMeta } from '@/types'
+import type { ReactionType } from '@/lib/actions/reactions'
 import { RichText } from '@/components/ui/RichText'
+import { ReactionPicker } from '@/components/reactions/ReactionPicker'
 import { translateText } from '@/lib/actions/translate'
 import { useTranslation } from '@/lib/i18n'
 import toast from 'react-hot-toast'
 
 interface PostCardProps {
-  post: PostWithMeta
+  post: PostWithMeta & {
+    reactions?: Array<{ type: ReactionType; userId: string }>
+  }
   currentUserId?: string
 }
 
-export function PostCard({ post, currentUserId }: PostCardProps) {
+export const PostCard = memo(function PostCard({ post, currentUserId }: PostCardProps) {
   const router = useRouter()
   const [isPending, startTransition] = useTransition()
-  const [liked, setLiked] = useState(() => (post.likes?.length ?? 0) > 0)
-  const [likeCount, setLikeCount] = useState(post._count.likes)
   const [bookmarked, setBookmarked] = useState(() => (post.bookmarks?.length ?? 0) > 0)
+
+  // Reacciones — calculadas desde los datos del post
+  const reactionSummary = (() => {
+    if (!post.reactions) return []
+    const counts: Record<string, number> = {}
+    for (const r of post.reactions) counts[r.type] = (counts[r.type] ?? 0) + 1
+    return Object.entries(counts).map(([type, count]) => ({ type: type as ReactionType, count }))
+  })()
+  const myReaction = post.reactions?.find(r => r.userId === currentUserId)?.type ?? null
   const [showCode, setShowCode] = useState(false)
   const [showMenu, setShowMenu] = useState(false)
   const [deleted, setDeleted] = useState(false)
@@ -45,21 +56,6 @@ export function PostCard({ post, currentUserId }: PostCardProps) {
     if (showMenu) document.addEventListener('mousedown', handleClick)
     return () => document.removeEventListener('mousedown', handleClick)
   }, [showMenu])
-
-  function handleLike() {
-    if (!currentUserId) { toast.error(tPost.toasts.login_like); return }
-    const wasLiked = liked
-    setLiked(!wasLiked)
-    setLikeCount(prev => wasLiked ? prev - 1 : prev + 1)
-    startTransition(async () => {
-      try {
-        await toggleLike(post.id)
-      } catch {
-        setLiked(wasLiked)
-        setLikeCount(prev => wasLiked ? prev + 1 : prev - 1)
-      }
-    })
-  }
 
   function handleBookmark() {
     if (!currentUserId) { toast.error(tPost.toasts.login_save); return }
@@ -228,19 +224,12 @@ export function PostCard({ post, currentUserId }: PostCardProps) {
 
       {/* Actions */}
       <div className="flex items-center gap-1 pt-3 border-t border-surface-border">
-        <button
-          onClick={handleLike}
-          disabled={isPending}
-          className={cn(
-            'flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm transition-all duration-150',
-            liked
-              ? 'text-red-400 hover:bg-red-400/10'
-              : 'text-text-muted hover:text-red-400 hover:bg-red-400/10'
-          )}
-        >
-          <Heart className={cn('w-4 h-4', liked && 'fill-current')} />
-          <span>{formatCount(likeCount)}</span>
-        </button>
+        <ReactionPicker
+          postId={post.id}
+          reactions={reactionSummary}
+          myReaction={myReaction}
+          currentUserId={currentUserId}
+        />
 
         <Link
           href={`/post/${post.id}`}
@@ -274,4 +263,4 @@ export function PostCard({ post, currentUserId }: PostCardProps) {
       </div>
     </article>
   )
-}
+})

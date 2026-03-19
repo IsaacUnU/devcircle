@@ -5,6 +5,7 @@ import { auth } from '@/lib/auth'
 import { db } from '@/lib/db'
 import { updateProfileSchema } from '@/lib/validations'
 import { updateReputation } from './reputation'
+import { checkAndAwardBadges } from './badges'
 
 // ── Toggle Follow ────────────────────────────────────────────────────────────
 export async function toggleFollow(targetUserId: string) {
@@ -32,6 +33,8 @@ export async function toggleFollow(targetUserId: string) {
 
     // Reputation: +5 for the followed user
     await updateReputation(targetUserId, 5)
+    // Comprobar badges (first_fan, influencer, popular, rockstar)
+    await checkAndAwardBadges(targetUserId).catch(() => {})
 
     try {
       await db.notification.upsert({

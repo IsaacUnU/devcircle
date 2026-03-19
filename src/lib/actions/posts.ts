@@ -5,6 +5,7 @@ import { auth } from '@/lib/auth'
 import { db } from '@/lib/db'
 import { createPostSchema, createCommentSchema } from '@/lib/validations'
 import { updateReputation } from './reputation'
+import { checkAndAwardBadges } from './badges'
 import { rateLimit, RATE_LIMITS } from '@/lib/rateLimit'
 
 // ── Create Post ─────────────────────────────────────────────────────────────
@@ -51,6 +52,8 @@ export async function createPost(data: {
 
   // Reputation: +5 for creating a post
   await updateReputation(session.user.id, 5)
+  // Comprobar badges (first_post, storyteller, prolific, code_sharer)
+  await checkAndAwardBadges(session.user.id).catch(() => {})
 
   revalidatePath('/feed')
   return post

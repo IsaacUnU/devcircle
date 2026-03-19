@@ -67,6 +67,7 @@ model User {
   location      String?
   password      String?   @db.Text  // bcrypt hash — null para usuarios OAuth
   reputation    Int       @default(0)
+  earnedBadges  Json      @default("[]")
   verified      Boolean   @default(false)
   notifPrefs      Json?   // { likes: bool, comments: bool, follows: bool, mentions: bool }
   privacySettings Json?  // { isPrivate, showFollowers, showFollowing, whoCanMessage, whoCanComment }
@@ -83,6 +84,7 @@ model User {
   bookmarks     Bookmark[]
   notifications Notification[] @relation("NotificationReceiver")
   triggered     Notification[] @relation("NotificationTrigger")
+  reactions     Reaction[]
   videos        Video[]
   videoLikes    VideoLike[]
   videoComments VideoComment[]
@@ -167,6 +169,7 @@ model Post {
   author    User       @relation(fields: [authorId], references: [id], onDelete: Cascade)
   comments  Comment[]
   likes     Like[]
+  reactions Reaction[]
   bookmarks Bookmark[]
   tags      PostTag[]
 
@@ -206,7 +209,8 @@ model Comment {
   post     Post      @relation(fields: [postId], references: [id], onDelete: Cascade)
   parent   Comment?  @relation("CommentReplies", fields: [parentId], references: [id])
   replies  Comment[] @relation("CommentReplies")
-  likes    Like[]
+  likes     Like[]
+  reactions Reaction[]
 
   @@index([postId])
   @@index([authorId])
@@ -271,6 +275,7 @@ model Notification {
 
 enum NotificationType {
   LIKE
+  REACTION
   COMMENT
   FOLLOW
   FOLLOW_REQUEST
@@ -278,6 +283,37 @@ enum NotificationType {
   MENTION
   REPLY
   REPUTATION
+}
+
+// ─── REACTIONS (Phase 2) ────────────────────────────────────────────────────
+
+model Reaction {
+  id        String       @id @default(cuid())
+  type      ReactionType
+  userId    String
+  postId    String?
+  commentId String?
+  createdAt DateTime     @default(now())
+
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post    Post?    @relation(fields: [postId], references: [id], onDelete: Cascade)
+  comment Comment? @relation(fields: [commentId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, postId, type])
+  @@unique([userId, commentId, type])
+  @@index([postId])
+  @@index([commentId])
+  @@index([userId])
+  @@map("reactions")
+}
+
+enum ReactionType {
+  HEART
+  FIRE
+  ZAPPER
+  BULB
+  ROCKET
+  EYES
 }
 
 // ─── VIDEOS (Reels / DevClips) ───────────────────────────────────────────────

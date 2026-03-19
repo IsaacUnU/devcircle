@@ -50,8 +50,27 @@ export async function getFeed(page = 1, limit = 10) {
     db.post.count({ where }),
   ])
 
+  // Cargar reacciones por raw SQL (el cliente Prisma puede no tener el modelo generado)
+  let reactionsMap: Record<string, Array<{ type: string; userId: string }>> = {}
+  if (posts.length > 0) {
+    const postIds = posts.map(p => p.id)
+    const rawReactions = await db.$queryRaw<{ postId: string; type: string; userId: string }[]>`
+      SELECT "postId", type::text, "userId" FROM reactions
+      WHERE "postId" = ANY(${postIds}::text[])
+    `
+    for (const r of rawReactions) {
+      if (!reactionsMap[r.postId]) reactionsMap[r.postId] = []
+      reactionsMap[r.postId].push({ type: r.type, userId: r.userId })
+    }
+  }
+
+  const postsWithReactions = posts.map(p => ({
+    ...p,
+    reactions: reactionsMap[p.id] ?? [],
+  }))
+
   return {
-    posts,
+    posts: postsWithReactions,
     total,
     hasMore: skip + limit < total,
     page,
@@ -126,7 +145,17 @@ export async function getUserProfile(username: string) {
     },
   })
 
-  if (!user || !session?.user?.id) return user
+  if (!user) return user
+
+  // earnedBadges via raw SQL (evita dependencia del cliente Prisma generado)
+  const badgeRows = await db.$queryRaw<{ earnedBadges: unknown }[]>`
+    SELECT "earnedBadges" FROM users WHERE id = ${user.id}
+  `
+  const earnedBadges = Array.isArray(badgeRows[0]?.earnedBadges)
+    ? badgeRows[0].earnedBadges as string[]
+    : []
+
+  if (!session?.user?.id) return { ...user, earnedBadges }
 
   // ¿Hay solicitud de follow pendiente?
   const pendingRequest = await db.followRequest.findUnique({
@@ -136,6 +165,7 @@ export async function getUserProfile(username: string) {
 
   return {
     ...user,
+    earnedBadges,
     hasPendingRequest: pendingRequest?.status === 'PENDING',
   }
 }
@@ -163,7 +193,20 @@ export async function getUserPosts(username: string, page = 1, limit = 10) {
     },
   })
 
-  return posts
+  if (!posts || posts.length === 0) return posts
+
+  const postIds = posts.map((p: any) => p.id)
+  const rawReactions = await db.$queryRaw<{ postId: string; type: string; userId: string }[]>`
+    SELECT "postId", type::text, "userId" FROM reactions
+    WHERE "postId" = ANY(${postIds}::text[])
+  `
+  const reactionsMap: Record<string, Array<{ type: string; userId: string }>> = {}
+  for (const r of rawReactions) {
+    if (!reactionsMap[r.postId]) reactionsMap[r.postId] = []
+    reactionsMap[r.postId].push({ type: r.type, userId: r.userId })
+  }
+
+  return posts.map((p: any) => ({ ...p, reactions: reactionsMap[p.id] ?? [] }))
 }
 
 // ── Notifications ─────────────────────────────────────────────────────────────
@@ -433,6 +476,7 @@ export async function getExplorePosts(page = 1, limit = 10) {
   })
 }
 
+
 /**
  * getExploreMultimedia - Posts that contain images or external media
  */
@@ -481,20 +525,43 @@ export async function getExploreEvents(limit = 5) {
 }
 
 // ── Events Page ──────────────────────────────────────────────────────────────
-export async function getEvents(page = 1, limit = 10) {
+export async function getEvents({ 
+  page = 1, 
+  limit = 10, 
+  type, 
+  search 
+}: { 
+  page?: number, 
+  limit?: number, 
+  type?: string, 
+  search?: string 
+} = {}) {
   const skip = (page - 1) * limit
+
+  const where: any = {
+    startsAt: { gte: new Date() },
+  }
+
+  if (type && type !== 'all') {
+    where.type = type
+  }
+
+  if (search) {
+    where.OR = [
+      { title: { contains: search, mode: 'insensitive' } },
+      { description: { contains: search, mode: 'insensitive' } },
+      { location: { contains: search, mode: 'insensitive' } },
+    ]
+  }
 
   return db.event.findMany({
     skip,
     take: limit,
     orderBy: { startsAt: 'asc' },
-    where: {
-      startsAt: { gte: new Date() },
-    },
+    where,
     include: {
       author: {
         select: { id: true, username: true, name: true, image: true, role: true, verified: true },
-        // select: { id: true, username: true, name: true, image: true, role: true, verified: true }
       },
     },
   })

@@ -38,8 +38,8 @@ interface UIState {
   setMobileSidebarOpen: (isOpen: boolean) => void
 
   // Sidebar Style
-  sidebarStyle: 'full' | 'compact' | 'floating'
-  setSidebarStyle: (style: 'full' | 'compact' | 'floating') => void
+  sidebarStyle: 'full' | 'compact'
+  setSidebarStyle: (style: 'full' | 'compact') => void
 
   // Language
   language: string

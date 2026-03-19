@@ -41,7 +41,6 @@ export function AppearanceTab() {
   const SIDEBAR_STYLES = [
     { id: 'full', label: t.sidebarStyles.full, icon: Columns },
     { id: 'compact', label: t.sidebarStyles.compact, icon: Square },
-    { id: 'floating', label: t.sidebarStyles.floating, icon: Layout },
   ]
 
   return (
@@ -100,7 +99,7 @@ export function AppearanceTab() {
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-1.5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
           {SIDEBAR_STYLES.map(s => (
             <button
               key={s.id}

@@ -1,16 +1,125 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { timeAgo, getAvatarUrl } from '@/lib/utils'
-import { cn } from '@/lib/utils'
+import { useState, useEffect, useRef } from 'react'
+import { timeAgo, getAvatarUrl, cn } from '@/lib/utils'
 import Link from 'next/link'
 import { useSession } from 'next-auth/react'
-import { Reply, MessageCircle, Send, Trash2 } from 'lucide-react'
+import { Reply, MessageCircle, Send, Trash2, Heart, Flame, Zap, Lightbulb, Rocket, Eye, Plus } from 'lucide-react'
 import { addComment, deleteComment } from '@/lib/actions/posts'
+import { toggleCommentReaction, ReactionType } from '@/lib/actions/reactions'
 import toast from 'react-hot-toast'
 import { MentionTextarea } from '@/components/ui/MentionTextarea'
 import { RichText } from '@/components/ui/RichText'
 import { useTranslation } from '@/lib/i18n'
+
+// ── CommentReactions ─────────────────────────────────────────────────────────
+const COMMENT_REACTIONS: Record<ReactionType, { icon: React.ElementType; color: string }> = {
+  HEART:  { icon: Heart,     color: 'hover:text-rose-400'   },
+  FIRE:   { icon: Flame,     color: 'hover:text-orange-400' },
+  ZAPPER: { icon: Zap,       color: 'hover:text-yellow-400' },
+  BULB:   { icon: Lightbulb, color: 'hover:text-sky-400'    },
+  ROCKET: { icon: Rocket,    color: 'hover:text-brand-400'  },
+  EYES:   { icon: Eye,       color: 'hover:text-purple-400' },
+}
+
+function CommentReactionPicker({
+  commentId, currentUserId,
+}: {
+  commentId: string
+  currentUserId?: string
+}) {
+  const [open, setOpen]           = useState(false)
+  const [myReaction, setMyReaction] = useState<ReactionType | null>(null)
+  const [counts, setCounts]       = useState<Record<string, number>>({})
+  const pickerRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    function handler(e: MouseEvent) {
+      if (pickerRef.current && !pickerRef.current.contains(e.target as Node)) setOpen(false)
+    }
+    document.addEventListener('mousedown', handler)
+    return () => document.removeEventListener('mousedown', handler)
+  }, [])
+
+  async function handleReact(type: ReactionType) {
+    if (!currentUserId) { toast.error('Inicia sesión para reaccionar'); return }
+    setOpen(false)
+    const wasMe = myReaction === type
+    const prev  = myReaction
+    setMyReaction(wasMe ? null : type)
+    setCounts(c => {
+      const next = { ...c }
+      if (prev)  next[prev] = Math.max(0, (next[prev] ?? 0) - 1)
+      if (!wasMe) next[type] = (next[type] ?? 0) + 1
+      return next
+    })
+    try {
+      await toggleCommentReaction(commentId, type)
+    } catch {
+      setMyReaction(prev)
+      toast.error('Error al reaccionar')
+    }
+  }
+
+  const total = Object.values(counts).reduce((s, v) => s + v, 0)
+  const MyIcon = myReaction ? COMMENT_REACTIONS[myReaction].icon : null
+
+  return (
+    <div className="relative flex items-center gap-1" ref={pickerRef}>
+      {/* Pills de reacciones activas */}
+      {Object.entries(counts).filter(([, v]) => v > 0).map(([type, count]) => {
+        const cfg  = COMMENT_REACTIONS[type as ReactionType]
+        const Icon = cfg.icon
+        const isMe = myReaction === type
+        return (
+          <button key={type} onClick={() => handleReact(type as ReactionType)}
+            className={cn(
+              'flex items-center gap-0.5 px-1.5 py-0.5 rounded-full text-[11px] border transition-all',
+              isMe ? 'text-brand-400 border-brand-500/40 bg-brand-500/10' : 'text-text-muted border-surface-border bg-surface-hover'
+            )}
+          >
+            <Icon className="w-2.5 h-2.5" />
+            <span>{count}</span>
+          </button>
+        )
+      })}
+
+      {/* Botón abrir picker */}
+      <div className="relative">
+        <button onClick={() => setOpen(p => !p)}
+          className={cn(
+            'flex items-center justify-center w-6 h-6 rounded-md transition-all text-text-muted',
+            open ? 'bg-surface-hover text-text-primary' : 'hover:bg-surface-hover opacity-0 group-hover:opacity-100'
+          )}
+        >
+          {MyIcon ? <MyIcon className="w-3 h-3 fill-current text-brand-400" /> : <Plus className="w-3 h-3" />}
+        </button>
+
+        {open && (
+          <div className="absolute bottom-full left-0 mb-1.5 z-50 animate-fade-in">
+            <div className="flex items-center gap-0.5 p-1 rounded-lg bg-surface-card border border-surface-border shadow-xl">
+              {(Object.keys(COMMENT_REACTIONS) as ReactionType[]).map(type => {
+                const cfg  = COMMENT_REACTIONS[type]
+                const Icon = cfg.icon
+                return (
+                  <button key={type} onClick={() => handleReact(type)} title={type.toLowerCase()}
+                    className={cn(
+                      'flex items-center justify-center w-7 h-7 rounded-md transition-all hover:scale-110 text-text-muted',
+                      cfg.color,
+                      myReaction === type && 'fill-current text-brand-400'
+                    )}
+                  >
+                    <Icon className="w-3.5 h-3.5" />
+                  </button>
+                )
+              })}
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
 
 // ── Tipos ─────────────────────────────────────────────────────────────────────
 interface Author {
@@ -203,21 +312,28 @@ function CommentItem({
           <RichText text={comment.content} />
         </p>
 
-        {/* Responder */}
-        {session && !isNested && (
-          <button
-            onClick={() => setReplying(r => !r)}
-            className={cn(
-              'flex items-center gap-1 text-xs mt-2 py-0.5 transition-colors',
-              replying
-                ? 'text-brand-400'
-                : 'text-text-muted hover:text-brand-400 opacity-0 group-hover:opacity-100'
-            )}
-          >
-            <Reply className="w-3.5 h-3.5" />
-            {t.reply_button}
-          </button>
-        )}
+        {/* Reacciones + Responder */}
+        <div className="flex items-center gap-3 mt-2">
+          <CommentReactionPicker
+            commentId={comment.id}
+            currentUserId={session?.user ? (session.user as any).id : undefined}
+          />
+
+          {session && !isNested && (
+            <button
+              onClick={() => setReplying(r => !r)}
+              className={cn(
+                'flex items-center gap-1 text-xs py-0.5 transition-colors',
+                replying
+                  ? 'text-brand-400'
+                  : 'text-text-muted hover:text-brand-400 opacity-0 group-hover:opacity-100'
+              )}
+            >
+              <Reply className="w-3.5 h-3.5" />
+              {t.reply_button}
+            </button>
+          )}
+        </div>
 
         {/* InlineReplyForm */}
         {replying && session && (

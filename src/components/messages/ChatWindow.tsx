@@ -1,10 +1,12 @@
 'use client'
 
 import { useState, useRef, useEffect, useTransition, useCallback } from 'react'
-import { Send, MoreVertical } from 'lucide-react'
+import { Send, MoreVertical, Mic, Image as ImageIcon, Loader2 } from 'lucide-react'
 import { cn, getAvatarUrl } from '@/lib/utils'
-import { sendMessage } from '@/lib/actions/messages'
+import { sendMessage, markConversationAsRead } from '@/lib/actions/messages'
 import { useRealtimeTable } from '@/hooks/useRealtimeTable'
+import { AudioRecorder, AudioMessage } from './AudioRecorder'
+import { uploadFile, MESSAGES_BUCKET } from '@/lib/supabase'
 import Link from 'next/link'
 import toast from 'react-hot-toast'
 
@@ -14,6 +16,8 @@ interface Message {
   senderId: string
   createdAt: Date
   read: boolean
+  mediaUrl?: string | null
+  mediaType?: string | null
   sender: {
     id: string
     username: string
@@ -38,58 +42,55 @@ interface Props {
 
 export function ChatWindow({ conversation, currentUserId, otherUser }: Props) {
   const [messages, setMessages] = useState<Message[]>(conversation.messages)
-  const [input, setInput]       = useState('')
+  const [input, setInput] = useState('')
+  const [showAudio, setShowAudio] = useState(false)
+  const [uploadingImage, setUploadingImage] = useState(false)
+  const imageInputRef = useRef<HTMLInputElement>(null)
   const [isPending, startTransition] = useTransition()
-  const bottomRef  = useRef<HTMLDivElement>(null)
-  const inputRef   = useRef<HTMLTextAreaElement>(null)
+  const bottomRef = useRef<HTMLDivElement>(null)
+  const inputRef = useRef<HTMLTextAreaElement>(null)
 
-  // Scroll al fondo cuando llegan mensajes nuevos
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages])
 
-  // Fetch de mensajes actualizado
   const fetchMessages = useCallback(async () => {
     try {
       const res = await fetch(`/api/messages/${conversation.id}`)
       if (res.ok) {
         const data = await res.json()
-        setMessages(data.messages)
+        setMessages(data) // El API devuelve el array directamente
       }
-    } catch {}
+    } catch { }
   }, [conversation.id])
 
-  // Realtime: escucha INSERT en direct_messages de esta conversación
   useRealtimeTable(
     'direct_messages',
     { column: 'conversationId', value: conversation.id },
     fetchMessages
   )
 
+  // ── Enviar texto ──────────────────────────────────────────────────────────
   const handleSend = () => {
-    if (!input.trim()) return
+    if (isPending || uploadingImage || !input.trim()) return
     const content = input.trim()
     setInput('')
 
-    // Optimistic UI
     const optimistic: Message = {
       id: `temp-${Date.now()}`,
       content,
       senderId: currentUserId,
       createdAt: new Date(),
       read: false,
+      mediaUrl: null,
+      mediaType: null,
       sender: { id: currentUserId, username: 'me', name: null, image: null },
     }
     setMessages(prev => [...prev, optimistic])
 
     startTransition(async () => {
       try {
-        await sendMessage({
-          conversationId: conversation.id,
-          receiverId: otherUser.id,
-          content,
-        })
-        // El Realtime se encarga de refrescar con el mensaje real de BD
+        await sendMessage({ conversationId: conversation.id, receiverId: otherUser.id, content })
       } catch {
         toast.error('Error al enviar mensaje')
         setMessages(prev => prev.filter(m => m.id !== optimistic.id))
@@ -99,13 +100,61 @@ export function ChatWindow({ conversation, currentUserId, otherUser }: Props) {
   }
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault()
-      handleSend()
-    }
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend() }
   }
 
-  // Agrupar mensajes por fecha
+  // ── Enviar audio ──────────────────────────────────────────────────────────
+  async function handleAudioSend(blob: Blob, _duration: number) {
+    setShowAudio(false)
+    startTransition(async () => {
+      try {
+        const file = new File([blob], 'audio.webm', { type: 'audio/webm' })
+        const path = `${conversation.id}/${Date.now()}_audio.webm`
+        const url = await uploadFile(MESSAGES_BUCKET, path, file)
+
+        await sendMessage({
+          conversationId: conversation.id,
+          receiverId: otherUser.id,
+          content: '',
+          mediaUrl: url,
+          mediaType: 'audio',
+        })
+        fetchMessages()
+        toast.success('Nota de voz enviada')
+      } catch {
+        toast.error('Error al enviar el audio')
+      }
+    })
+  }
+
+  // ── Enviar imagen ──────────────────────────────────────────────────────────
+  async function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0]
+    if (!file) return
+    setUploadingImage(true)
+    startTransition(async () => {
+      try {
+        const path = `${conversation.id}/${Date.now()}_${file.name}`
+        const url = await uploadFile(MESSAGES_BUCKET, path, file)
+        await sendMessage({
+          conversationId: conversation.id,
+          receiverId: otherUser.id,
+          content: '',
+          mediaUrl: url,
+          mediaType: 'image'
+        })
+        fetchMessages()
+        toast.success('Imagen enviada')
+      } catch {
+        toast.error('Error al subir imagen')
+      } finally {
+        setUploadingImage(false)
+        if (imageInputRef.current) imageInputRef.current.value = ''
+      }
+    })
+  }
+
+  // ── Agrupar por fecha ─────────────────────────────────────────────────────
   const groupedMessages = messages.reduce((acc, msg) => {
     const date = new Date(msg.createdAt).toLocaleDateString('es-ES', {
       day: 'numeric', month: 'long', year: 'numeric'
@@ -120,15 +169,10 @@ export function ChatWindow({ conversation, currentUserId, otherUser }: Props) {
       {/* Header */}
       <div className="flex items-center justify-between px-6 py-4 border-b border-surface-border">
         <Link href={`/profile/${otherUser.username}`} className="flex items-center gap-3 hover:opacity-80 transition-opacity">
-          <img
-            src={otherUser.image ?? getAvatarUrl(otherUser.username)}
-            alt=""
-            className="w-9 h-9 rounded-full object-cover"
-          />
+          <img src={otherUser.image ?? getAvatarUrl(otherUser.username)} alt=""
+            className="w-9 h-9 rounded-full object-cover" />
           <div>
-            <p className="font-semibold text-text-primary text-sm">
-              {otherUser.name ?? otherUser.username}
-            </p>
+            <p className="font-semibold text-text-primary text-sm">{otherUser.name ?? otherUser.username}</p>
             <p className="text-xs text-text-muted">@{otherUser.username}</p>
           </div>
         </Link>
@@ -154,42 +198,52 @@ export function ChatWindow({ conversation, currentUserId, otherUser }: Props) {
             </div>
             <div className="space-y-2">
               {msgs.map((msg, i) => {
-                const isMe      = msg.senderId === currentUserId
-                const isFirst   = i === 0 || msgs[i - 1]?.senderId !== msg.senderId
-                const isLast    = i === msgs.length - 1 || msgs[i + 1]?.senderId !== msg.senderId
+                const isMe = msg.senderId === currentUserId
+                const isFirst = i === 0 || msgs[i - 1]?.senderId !== msg.senderId
+                const isLast = i === msgs.length - 1 || msgs[i + 1]?.senderId !== msg.senderId
                 const isOptimistic = msg.id.startsWith('temp-')
+                const isAudio = msg.mediaType === 'audio'
 
                 return (
                   <div key={msg.id} className={cn('flex items-end gap-2', isMe ? 'flex-row-reverse' : 'flex-row')}>
-                    {/* Avatar (solo el otro usuario) */}
+                    {/* Avatar del otro */}
                     {!isMe && (
                       <div className="w-7 shrink-0">
                         {isLast && (
-                          <img
-                            src={otherUser.image ?? getAvatarUrl(otherUser.username)}
-                            alt=""
-                            className="w-7 h-7 rounded-full object-cover"
-                          />
+                          <img src={otherUser.image ?? getAvatarUrl(otherUser.username)} alt=""
+                            className="w-7 h-7 rounded-full object-cover" />
                         )}
                       </div>
                     )}
 
-                    {/* Burbuja */}
-                    <div className={cn(
-                      'max-w-xs lg:max-w-md px-4 py-2 text-sm transition-opacity',
-                      isOptimistic && 'opacity-70',
-                      isMe ? 'bg-brand-500 text-white' : 'bg-surface-hover text-text-primary',
-                      isFirst && isLast  ? 'rounded-2xl' : '',
-                      isFirst && !isLast ? (isMe ? 'rounded-t-2xl rounded-bl-2xl' : 'rounded-t-2xl rounded-br-2xl') : '',
-                      isLast && !isFirst ? (isMe ? 'rounded-b-2xl rounded-tl-2xl' : 'rounded-b-2xl rounded-tr-2xl') : '',
-                      !isFirst && !isLast ? 'rounded-2xl' : '',
-                    )}>
-                      <p className="whitespace-pre-wrap break-words">{msg.content}</p>
-                      <p className={cn('text-xs mt-1', isMe ? 'text-white/60' : 'text-text-muted')}>
-                        {new Date(msg.createdAt).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })}
-                        {isMe && msg.read && <span className="ml-1">✓✓</span>}
-                        {isOptimistic && <span className="ml-1">⏳</span>}
-                      </p>
+                    {/* Burbuja o audio */}
+                    <div className={cn('transition-opacity', isOptimistic && 'opacity-70')}>
+                      {isAudio && msg.mediaUrl ? (
+                        <AudioMessage url={msg.mediaUrl} isMe={isMe} />
+                      ) : (
+                        <div className={cn(
+                          'max-w-xs lg:max-w-sm px-4 py-2 text-sm shadow-sm',
+                          isMe ? 'bg-brand-500 text-white' : 'bg-surface-hover text-text-primary',
+                          isFirst && isLast ? 'rounded-2xl' : '',
+                          isFirst && !isLast ? (isMe ? 'rounded-t-2xl rounded-bl-2xl' : 'rounded-t-2xl rounded-br-2xl') : '',
+                          isLast && !isFirst ? (isMe ? 'rounded-b-2xl rounded-tl-2xl' : 'rounded-b-2xl rounded-tr-2xl') : '',
+                          !isFirst && !isLast ? 'rounded-2xl' : '',
+                        )}>
+                          {msg.mediaUrl && msg.mediaType === 'image' && (
+                            <img
+                              src={msg.mediaUrl}
+                              alt="Adjunto"
+                              className="rounded-xl max-w-full mb-2 object-cover border border-white/10"
+                            />
+                          )}
+                          <p className="whitespace-pre-wrap break-words">{msg.content}</p>
+                          <p className={cn('text-xs mt-1', isMe ? 'text-white/60' : 'text-text-muted')}>
+                            {new Date(msg.createdAt).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })}
+                            {isMe && msg.read && <span className="ml-1">✓✓</span>}
+                            {isOptimistic && <span className="ml-1">⏳</span>}
+                          </p>
+                        </div>
+                      )}
                     </div>
                   </div>
                 )
@@ -202,30 +256,69 @@ export function ChatWindow({ conversation, currentUserId, otherUser }: Props) {
 
       {/* Input */}
       <div className="px-6 py-4 border-t border-surface-border">
-        <div className="flex items-end gap-3 bg-surface-hover rounded-2xl px-4 py-3">
-          <textarea
-            ref={inputRef}
-            value={input}
-            onChange={e => setInput(e.target.value)}
-            onKeyDown={handleKeyDown}
-            placeholder={`Mensaje a @${otherUser.username}...`}
-            rows={1}
-            className="flex-1 bg-transparent text-sm text-text-primary placeholder:text-text-muted outline-none resize-none max-h-32"
-            onInput={e => {
-              const t = e.currentTarget
-              t.style.height = 'auto'
-              t.style.height = `${t.scrollHeight}px`
-            }}
+        {showAudio ? (
+          <AudioRecorder
+            onSend={handleAudioSend}
+            onCancel={() => setShowAudio(false)}
+            disabled={isPending}
           />
-          <button
-            onClick={handleSend}
-            disabled={!input.trim() || isPending}
-            className="w-9 h-9 rounded-xl bg-brand-500 hover:bg-brand-400 flex items-center justify-center text-white transition-all disabled:opacity-40 disabled:cursor-not-allowed shrink-0"
-          >
-            <Send className="w-4 h-4" />
-          </button>
-        </div>
-        <p className="text-xs text-text-muted mt-2 text-center">Enter para enviar · Shift+Enter para nueva línea</p>
+        ) : (
+          <>
+            <div className="max-w-3xl mx-auto flex items-end gap-3 bg-surface-hover rounded-2xl px-4 py-2">
+              {/* Upload imagen */}
+              <input
+                type="file"
+                accept="image/*"
+                className="hidden"
+                ref={imageInputRef}
+                onChange={handleImageUpload}
+              />
+              <button
+                type="button"
+                onClick={() => imageInputRef.current?.click()}
+                disabled={isPending || uploadingImage}
+                className="w-10 h-10 rounded-xl hover:bg-surface-border flex items-center justify-center text-text-muted hover:text-brand-400 transition-colors shrink-0"
+                title="Enviar imagen"
+              >
+                {uploadingImage ? <Loader2 className="w-5 h-5 animate-spin" /> : <ImageIcon className="w-5 h-5" />}
+              </button>
+
+              {/* Botón micrófono */}
+              <button
+                onClick={() => setShowAudio(true)}
+                className="w-10 h-10 rounded-xl hover:bg-surface-border flex items-center justify-center text-text-muted hover:text-brand-400 transition-colors shrink-0"
+                title="Enviar nota de voz"
+              >
+                <Mic className="w-5 h-5" />
+              </button>
+
+              <textarea
+                ref={inputRef}
+                value={input}
+                onChange={e => setInput(e.target.value)}
+                onKeyDown={handleKeyDown}
+                placeholder={`Mensaje a @${otherUser.username}...`}
+                rows={1}
+                className="flex-1 bg-transparent text-base text-text-primary placeholder:text-text-muted outline-none resize-none max-h-32 py-2"
+                onInput={e => {
+                  const t = e.currentTarget
+                  t.style.height = 'auto'
+                  t.style.height = `${t.scrollHeight}px`
+                }}
+              />
+              <button
+                onClick={handleSend}
+                disabled={!input.trim() || isPending}
+                className="w-10 h-10 rounded-xl bg-brand-500 hover:bg-brand-400 flex items-center justify-center text-white transition-all disabled:opacity-40 disabled:cursor-not-allowed shrink-0"
+              >
+                <Send className="w-5 h-5" />
+              </button>
+            </div>
+            <p className="text-xs text-text-muted mt-2 text-center">
+              Enter para enviar · Shift+Enter para nueva línea
+            </p>
+          </>
+        )}
       </div>
     </div>
   )

@@ -2,7 +2,7 @@ import { auth } from '@/lib/auth'
 import { db } from '@/lib/db'
 import { redirect, notFound } from 'next/navigation'
 import { ConversationList } from '@/components/messages/ConversationList'
-import { ChatView } from '@/components/messages/ChatView'
+import { ChatWindow } from '@/components/messages/ChatWindow'
 import { MessageSquare } from 'lucide-react'
 
 export default async function ConversationPage({ params }: { params: { id: string } }) {
@@ -67,12 +67,11 @@ export default async function ConversationPage({ params }: { params: { id: strin
                 />
             </div>
 
-            {/* Chat View */}
-            <ChatView
-                conversationId={id}
+            {/* Chat Window */}
+            <ChatWindow
+                conversation={currentConv as any}
                 currentUserId={session.user.id}
-                otherUser={otherUser}
-                initialMessages={currentConv.messages as any}
+                otherUser={otherUser as any}
             />
         </div>
     )
