@@ -48,7 +48,7 @@ export function SearchClient({ trendingTags, explorePosts, exploreMultimedia, ex
   const [results, setResults] = useState<SearchResult | null>(null)
   const [loading, setLoading] = useState(false)
   const [focused, setFocused] = useState(false)
-  
+
   // Discovery State
   const [dTab, setDTab] = useState<DiscoveryTab>('foryou')
 
@@ -238,10 +238,10 @@ export function SearchClient({ trendingTags, explorePosts, exploreMultimedia, ex
                       </p>
                       <div className="flex items-center justify-between mt-auto">
                         <div className="flex items-center gap-3">
-                           <img src={e.author.image ?? getAvatarUrl(e.author.username)} className="w-6 h-6 rounded-full" alt="" />
-                           <span className="text-xs text-text-muted">@{e.author.username}</span>
+                          <img src={e.author.image ?? getAvatarUrl(e.author.username)} className="w-6 h-6 rounded-full object-cover" alt="" />
+                          <span className="text-xs text-text-muted">@{e.author.username}</span>
                         </div>
-                        <button className="text-xs font-bold text-brand-400 underline-offset-4 hover:underline">Ver detalles</button>
+                        <a className="text-xs font-bold text-brand-400 underline-offset-4 hover:underline" target="_blank" rel="noopener noreferrer" href={e.url}>Ver detalles ↗</a>
                       </div>
                     </div>
                   ))
@@ -315,44 +315,44 @@ export function SearchClient({ trendingTags, explorePosts, exploreMultimedia, ex
                 {(tab === 'all' || tab === 'users') && results.users.length > 0 && (
                   <section className="animate-in fade-in slide-in-from-left-4 duration-500">
                     {tab === 'all' && (
-                       <div className="flex items-center gap-2 mb-5 px-1">
-                          <Users className="w-4 h-4 text-brand-400" />
-                          <h3 className="text-[11px] font-black text-text-muted uppercase tracking-[0.2em]">Personas</h3>
-                       </div>
+                      <div className="flex items-center gap-2 mb-5 px-1">
+                        <Users className="w-4 h-4 text-brand-400" />
+                        <h3 className="text-[11px] font-black text-text-muted uppercase tracking-[0.2em]">Personas</h3>
+                      </div>
                     )}
                     <div className="grid grid-cols-1 gap-4">
                       {results.users.map((user, i) => (
-                        <div 
+                        <div
                           key={user.id}
                           style={{ animationDelay: `${i * 50}ms` }}
                           className="group p-5 flex items-center gap-5 rounded-[2rem] bg-surface-card/40 border border-surface-border/50 hover:border-brand-500/40 hover:bg-surface-hover/80 transition-all relative overflow-hidden backdrop-blur-sm shadow-sm animate-in fade-in slide-in-from-right-4">
                           <Link href={`/profile/${user.username}`} className="shrink-0">
-                            <img 
-                              src={user.image ?? getAvatarUrl(user.username)} 
-                              alt="" 
-                              className="w-14 h-14 avatar object-cover shadow-xl border-2 border-brand-500/20 group-hover:border-brand-500/50 transition-colors" 
+                            <img
+                              src={user.image ?? getAvatarUrl(user.username)}
+                              alt=""
+                              className="w-14 h-14 avatar object-cover shadow-xl border-2 border-brand-500/20 group-hover:border-brand-500/50 transition-colors"
                             />
                           </Link>
                           <div className="flex-1 min-w-0">
                             <Link href={`/profile/${user.username}`} className="block w-fit">
-                               <p className="font-black text-text-primary group-hover:text-brand-400 transition-colors text-lg">{user.name ?? user.username}</p>
+                              <p className="font-black text-text-primary group-hover:text-brand-400 transition-colors text-lg">{user.name ?? user.username}</p>
                             </Link>
                             <p className="text-sm text-text-muted">@{user.username}</p>
                             {user.bio && <p className="text-sm text-text-secondary mt-2 line-clamp-1 italic font-medium leading-relaxed opacity-80 group-hover:opacity-100">{user.bio}</p>}
                           </div>
                           <div className="flex flex-col items-end gap-3 shrink-0">
-                             {session?.user?.id && user.id !== session.user.id && (
-                               <FollowButton 
-                                 targetUserId={user.id}
-                                 username={user.username}
-                                 initialFollowing={user.isFollowing}
-                                 className="py-1.5 px-4 rounded-xl text-xs h-9"
-                               />
-                             )}
-                             <div className="text-right">
-                               <p className="text-sm font-black text-text-primary tabular-nums">{user._count.followers}</p>
-                               <p className="text-[9px] text-text-muted font-black uppercase tracking-tighter">seguidores</p>
-                             </div>
+                            {session?.user?.id && user.id !== session.user.id && (
+                              <FollowButton
+                                targetUserId={user.id}
+                                username={user.username}
+                                initialFollowing={user.isFollowing}
+                                className="py-1.5 px-4 rounded-xl text-xs h-9"
+                              />
+                            )}
+                            <div className="text-right">
+                              <p className="text-sm font-black text-text-primary tabular-nums">{user._count.followers}</p>
+                              <p className="text-[9px] text-text-muted font-black uppercase tracking-tighter">seguidores</p>
+                            </div>
                           </div>
                         </div>
                       ))}
@@ -364,15 +364,15 @@ export function SearchClient({ trendingTags, explorePosts, exploreMultimedia, ex
                 {(tab === 'all' || tab === 'multimedia') && results.multimedia.length > 0 && (
                   <section>
                     {tab === 'all' && (
-                       <div className="flex items-center gap-2 mb-6 px-1">
-                          <ImageIcon className="w-4 h-4 text-brand-400" />
-                          <h3 className="text-[11px] font-black text-text-muted uppercase tracking-[0.2em]">Multimedia</h3>
-                       </div>
+                      <div className="flex items-center gap-2 mb-6 px-1">
+                        <ImageIcon className="w-4 h-4 text-brand-400" />
+                        <h3 className="text-[11px] font-black text-text-muted uppercase tracking-[0.2em]">Multimedia</h3>
+                      </div>
                     )}
                     <div className="masonry-grid gap-4">
                       {results.multimedia.map((post: any) => (
                         <div key={post.id} className="break-inside-avoid mb-4">
-                           <PostCard post={post} currentUserId={session?.user?.id} />
+                          <PostCard post={post} currentUserId={session?.user?.id} />
                         </div>
                       ))}
                     </div>
@@ -383,10 +383,10 @@ export function SearchClient({ trendingTags, explorePosts, exploreMultimedia, ex
                 {(tab === 'all' || tab === 'posts') && results.posts.length > 0 && (
                   <section>
                     {tab === 'all' && (
-                       <div className="flex items-center gap-2 mb-6 px-1">
-                          <FileText className="w-4 h-4 text-brand-400" />
-                          <h3 className="text-[11px] font-black text-text-muted uppercase tracking-[0.2em]">Publicaciones</h3>
-                       </div>
+                      <div className="flex items-center gap-2 mb-6 px-1">
+                        <FileText className="w-4 h-4 text-brand-400" />
+                        <h3 className="text-[11px] font-black text-text-muted uppercase tracking-[0.2em]">Publicaciones</h3>
+                      </div>
                     )}
                     <div className="space-y-6">
                       {results.posts.map((post: any) => (
