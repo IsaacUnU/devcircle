@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { Users, Lock, Globe } from 'lucide-react'
+import { Users, Lock, Globe, BadgeCheck } from 'lucide-react'
 import { getAvatarUrl } from '@/lib/utils'
 
 interface GroupCardProps {
@@ -12,6 +12,7 @@ interface GroupCardProps {
     image: string | null
     banner: string | null
     isPrivate: boolean
+    isVerified: boolean
     creatorId: string
     _count: { members: number; posts: number }
     creator: { id: string; username: string; name: string | null; image: string | null }
@@ -25,6 +26,7 @@ export function GroupCard({ group }: GroupCardProps) {
     ? { background: `linear-gradient(135deg, ${group.banner.split(':')[1]}, ${group.banner.split(':')[2]})` }
     : {}
   const hasBannerImg = group.banner && !group.banner.startsWith('color:')
+  const accentColor = group.banner?.startsWith('color:') ? group.banner.split(':')[1] : null
 
   return (
     <Link href={`/groups/${group.id}`} className="card group overflow-hidden hover:border-brand-500/30 transition-all block">
@@ -55,8 +57,15 @@ export function GroupCard({ group }: GroupCardProps) {
       </div>
 
       <div className="p-5 pt-9">
-        <h3 className="text-base font-bold text-text-primary group-hover:text-brand-400 transition-colors truncate mb-1">
-          {group.name}
+        <h3 className="text-base font-bold text-text-primary group-hover:text-brand-400 transition-colors mb-1 flex items-center gap-1.5 min-w-0">
+          <span className="truncate">{group.name}</span>
+          {group.isVerified && (
+            <BadgeCheck
+              className="w-4 h-4 shrink-0"
+              style={{ color: accentColor ?? '#38bdf8' }}
+              title="Grupo verificado"
+            />
+          )}
         </h3>
         <p className="text-xs text-text-muted line-clamp-2 mb-4 leading-relaxed min-h-[2.5rem]">
           {group.description || 'Sin descripción para esta comunidad.'}

@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3:*)",
+      "Bash(python3.exe /tmp/write_groups.py)",
+      "Bash(node:*)",
+      "Bash(find /c/Users/lopez/Desktop/html/devcircle/src/hooks -type f -name *.ts -o -name *.tsx)",
+      "Bash(xargs grep:*)",
+      "Bash(xargs cat:*)"
+    ]
+  }
+}

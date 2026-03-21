@@ -175,6 +175,7 @@ model Post {
 
   @@index([authorId])
   @@index([createdAt])
+  @@index([published, createdAt])
   @@map("posts")
 }
 
@@ -214,6 +215,7 @@ model Comment {
 
   @@index([postId])
   @@index([authorId])
+  @@index([parentId])
   @@map("comments")
 }
 
@@ -405,7 +407,7 @@ model DirectMessage {
   receiver     User         @relation("MessageReceiver", fields: [receiverId], references: [id], onDelete: Cascade)
   conversation Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
 
-  @@index([conversationId])
+  @@index([conversationId, createdAt])
   @@index([senderId])
   @@map("direct_messages")
 }

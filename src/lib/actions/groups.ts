@@ -4,6 +4,15 @@ import { revalidatePath } from 'next/cache'
 import { auth } from '@/lib/auth'
 import { db } from '@/lib/db'
 import { z } from 'zod'
+import { canCreateGroup, type EligibilityResult } from '@/lib/group-utils'
+
+export type { EligibilityResult }
+
+export async function getGroupCreationEligibility(userId: string): Promise<EligibilityResult> {
+  const user = await db.user.findUnique({ where: { id: userId }, select: { role: true, createdAt: true } })
+  if (!user) throw new Error('Usuario no encontrado')
+  return canCreateGroup(user)
+}
 
 const groupSchema = z.object({
   name:        z.string().min(3, 'Mínimo 3 caracteres').max(50),
@@ -29,18 +38,22 @@ export async function createGroup(data: z.infer<typeof groupSchema>) {
   const user = await db.user.findUnique({ where: { id: session.user.id } })
   if (!user) throw new Error('Usuario no encontrado')
 
-  const daysSinceCreation = (Date.now() - user.createdAt.getTime()) / (1000 * 60 * 60 * 24)
-  if (daysSinceCreation < 30) {
-    throw new Error(`Debes tener al menos 30 días de antigüedad para crear un grupo (tienes ${Math.floor(daysSinceCreation)} días)`)
+  const eligibility = canCreateGroup(user)
+  if (!eligibility.eligible) {
+    throw new Error(`Debes tener al menos ${eligibility.daysRequired} días de antigüedad para crear un grupo (tienes ${eligibility.daysActive} días)`)
   }
 
-  const isVerifiedGroup = user.role === 'DEVELOPER' || user.role === 'ADMIN'
+  const isVerifiedGroup =
+    user.role === 'ADMIN' ||
+    (user.role === 'DEVELOPER' && user.verified === true)
+  const autoDeleteAt = isVerifiedGroup ? null : new Date(Date.now() + 90 * 24 * 60 * 60 * 1000)
 
   const group = await db.group.create({
     data: {
       ...parsed.data,
       isVerified: isVerifiedGroup,
       creatorId: session.user.id,
+      autoDeleteAt,
       members: {
         create: { userId: session.user.id, role: 'ADMIN' },
       },
@@ -63,6 +76,11 @@ export async function joinGroup(groupId: string) {
 
   await db.groupMember.create({
     data: { groupId, userId: session.user.id, role: 'MEMBER' },
+  })
+
+  await db.group.update({
+    where: { id: groupId },
+    data: { lastActivityAt: new Date(), autoDeleteAt: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000) },
   })
 
   revalidatePath(`/groups/${groupId}`)
@@ -163,6 +181,11 @@ export async function createGroupPost(groupId: string, content: string) {
     include: { author: { select: { id: true, username: true, name: true, image: true } } },
   })
 
+  await db.group.update({
+    where: { id: groupId },
+    data: { lastActivityAt: new Date(), autoDeleteAt: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000) },
+  })
+
   revalidatePath(`/groups/${groupId}`)
   return post
 }
@@ -208,6 +231,11 @@ export async function respondToJoinRequest(inviteId: string, accept: boolean) {
   if (accept && invite.userId) {
     await db.groupMember.create({
       data: { groupId: invite.groupId, userId: invite.userId, role: 'MEMBER' },
+    })
+
+    await db.group.update({
+      where: { id: invite.groupId },
+      data: { lastActivityAt: new Date() },
     })
   }
 
@@ -264,3 +292,91 @@ export async function joinViaInviteToken(token: string) {
   revalidatePath(`/groups/${invite.groupId}`)
   return invite.groupId
 }
+
+// ── Solicitar verificación de grupo ────────────────────────────────────────────────────────────────────────────
+export async function requestGroupVerification(groupId: string): Promise<{ requested: boolean; reason?: string }> {
+  const session = await auth()
+  if (!session?.user?.id) throw new Error('No autenticado')
+
+  const group = await db.group.findUnique({
+    where: { id: groupId },
+    include: { creator: { select: { id: true, role: true, verified: true } } },
+  })
+  if (!group) throw new Error('Grupo no encontrado')
+
+  if (group.creatorId !== session.user.id) throw new Error('Solo el creador puede solicitar la verificación')
+
+  if (group.isVerified) return { requested: false, reason: 'already_verified' }
+
+  const user = await db.user.findUnique({
+    where: { id: session.user.id },
+    select: { role: true, verified: true },
+  })
+  if (!user) throw new Error('Usuario no encontrado')
+
+  const eligible =
+    user.role === 'ADMIN' ||
+    (user.role === 'DEVELOPER' && user.verified === true)
+
+  if (!eligible) return { requested: false, reason: 'not_eligible' }
+
+  const existingRequest = await db.groupInvite.findFirst({
+    where: { groupId, userId: null, status: 'VERIFICATION_REQUEST' },
+  })
+  if (existingRequest) return { requested: true }
+
+  await db.groupInvite.create({
+    data: { groupId, userId: null, status: 'VERIFICATION_REQUEST' },
+  })
+
+  return { requested: true }
+}
+
+// ── Estado de verificación de grupo ────────────────────────────────────────────────────────────────────────────
+export async function getGroupVerificationStatus(groupId: string) {
+  const group = await db.group.findUnique({
+    where: { id: groupId },
+    select: { isVerified: true, creatorId: true, creator: { select: { role: true, verified: true } } },
+  })
+  if (!group) return null
+
+  const creatorEligible =
+    group.creator.role === 'ADMIN' ||
+    (group.creator.role === 'DEVELOPER' && group.creator.verified)
+
+  const pendingRequest = await db.groupInvite.findFirst({
+    where: { groupId, userId: null, status: 'VERIFICATION_REQUEST' },
+  })
+
+  return {
+    isVerified: group.isVerified,
+    creatorEligible,
+    hasPendingRequest: !!pendingRequest,
+  }
+}
+
+// ── Otorgar verificación (solo admin de plataforma) ───────────────────────────────────────────────────────────────────────────
+export async function grantGroupVerification(groupId: string) {
+  const session = await auth()
+  if (!session?.user?.id) throw new Error('No autenticado')
+
+  const user = await db.user.findUnique({
+    where: { id: session.user.id },
+    select: { role: true },
+  })
+  if (!user || user.role !== 'ADMIN') throw new Error('Solo administradores pueden otorgar verificación')
+
+  await db.groupInvite.deleteMany({
+    where: { groupId, userId: null, status: 'VERIFICATION_REQUEST' },
+  })
+
+  const updated = await db.group.update({
+    where: { id: groupId },
+    data: { isVerified: true },
+  })
+
+  revalidatePath(`/groups/${groupId}`)
+  revalidatePath('/groups')
+  return updated
+}
+

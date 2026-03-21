@@ -238,7 +238,7 @@ export async function getSuggestedUsers() {
       location: true,
       following: { select: { followingId: true } },
       posts: {
-        take: 20,
+        take: 5,
         select: { tags: { select: { tag: { select: { name: true } } } } },
       },
     },
@@ -285,12 +285,12 @@ export async function getSuggestedUsers() {
       reputation: true,
       _count: { select: { followers: true, posts: true } },
       posts: {
-        take: 10,
+        take: 5,
         select: { tags: { select: { tag: { select: { name: true } } } } },
       },
     },
     orderBy: { reputation: 'desc' },
-    take: 40, // pool amplio para luego ordenar por score
+    take: 20,
   })
 
   // 4. Calcular score de cada candidato
@@ -360,12 +360,13 @@ export async function getTopContributors() {
 }
 
 // ── Projects ─────────────────────────────────────────────────────────────────
-export async function getProjects() {
+export async function getProjects(limit = 20) {
   return db.project.findMany({
     include: {
       owner: { select: { id: true, username: true, name: true, image: true } },
     },
     orderBy: { createdAt: 'desc' },
+    take: limit,
   })
 }
 
@@ -380,17 +381,18 @@ export async function getFeaturedProject() {
 }
 
 // ── Jobs ───────────────────────────────────────────────────────────────────
-export async function getJobs() {
+export async function getJobs(limit = 20) {
   return db.job.findMany({
     include: {
       author: { select: { id: true, username: true, name: true, image: true } },
     },
     orderBy: { createdAt: 'desc' },
+    take: limit,
   })
 }
 
 // ── Groups ─────────────────────────────────────────────────────────────────
-export async function getGroups() {
+export async function getGroups(limit = 30) {
   return db.group.findMany({
     include: {
       _count: { select: { members: true, posts: true } },
@@ -401,6 +403,7 @@ export async function getGroups() {
       },
     },
     orderBy: { createdAt: 'desc' },
+    take: limit,
   })
 }
 
@@ -408,38 +411,43 @@ export async function getGroups() {
 export async function getGroup(groupId: string) {
   const session = await auth()
 
-  const group = await db.group.findUnique({
-    where: { id: groupId },
-    include: {
-      creator: { select: { id: true, username: true, name: true, image: true } },
-      _count: { select: { members: true, posts: true } },
-      members: {
-        orderBy: { joinedAt: 'asc' },
-        include: {
-          user: { select: { id: true, username: true, name: true, image: true } },
+  const [group, membership] = await Promise.all([
+    db.group.findUnique({
+      where: { id: groupId },
+      include: {
+        creator: { select: { id: true, username: true, name: true, image: true } },
+        _count: { select: { members: true, posts: true } },
+        members: {
+          orderBy: { joinedAt: 'asc' },
+          take: 100,
+          include: {
+            user: { select: { id: true, username: true, name: true, image: true } },
+          },
+        },
+        posts: {
+          orderBy: { createdAt: 'desc' },
+          take: 20,
+          include: {
+            author: { select: { id: true, username: true, name: true, image: true } },
+          },
         },
       },
-      posts: {
-        orderBy: { createdAt: 'desc' },
-        take: 20,
-        include: {
-          author: { select: { id: true, username: true, name: true, image: true } },
-        },
-      },
-    },
-  })
+    }),
+    session?.user?.id
+      ? db.groupMember.findUnique({
+          where: { groupId_userId: { groupId, userId: session.user.id } },
+          select: { role: true },
+        })
+      : Promise.resolve(null),
+  ])
 
   if (!group) return null
 
-  const isMember = session?.user?.id
-    ? group.members.some(m => m.userId === session.user.id)
-    : false
-
-  const myRole = session?.user?.id
-    ? group.members.find(m => m.userId === session.user.id)?.role ?? null
-    : null
-
-  return { ...group, isMember, myRole }
+  return {
+    ...group,
+    isMember: !!membership,
+    myRole: membership?.role ?? null,
+  }
 }
 
 // ── Explore / Discovery ───────────────────────────────────────────────────────
